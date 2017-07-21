@@ -1,0 +1,8 @@
+@import "../../node_modules/compass-mixins/lib/compass";
+@import "../../node_modules/compass-mixins/lib/animate";
+@import "../../node_modules/compass-mixins/lib/lemonade";
+//bootstrap
+$icon-font-path: "../assets/fonts/bootstrap/" !default;
+$brand-primary: #0593e8 !default;
+$base-background: rgba(0, 0, 0, .55) !default;
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
