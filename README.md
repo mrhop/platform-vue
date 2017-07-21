@@ -17,3 +17,4 @@ $ npm run dev # serve examples at localhost:8080
 开始实现后台接口【oauth2，登录，注册，默认返回，等需要考虑
 
 然后user部分的实现，然后是
+需要提供一个直接的url post的方式，而不是json的方式？？默认是json，其他方式则是一个http post，另一个是action自行处理并返回的方式
