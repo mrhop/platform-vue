@@ -2,6 +2,9 @@
 
   <panel id="login-wrapper" :col="6">
     <h1 slot="header">用户登录</h1>
+    <p v-if="authenticationError" class="error">
+      用户名或密码错误,请重新输入
+    </p>
     <vform id="login-form" :actionUrls="formActionUrls" :actions="formActions"></vform>
   </panel>
   <!--登录页面，需要考虑的是module，panel以及-->
@@ -9,7 +12,7 @@
 
 <script>
   import huodhVuePlugins from 'huodh-vue-plugins'
-  import {commonUrls} from '../../common'
+  import {commonUrls} from '../../common/login'
 
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
@@ -23,7 +26,7 @@
               'rules': {
                 'items': [
                   {
-                    'name': 'account',
+                    'name': 'username',
                     'label': '账号',
                     'type': 'text',
                     'validate': [{
@@ -62,14 +65,20 @@
           }
         },
         formActionUrls: {
-          saveUrl: commonUrls.login.login,
-          registration: commonUrls.login.registrationPage
-        }
+          directSaveUrl: commonUrls.login,
+          registration: commonUrls.registrationPage
+        },
+        authenticationError: false
       }
     },
     methods: {},
     components: {
       panel, vform
+    },
+    mounted () {
+      if (this.$route.query.authentication_error) {
+        this.authenticationError = true
+      }
     }
   }
 </script>

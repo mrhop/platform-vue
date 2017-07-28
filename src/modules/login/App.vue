@@ -15,7 +15,7 @@
 <style rel="stylesheet/scss" lang="scss">
   @import "../../scss/import.scss";
 
-  #login-wrapper,#registration-wrapper {
+  #login-wrapper, #registration-wrapper {
     padding: 0;
     background: $base-background;
     border-radius: 5px;
@@ -37,7 +37,7 @@
       }
       .form-wrapper {
         .actions {
-          a.registration,a.login {
+          a.registration, a.login {
             color: #fff;
             text-decoration: underline;
             position: absolute;
@@ -50,14 +50,20 @@
         }
       }
     }
+    p.error {
+      text-align: right;
+      margin: 5px 20px 0 0;
+      color: $brand-danger;
+    }
   }
 
-  #login-wrapper{
+  #login-wrapper {
     @media(min-width: $screen-sm-min) {
       margin-top: -103px;
     }
   }
-  #registration-wrapper{
+
+  #registration-wrapper {
     @media(min-width: $screen-sm-min) {
       margin-top: -182px;
     }

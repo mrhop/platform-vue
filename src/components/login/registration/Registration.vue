@@ -8,7 +8,7 @@
 
 <script>
   import huodhVuePlugins from 'huodh-vue-plugins'
-  import {commonUrls} from '../../common'
+  import {commonUrls} from '../../common/login'
 
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
@@ -115,7 +115,7 @@
           }
         },
         formActionUrls: {
-          login: commonUrls.login.loginPage
+          login: commonUrls.loginPage
         }
       }
     },
