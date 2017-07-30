@@ -411,7 +411,8 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/table.html'), functi
             "title": "在此之前",
             "editable": true,
             "type": "date",
-            "filter": true
+            "filter": true,
+            "sortable": true
           }
         ],
         "action": {
