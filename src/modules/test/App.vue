@@ -9,6 +9,7 @@
       <button @click.prevent="getRestrictedResourceInSameClient">访问client同app的限制资源</button>
       <button @click.prevent="getRestrictedResourceInDifferentClient">访问其他资源库的限制的资源</button>
       <button @click.prevent="getResourceInDifferentClient">访问其他资源库的client可用资源</button>
+      <button @click.prevent="getResourceInDifferentClient2">访问moji测试</button>
     </div>
     <vfoot></vfoot>
   </div>
@@ -37,6 +38,12 @@
     method: 'get',
     withCredentials: true
   }
+  let config4 = {
+    headers: {'Authorization': 'Bearer ' + accesstoken},
+    url: 'http://localhost:8084/utilsweb/test/moji',
+    method: 'get',
+    withCredentials: true
+  }
   export default {
     components: {
       vhead,
@@ -60,6 +67,13 @@
       getResourceInDifferentClient () {
         axios.request(config3).then(function (response) {
           console.log('success:' + response.data.message)
+        }).catch(function (error) {
+          console.log('error:' + error)
+        })
+      },
+      getResourceInDifferentClient2 () {
+        axios.request(config4).then(function (response) {
+          console.log('success:')
         }).catch(function (error) {
           console.log('error:' + error)
         })

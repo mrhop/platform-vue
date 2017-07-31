@@ -1032,8 +1032,8 @@ app.get(path.posix.join(config.dev.assetsPublicPath, 'data/tree-item-delete.html
   if (id == 5 || id == 6) {
     res.json({
       error: {
-        header: '该栏目已锁定',
-        content: '当前状态，不可删除'
+        title: '该栏目已锁定',
+        message: '当前状态，不可删除'
       }
     })
   } else {
