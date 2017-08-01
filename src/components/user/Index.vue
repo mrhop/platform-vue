@@ -29,5 +29,6 @@
   }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss">
+  @import "../../scss/import.scss";
 </style>
