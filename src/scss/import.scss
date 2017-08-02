@@ -5,4 +5,7 @@
 $icon-font-path: "../assets/fonts/bootstrap/" !default;
 $brand-primary: #0593e8 !default;
 $base-background: rgba(0, 0, 0, .5) !default;
+$link-color: #fff !default;
+$link-hover-color: $brand-primary !default;
+$text-color: #fff !default;
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";

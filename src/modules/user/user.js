@@ -6,7 +6,7 @@ import huodhVuePlugins from 'huodh-vue-plugins'
 import {commonUrls} from '../../components/common/user'
 Vue.use(Vuex)
 Vue.use(huodhVuePlugins.config)
-const store = huodhVuePlugins.generateStore()
+global.store = huodhVuePlugins.generateStore()
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -16,7 +16,7 @@ new Vue({
     }
   },
   router,
-  store,
+  store: global.store,
   template: '<App appName="用户" :treeData="leftTree"/>',
   components: {App}
 })

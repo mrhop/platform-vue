@@ -2,7 +2,7 @@
   <div class="user-list">
     <panel>
       <h1 slot="header">用户列表</h1>
-      <vtable :id="1" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
+      <vtable id="user-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
     </panel>
   </div>
 </template>
@@ -29,105 +29,111 @@
             var filters = args.filters
             var sorts = args.sorts
             if (init) {
-              // 初始化
-              // 初始化获取data
-              var config = {
+              let config = {
                 url: commonUrls.userList,
                 method: 'post',
                 data: {pager, init: true}
               }
               axios.request(config).then(function (response) {
-                // 如何将数据回传？
-              })
-              return {
-                'rules': {
-                  'header': [
-                    {
-                      'name': '#sn',
-                      'title': '#sn'
-                    },
-                    {
-                      'name': 'username',
-                      'title': '账号',
-                      'type': 'text',
-                      'filter': true,
-                      'sortable': true
-                    },
-                    {
-                      'name': 'name',
-                      'title': '姓名',
-                      'type': 'text',
-                      'filter': true
-                    },
-                    {
-                      'name': 'email',
-                      'title': 'Email',
-                      'type': 'text',
-                      'filter': true
-                    },
-                    {
-                      'name': 'phone',
-                      'title': '手机',
-                      'type': 'text',
-                      'filter': true
-                    },
-                    {
-                      'name': 'enabled',
-                      'title': '已激活',
-                      'type': 'select',
-                      'editable': true,
-                      'filter': true,
-                      'sortable': true,
-                      'items': [
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'user-list',
+                  data: {
+                    'rules': {
+                      'header': [
                         {
-                          'label': '是',
-                          'value': true
+                          'name': '#sn',
+                          'title': '#sn'
                         },
                         {
-                          'label': '否',
-                          'value': false
+                          'name': 'username',
+                          'title': '账号',
+                          'type': 'text',
+                          'filter': true,
+                          'sortable': true
+                        },
+                        {
+                          'name': 'name',
+                          'title': '姓名',
+                          'type': 'text',
+                          'filter': true
+                        },
+                        {
+                          'name': 'email',
+                          'title': 'Email',
+                          'type': 'text',
+                          'filter': true
+                        },
+                        {
+                          'name': 'phone',
+                          'title': '手机',
+                          'type': 'text',
+                          'filter': true
+                        },
+                        {
+                          'name': 'enabled',
+                          'title': '已激活',
+                          'type': 'select',
+                          'editable': true,
+                          'filter': true,
+                          'sortable': true,
+                          'items': [
+                            {
+                              'label': '是',
+                              'value': true
+                            },
+                            {
+                              'label': '否',
+                              'value': false
+                            }
+                          ]
+                        },
+                        {
+                          'name': 'createUser',
+                          'title': '创建人',
+                          'type': 'text'
+                        },
+                        {
+                          'name': 'createdDate',
+                          'title': '创建日期',
+                          'type': 'date',
+                          'sortable': true
                         }
-                      ]
+                      ],
+                      'action': {
+                        'add': true,
+                        'detail': true,
+                        'update': true,
+                        'delete': true
+                      },
+                      'feature': {
+                        'filter': true,
+                        'pager': true
+                      }
                     },
-                    {
-                      'name': 'createUser',
-                      'title': '创建人',
-                      'type': 'text'
-                    },
-                    {
-                      'name': 'createdDate',
-                      'title': '创建日期',
-                      'type': 'date',
-                      'sortable': true
-                    }
-                  ],
-                  'action': {
-                    'add': true,
-                    'detail': true,
-                    'update': true,
-                    'delete': true
+                    'data': response.data
                   },
-                  'feature': {
-                    'filter': true,
-                    'pager': true
-                  }
-                },
-                'data': {
-                  'rows': null,
-                  'totalCount': 0,
-                  pager
-                }
-              }
+                  callParameters: {pager, init: true}
+                })
+              }).catch(function (error) {
+                global.store.commit('TABLE_FAILURE', {id: 'user-list', error})
+              })
             } else {
-              return {
-                'data': {
-                  'rows': null,
-                  'totalCount': 0,
-                  pager,
-                  filters,
-                  sorts
-                }
+              let config = {
+                url: commonUrls.userList,
+                method: 'post',
+                data: {pager, filters, sorts}
               }
+              axios.request(config).then(function (response) {
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'user-list',
+                  data: {
+                    'data': response.data
+                  },
+                  callParameters: {pager, filters, sorts}
+                })
+              }).catch(function (error) {
+                global.store.commit('TABLE_FAILURE', {id: 'user-list', error})
+              })
             }
           },
           delete: function (args) {
@@ -149,6 +155,14 @@
   }
 </script>
 
-<style scoped>
-
+<style rel="stylesheet/scss" lang="scss">
+  div.user-list {
+    .table-wrapper {
+      thead.table-header {
+        tr, th {
+          max-width: 100px;
+        }
+      }
+    }
+  }
 </style>

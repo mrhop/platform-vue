@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid head">
     <div class="pull-left">
-      <h3><span class="brand">{{appName}}</span>管理平台</h3>
+      <h3>{{appName}}<span class="brand">管理平台</span></h3>
       <a :class="menuClass" @click.prevent="menuClick"/>
     </div>
     <div class="pull-right">
