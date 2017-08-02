@@ -14,16 +14,16 @@
   export default{
     data () {
       return {
-        menuClass: 'glyphicon glyphicon-list',
+        menuClass: 'menu glyphicon glyphicon-list',
         menuOpend: true
       }
     },
     methods: {
       menuClick () {
         if (this.menuOpend) {
-          this.menuClass = 'glyphicon glyphicon-option-vertical'
+          this.menuClass = 'menu glyphicon glyphicon-option-vertical'
         } else {
-          this.menuClass = 'glyphicon glyphicon-list'
+          this.menuClass = 'menu glyphicon glyphicon-list'
         }
         this.menuOpend = !this.menuOpend
         this.$emit('menuClick', this.menuOpend)
@@ -38,15 +38,5 @@
 </script>
 
 <!-- 加入scoped是为了防止本组件中的css渗透到其他组件，可以去掉看看结果 -->
-<style rel="stylesheet/scss" lang="scss" scoped>
-  h1 {
-    color: black;
-  }
-
-  a {
-    cursor: pointer;
-    &:hover {
-      text-decoration: none;
-    }
-  }
+<style rel="stylesheet/scss" lang="scss" >
 </style>
