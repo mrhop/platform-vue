@@ -18,3 +18,6 @@ $ npm run dev # serve examples at localhost:8080
 
 然后user部分的实现，然后是
 需要提供一个直接的url post的方式，而不是json的方式？？默认是json，其他方式则是一个http post，另一个是action自行处理并返回的方式
+
+继续完成列表页面的样式，同时考虑td中的form表单以及按钮样式
+另外当当前页没有数据时，返回最后一个有数据的页面
