@@ -128,6 +128,16 @@ body {
   height: 50px;
 }
 
+.huodh-vue-modal {
+  .modal-body {
+    color: #333;
+  }
+}
+
+.form-element .date-picker {
+  color: #333;
+}
+
 #index-app {
   position: absolute;
   top: 66px;
@@ -204,18 +214,56 @@ body {
             background: rgba(0, 0, 0, .2);
             a {
               text-decoration: underline;
+              margin-bottom: 0;
             }
+            padding: 5px 0;
           }
         }
-        tr, th {
+        tr {
           &:hover {
             background: rgba(0, 0, 0, .2);
           }
           td.td-actions {
+            a {
+              text-decoration: none;
+            }
             .btn-info {
               background: $brand-primary;
+              border: $brand-primary;
               &:hover {
                 background: darken($brand-primary, 15%);
+                border: darken($brand-primary, 15%);
+              }
+            }
+          }
+          td, th {
+            a {
+              text-decoration: underline;
+              margin-bottom: 0;
+            }
+            span {
+              button {
+                margin-top: 3px;
+                border-radius: 3px;
+                border: 1px solid;
+                font-size: 11px;
+                &:nth-child(2) {
+                  background: $brand-primary;
+                  border: $brand-primary;
+                  &:hover {
+                    border: darken($brand-primary, 15%);
+                    border: darken($brand-primary, 15%);
+                  }
+                  margin-right: 4px;
+                }
+                &:nth-child(3) {
+                  background: $brand-warning;
+                  border: $brand-warning;
+                  &:hover {
+                    border: darken($brand-warning, 15%);
+                    border: darken($brand-warning, 15%);
+                  }
+                }
               }
             }
           }
@@ -251,6 +299,29 @@ body {
         }
       }
     }
+    div.form-detail {
+      .form-wrapper {
+        .form-element {
+          .form-control {
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            box-shadow: none;
+            color: #fff;
+          }
+          .date-picker {
+            div.input-wrapper {
+              background: rgba(0, 0, 0, 0.3);
+              border: none;
+              color: #fff;
+              img.cancel-btn {
+                display: none !important;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .tab-sample {
       .tab-body {
         padding: 5px 15px;

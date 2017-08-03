@@ -15,7 +15,8 @@ var commonUrls = {
   vuerouter: {
     adduser: 'adduser',
     edituser: 'edituser',
-    userdetail: 'userdetail'
+    userdetail: 'userdetail',
+    userlist: 'userlist'
   }
 }
 export {

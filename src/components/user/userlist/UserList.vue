@@ -20,7 +20,8 @@
         actionUrls: {
           addUrl: commonUrls.vuerouter.adduser,
           detailUrl: commonUrls.vuerouter.userdetail,
-          infoUrl: commonUrls.vuerouter.edituser
+          infoUrl: commonUrls.vuerouter.edituser,
+          deleteUrl: commonUrls.deleteUser
         },
         actions: {
           list: function (args) {
@@ -135,10 +136,6 @@
                 global.store.commit('TABLE_FAILURE', {id: 'user-list', error})
               })
             }
-          },
-          delete: function (args) {
-            console.log('do delete by actions delete function')
-            // var id = parseInt(args.key)
           },
           edit: function (args) {
             console.log('this is for editing')
