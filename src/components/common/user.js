@@ -8,6 +8,7 @@ var commonUrls = {
   userList: basePath + 'user/list',
   deleteUser: basePath + 'user/delete',
   userInfo: basePath + 'user/info',
+  userFormRuleUpdate: basePath + 'user/form/rulechange',
   personalInfo: basePath + 'user/',
   personalUpdate: basePath + 'user/personal/update',
   userUpdate: basePath + 'user/update',
