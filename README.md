@@ -21,3 +21,5 @@ $ npm run dev # serve examples at localhost:8080
 
 继续完成列表页面的样式，同时考虑td中的form表单以及按钮样式
 另外当当前页没有数据时，返回最后一个有数据的页面
+
+需要将formelement中的formreset 做完包含file，同时考虑是否使用form.reset()
