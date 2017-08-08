@@ -889,8 +889,8 @@ app.get(path.posix.join(config.dev.assetsPublicPath, 'data/form-reset.html'), fu
 
 app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html'), function (req, res) {
   var data = req.body
-  if (data && data.testRadio) {
-    if (data.testRadio == '1') {
+  if (data && data.changed.testRadio) {
+    if (data.changed.testRadio == '1') {
       res.json([
         {
           "name": "ruleChange1",
@@ -903,7 +903,7 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html
           "hidden": true
         }
       ])
-    } else if (data.testRadio == '2') {
+    } else if (data.changed.testRadio == '2') {
       res.json([
         {
           "name": "ruleChange1",
@@ -916,7 +916,7 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html
           "hidden": true
         }
       ])
-    } else if (data.testRadio == '3') {
+    } else if (data.changed.testRadio == '3') {
       res.json([
         {
           "name": "ruleChange1",
@@ -934,7 +934,7 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html
       ])
     }
   }
-  if (data && data.addLine) {
+  if (data && data.changed.addLine) {
     // add line
     if (!formLineAdd.add1) {
       formLineAdd.add1 = true
@@ -966,7 +966,7 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html
       ])
     }
   }
-  if (data && data.delLine1) {
+  if (data && data.changed.delLine1) {
     formLineAdd.add1 = false
     res.json([
       {
@@ -981,7 +981,7 @@ app.post(path.posix.join(config.dev.assetsPublicPath, 'data/form-rulechange.html
       }
     ])
   }
-  if (data && data.delLine2) {
+  if (data && data.changed.delLine2) {
     formLineAdd.add2 = false
     res.json([
       {

@@ -17,70 +17,136 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.userlist
+          backupUrl: commonUrls.vuerouter.userlist,
+          saveUrl: commonUrls.userSave
         },
         actions: {
           init: function (params) {
-             // 首先需要考虑权限，然后给出rule change
+            // 首先需要考虑权限，然后给出rule change
             let config = {
               url: commonUrls.userFormRuleUpdate,
-              method: 'get'
+              method: 'post'
             }
+            axios.request(config).then(function (response) {
               let rules = {
                 'items': [
                   {
                     'name': 'username',
                     'label': '账号',
                     'type': 'text',
-                    'locked': true
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }, {
+                      'errorMsg': '账号由英文，数字和 _ 组成，并在5-40个字符之间',
+                      'regex': '^\\w{5,40}$'
+                    }],
+                    'placeholder': '账号'
                   },
                   {
                     'name': 'name',
                     'label': '姓名',
                     'type': 'text',
-                    'locked': true
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }, {
+                      'errorMsg': '账号由英文，数字和 _ 组成，并在2-40个字符之间',
+                      'regex': '^\\S{2,40}$'
+                    }],
+                    'placeholder': '姓名'
                   },
                   {
                     'name': 'phone',
                     'label': '电话',
                     'type': 'text',
-                    'locked': true
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }, {
+                      'errorMsg': '请输入正确的手机号',
+                      'regex': '^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|(17|18)[0|1|2|3|5|6|7|8|9])\\d{8}$'
+                    }],
+                    'placeholder': '手机号'
                   },
                   {
                     'name': 'email',
                     'label': 'Email',
                     'type': 'text',
-                    'locked': true
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }, {
+                      'errorMsg': '请输入正确的Email',
+                      'regex': '^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
+                    }],
+                    'placeholder': 'Email'
+                  },
+                  {
+                    'name': 'photo',
+                    'label': '头像',
+                    'type': 'file',
+                    'validate': [{
+                      'errorMsg': '只能为图片文件',
+                      'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
+                    }],
+                    'maxSize': 5000
                   },
                   {
                     'name': 'enabledStr',
                     'label': '是否激活',
-                    'type': 'text',
-                    'locked': true
+                    'type': 'select',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    'defaultValue': true,
+                    'items': [
+                      {
+                        'label': '激活',
+                        'value': true
+                      },
+                      {
+                        'label': '未激活',
+                        'value': false
+                      }
+                    ]
                   },
                   {
                     'name': 'limitedDate',
                     'label': '有效期',
-                    'type': 'date',
-                    'locked': true
+                    'type': 'date'
                   },
                   {
                     'name': 'authoritiesStr',
                     'label': '权限',
-                    'type': 'text',
-                    'locked': true
+                    'type': 'select',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    'ruleChange': true
                   },
                   {
-                    'name': 'clientsStr',
+                    'name': 'clients',
                     'label': '关联客户端',
-                    'type': 'text',
-                    'locked': true
+                    'type': 'checkbox',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    'hidden': true,
+                    'ruleChange': true
                   },
                   {
-                    'name': 'modulesAuthoritiesStr',
+                    'name': 'modulesAuthorities',
                     'label': '模块权限',
-                    'type': 'text',
-                    'locked': true
+                    'type': 'checkbox',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    'hidden': true
                   }
                 ],
                 action: {
@@ -96,10 +162,16 @@
                 }
               }
               if (response.data) {
-                for (var key in rules.items) {
-                  if (response.data.hasOwnProperty(rules.items[key].name)) {
-                    // 选项的设计
-                    rules.items[key].items = response.data[rules.items[key].name]
+                if (response.data.authorities) {
+                  for (var key in rules.items) {
+                    if (rules.items[key].name === 'authorities') {
+                      rules.items[key].items = response.data.authorities
+                    } else if (rules.items[key].name === 'clients') {
+                      if (response.data.authorities.length === 2 && response.data.clients) {
+                        rules.items[key].items = response.data.clients
+                        delete rules.items['clients'].hidden
+                      }
+                    }
                   }
                 }
               }
@@ -109,144 +181,12 @@
                   rules
                 }
               })
-            }
-          },
-          save: function (params) {
-            if (params.key) {
-              console.log('save data by key:' + params.key)
-            }
-            if (params.data) {
-              console.log('these data will be saved:' + JSON.stringify(params.data))
-            }
-            if (params.multipart) {
-              console.log('we shall transfer these data to server by multipart type')
-            }
-            return {
-              success: {
-                title: '保存数据',
-                message: '保存成功'
-              }
-            }
+            }).catch(function (error) {
+              console.log(error)
+            })
           },
           ruleChange: function (params) {
-            if (params.parameters) {
-              console.log('change rule data by key:' + JSON.stringify(params.data))
-            }
-            const data = params.parameters
-            if (data && data.testRadio) {
-              if (data.testRadio === '1') {
-                return [
-                  {
-                    'name': 'ruleChange1',
-                    'hidden': false
-                  }, {
-                    'name': 'ruleChange2',
-                    'hidden': true
-                  }, {
-                    'name': 'ruleChange3',
-                    'hidden': true
-                  }
-                ]
-              } else if (data.testRadio === '2') {
-                return [
-                  {
-                    'name': 'ruleChange1',
-                    'hidden': true
-                  }, {
-                    'name': 'ruleChange2',
-                    'hidden': false
-                  }, {
-                    'name': 'ruleChange3',
-                    'hidden': true
-                  }
-                ]
-              } else if (data.testRadio === '3') {
-                return [
-                  {
-                    'name': 'ruleChange1',
-                    'hidden': true
-                  },
-                  {
-                    'name': 'ruleChange2',
-                    'hidden': true
-                  },
-                  {
-                    'name': 'ruleChange3',
-                    'defaultValue': '联动测试3' + new Date().getMilliseconds(),
-                    'hidden': false
-                  }
-                ]
-              }
-            }
-            if (data && data.addLine) {
-              // add line
-              if (!formLineAdd.add1) {
-                formLineAdd.add1 = true
-                return [
-                  {
-                    'name': 'testInline4',
-                    'hidden': false
-                  }, {
-                    'name': 'testInline5',
-                    'hidden': false
-                  }, {
-                    'name': 'delLine1',
-                    'hidden': false
-                  }
-                ]
-              } else if (!formLineAdd.add2) {
-                formLineAdd.add2 = true
-                return [
-                  {
-                    'name': 'testInline6',
-                    'hidden': false
-                  }, {
-                    'name': 'testInline7',
-                    'hidden': false
-                  }, {
-                    'name': 'delLine2',
-                    'hidden': false
-                  }
-                ]
-              }
-            }
-            if (data && data.delLine1) {
-              formLineAdd.add1 = false
-              return [
-                {
-                  'name': 'testInline4',
-                  'hidden': true
-                }, {
-                  'name': 'testInline5',
-                  'hidden': true
-                }, {
-                  'name': 'delLine1',
-                  'hidden': true
-                }
-              ]
-            }
-            if (data && data.delLine2) {
-              formLineAdd.add2 = false
-              return [
-                {
-                  'name': 'testInline6',
-                  'hidden': true
-                }, {
-                  'name': 'testInline7',
-                  'hidden': true
-                }, {
-                  'name': 'delLine2',
-                  'hidden': true
-                }
-              ]
-            }
-          },
-          reset: function (params) {
-            if (params.key) {
-              console.log('reset form by key:' + params.key)
-            }
-            formLineAdd = {add1: false, add2: false}
-          },
+          }
         }
       }
     },
