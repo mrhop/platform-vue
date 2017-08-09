@@ -13,6 +13,10 @@
   import {commonUrls} from '../../common/user'
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
+  let ruleChangeConfig = {
+    url: commonUrls.userFormRuleUpdate,
+    method: 'post'
+  }
   export default{
     data () {
       return {
@@ -23,11 +27,7 @@
         actions: {
           init: function (params) {
             // 首先需要考虑权限，然后给出rule change
-            let config = {
-              url: commonUrls.userFormRuleUpdate,
-              method: 'post'
-            }
-            axios.request(config).then(function (response) {
+            axios.request(ruleChangeConfig).then(function (response) {
               let rules = {
                 'items': [
                   {
@@ -93,7 +93,7 @@
                     'maxSize': 5000
                   },
                   {
-                    'name': 'enabledStr',
+                    'name': 'enabled',
                     'label': '是否激活',
                     'type': 'select',
                     'validate': [{
@@ -118,7 +118,7 @@
                     'type': 'date'
                   },
                   {
-                    'name': 'authoritiesStr',
+                    'name': 'authorities',
                     'label': '权限',
                     'type': 'select',
                     'validate': [{
@@ -167,9 +167,9 @@
                     if (rules.items[key].name === 'authorities') {
                       rules.items[key].items = response.data.authorities
                     } else if (rules.items[key].name === 'clients') {
+                      rules.items[key].items = response.data.clients
                       if (response.data.authorities.length === 2 && response.data.clients) {
-                        rules.items[key].items = response.data.clients
-                        delete rules.items['clients'].hidden
+                        rules.items['clients'].hidden = false
                       }
                     }
                   }
@@ -186,6 +186,100 @@
             })
           },
           ruleChange: function (params) {
+            if (params.changed.authorities) {
+              if (params.changed.authorities === 'ROLE_super_admin') {
+                return [
+                  {
+                    'name': 'clients',
+                    'hidden': true
+                  },
+                  {
+                    'name': 'modulesAuthorities',
+                    'hidden': true
+                  }
+                ]
+              } else if (params.changed.authorities === 'ROLE_admin') {
+                return [
+                  {
+                    'name': 'clients',
+                    'hidden': false
+                  },
+                  {
+                    'name': 'modulesAuthorities',
+                    'hidden': true
+                  }
+                ]
+              } else {
+                for (let key in params.items) {
+                  if (params.items[key].name === 'clients') {
+                    if (params.items[key].defaultValue.length > 0) {
+                      ruleChangeConfig.data = {'clients': params.items[key].defaultValue}
+                      axios.request(ruleChangeConfig).then(function (response) {
+                        global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
+                          id: 'user-add-form',
+                          data: [
+                            {
+                              'name': 'clients',
+                              'hidden': false
+                            },
+                            {
+                              'name': 'modulesAuthorities',
+                              'items': response.data.modulesAuthorities || [],
+                              'hidden': false
+                            }
+                          ]
+                        })
+                      }).catch(function (error) {
+                        console.log(error)
+                      })
+                      return
+                    }
+                  }
+                }
+                return [
+                  {
+                    'name': 'clients',
+                    'hidden': false
+                  },
+                  {
+                    'name': 'modulesAuthorities',
+                    'hidden': false
+                  }
+                ]
+              }
+            } else if (params.changed.clients) {
+              for (let key in params.items) {
+                if (params.items[key].name === 'authorities') {
+                  if (params.items[key].defaultValue === 'ROLE_common_user') {
+                    if (params.changed.clients.length > 0) {
+                      ruleChangeConfig.data = params.changed
+                      axios.request(ruleChangeConfig).then(function (response) {
+                        global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
+                          id: 'user-add-form',
+                          data: [
+                            {
+                              'name': 'modulesAuthorities',
+                              'items': response.data.modulesAuthorities || [],
+                              'hidden': false
+                            }
+                          ]
+                        })
+                      }).catch(function (error) {
+                        console.log(error)
+                      })
+                    } else {
+                      return [
+                        {
+                          'name': 'modulesAuthorities',
+                          'items': [],
+                          'hidden': false
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
