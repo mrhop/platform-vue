@@ -44,6 +44,27 @@
                     'placeholder': '账号'
                   },
                   {
+                    'name': 'password',
+                    'label': '密码',
+                    'type': 'password',
+                    'placeholder': '密码',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }, {
+                      'errorMsg': '至少包含数字，字母以及特殊字符【!@#$%^&*_】中任意两种,并在5-15字符之间',
+                      'regex': '^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*_]+$)[\\w!@#$%^&*]{5,15}$'
+                    }],
+                    'ruleChange': true
+                  },
+                  {
+                    'name': 'repassword',
+                    'label': '重复密码',
+                    'type': 'password',
+                    'placeholder': '重复密码',
+                    'ruleChange': true
+                  },
+                  {
                     'name': 'name',
                     'label': '姓名',
                     'type': 'text',
@@ -83,7 +104,7 @@
                     'placeholder': 'Email'
                   },
                   {
-                    'name': 'photo',
+                    'name': 'photoFiles',
                     'label': '头像',
                     'type': 'file',
                     'validate': [{
@@ -118,7 +139,7 @@
                     'type': 'date'
                   },
                   {
-                    'name': 'authorities',
+                    'name': 'authoritiesKey',
                     'label': '权限',
                     'type': 'select',
                     'validate': [{
@@ -164,7 +185,7 @@
               if (response.data) {
                 if (response.data.authorities) {
                   for (var key in rules.items) {
-                    if (rules.items[key].name === 'authorities') {
+                    if (rules.items[key].name === 'authoritiesKey') {
                       rules.items[key].items = response.data.authorities
                     } else if (rules.items[key].name === 'clients') {
                       rules.items[key].items = response.data.clients
@@ -186,8 +207,8 @@
             })
           },
           ruleChange: function (params) {
-            if (params.changed.authorities) {
-              if (params.changed.authorities === 'ROLE_super_admin') {
+            if (params.changed.authoritiesKey) {
+              if (params.changed.authoritiesKey === 'ROLE_super_admin') {
                 return [
                   {
                     'name': 'clients',
@@ -198,7 +219,7 @@
                     'hidden': true
                   }
                 ]
-              } else if (params.changed.authorities === 'ROLE_admin') {
+              } else if (params.changed.authoritiesKey === 'ROLE_admin') {
                 return [
                   {
                     'name': 'clients',
@@ -249,7 +270,7 @@
               }
             } else if (params.changed.clients) {
               for (let key in params.items) {
-                if (params.items[key].name === 'authorities') {
+                if (params.items[key].name === 'authoritiesKey') {
                   if (params.items[key].defaultValue === 'ROLE_common_user') {
                     if (params.changed.clients.length > 0) {
                       ruleChangeConfig.data = params.changed
@@ -276,6 +297,44 @@
                         }
                       ]
                     }
+                  }
+                }
+              }
+            } else if (params.changed.repassword !== undefined) {
+              for (let key in params.items) {
+                if (params.items[key].name === 'password') {
+                  if (params.items[key].defaultValue !== params.changed.repassword) {
+                    return [
+                      {
+                        'name': 'repassword',
+                        'validatedMsg': '密码不一致'
+                      }
+                    ]
+                  } else {
+                    return [
+                      {
+                        'name': 'repassword'
+                      }
+                    ]
+                  }
+                }
+              }
+            } else if (params.changed.password !== undefined) {
+              for (let key in params.items) {
+                if (params.items[key].name === 'repassword') {
+                  if (params.items[key].defaultValue !== params.changed.password) {
+                    return [
+                      {
+                        'name': 'repassword',
+                        'validatedMsg': '密码不一致'
+                      }
+                    ]
+                  } else {
+                    return [
+                      {
+                        'name': 'repassword'
+                      }
+                    ]
                   }
                 }
               }
