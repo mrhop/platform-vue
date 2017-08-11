@@ -116,6 +116,39 @@
               }
             }
           },
+          save: function ({key, data, multipart}) {
+            axios.request(ruleChangeConfig).then(function (response) {
+              if (response.data) {
+              }
+              global.store.commit('FORM_SUCCESS', {
+                id: 'user-add-form',
+                data: {
+                  rules
+                }
+              })
+            }).catch(function (error) {
+              global.store.commit('FORM_SUCCESS', {
+                id: 'user-add-form',
+                data: {
+                  rules
+                }
+              })
+              console.log(error)
+            })
+            if (params.data) {
+              console.log('these data will be saved:' + JSON.stringify(params.data))
+            }
+            if (params.multipart) {
+              console.log('we shall transfer these data to server by multipart type')
+            }
+            console.log('deal with the data by this save function itself')
+            return {
+              success: {
+                title: '保存数据',
+                message: '保存成功'
+              }
+            }
+          },
           ruleChange: function (params) {
             if (params.changed.repassword !== undefined) {
               for (let key in params.items) {
