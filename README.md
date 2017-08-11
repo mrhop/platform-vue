@@ -19,4 +19,4 @@ $ npm run dev # serve examples at localhost:8080
 然后user部分的实现，然后是
 需要提供一个直接的url post的方式，而不是json的方式？？默认是json，其他方式则是一个http post，另一个是action自行处理并返回的方式
 
-registration 注册页面的处理，需要在注册完成后跳转到登陆页面
+下一步是更新页面的实现，然后就是其他功能块的实现，最后是左侧树的实现，然后cms

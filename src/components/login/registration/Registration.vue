@@ -3,18 +3,27 @@
   <panel id="registration-wrapper" :col="6">
     <h1 slot="header">用户注册</h1>
     <vform id="registration-form" :actionUrls="formActionUrls" :actions="formActions"></vform>
+    <modalTpl :confirmModal="false"
+              type="success"
+              :trigger="succeed" v-on:closeEvent="routeToLogin">
+      <span slot="header">注册成功</span>
+      <div slot="body">点击返回登录页面</div>
+    </modalTpl>
   </panel>
 </template>
 
 <script>
+  import axios from 'axios'
   import huodhVuePlugins from 'huodh-vue-plugins'
   import {commonUrls} from '../../common/login'
 
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
-  export default{
+  let modalTpl = huodhVuePlugins.modalTpl
+  export default {
     data () {
       return {
+        succeed: false,
         formActions: {
           init: function (params) {
             return {
@@ -117,38 +126,30 @@
             }
           },
           save: function ({key, data, multipart}) {
-            axios.request(ruleChangeConfig).then(function (response) {
-              if (response.data) {
+            let config = {
+              headers: {'Content-Type': 'multipart/form-data'},
+              url: commonUrls.registration,
+              method: 'post',
+              data: this.$Vue.generateFormData(data)
+            }
+            const _this = this
+            axios.request(config).then(function (response) {
+              if (response.data && response.data.error) {
+                global.store.commit('FORM_SAVE_SUCCESS', {
+                  id: 'registration-form',
+                  data: response.data
+                })
+              } else {
+                // trigger the module,and the route to the right login page
+                _this.succeed = !_this.succeed
               }
-              global.store.commit('FORM_SUCCESS', {
-                id: 'user-add-form',
-                data: {
-                  rules
-                }
-              })
             }).catch(function (error) {
-              global.store.commit('FORM_SUCCESS', {
-                id: 'user-add-form',
-                data: {
-                  rules
-                }
+              global.store.commit('FORM_SAVE_FAILURE', {
+                id: 'registration-form',
+                error
               })
-              console.log(error)
             })
-            if (params.data) {
-              console.log('these data will be saved:' + JSON.stringify(params.data))
-            }
-            if (params.multipart) {
-              console.log('we shall transfer these data to server by multipart type')
-            }
-            console.log('deal with the data by this save function itself')
-            return {
-              success: {
-                title: '保存数据',
-                message: '保存成功'
-              }
-            }
-          },
+          }.bind(this),
           ruleChange: function (params) {
             if (params.changed.repassword !== undefined) {
               for (let key in params.items) {
@@ -192,14 +193,18 @@
           }
         },
         formActionUrls: {
-          saveUrl: commonUrls.registration,
           login: commonUrls.loginPage
         }
       }
     },
-    methods: {},
+    methods: {
+      routeToLogin () {
+        // go to the login page
+        this.$router.push(commonUrls.loginPage)
+      }
+    },
     components: {
-      panel, vform
+      panel, vform, modalTpl
     }
   }
 </script>
