@@ -138,6 +138,44 @@ body {
   color: #333;
 }
 
+#login-wrapper, #registration-wrapper, #index-app {
+  .form-wrapper {
+    .form-element {
+      .form-control {
+        background: rgba(0, 0, 0, 0.3);
+        border: none;
+        box-shadow: none;
+        color: #fff;
+      }
+      .date-picker {
+        div.input-wrapper {
+          background: rgba(0, 0, 0, 0.3);
+          border: none;
+          color: #fff;
+          .cancel-btn {
+            background-image: url("../assets/images/cancel-btn.png");
+          }
+        }
+      }
+      .select-block {
+        select {
+          option {
+            background: rgba(0, 0, 0, .6);
+          }
+        }
+        .cancel-btn {
+          background-image: url("../assets/images/cancel-btn.png");
+        }
+      }
+      .tree-block {
+        .cancel-btn {
+          background-image: url("../assets/images/cancel-btn.png");
+        }
+      }
+    }
+  }
+}
+
 #index-app {
   position: absolute;
   top: 66px;
@@ -299,36 +337,6 @@ body {
         }
       }
     }
-    div.form-detail {
-      .form-wrapper {
-        .form-element {
-          .form-control {
-            background: rgba(0, 0, 0, 0.3);
-            border: none;
-            box-shadow: none;
-            color: #fff;
-          }
-          .date-picker {
-            div.input-wrapper {
-              background: rgba(0, 0, 0, 0.3);
-              border: none;
-              color: #fff;
-              img.cancel-btn {
-                display: none !important;
-              }
-            }
-          }
-          .select-block {
-            select {
-              option {
-                background: rgba(0, 0, 0, .6);
-              }
-            }
-          }
-        }
-      }
-    }
-
     .tab-sample {
       .tab-body {
         padding: 5px 15px;

@@ -111,7 +111,8 @@
                       'errorMsg': '只能为图片文件',
                       'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
                     }],
-                    'maxSize': 5000
+                    required: true,
+                    'maxSize': 50000
                   },
                   {
                     'name': 'enabled',

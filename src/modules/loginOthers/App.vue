@@ -131,7 +131,7 @@
 
   #registration-wrapper {
     @media(min-width: $screen-sm-min) {
-      margin-top: -182px;
+      margin-top: -236px;
     }
   }
 </style>
