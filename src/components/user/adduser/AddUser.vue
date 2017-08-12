@@ -11,13 +11,14 @@
   import huodhVuePlugins from 'huodh-vue-plugins'
   import axios from 'axios'
   import {commonUrls} from '../../common/user'
+
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
   let ruleChangeConfig = {
     url: commonUrls.userFormRuleUpdate,
     method: 'post'
   }
-  export default{
+  export default {
     data () {
       return {
         actionUrls: {
@@ -146,7 +147,8 @@
                       'errorMsg': '不能为空',
                       'regex': '^\\S+$'
                     }],
-                    'ruleChange': true
+                    'ruleChange': true,
+                    'items': response.data.authorities
                   },
                   {
                     'name': 'clients',
@@ -156,8 +158,9 @@
                       'errorMsg': '不能为空',
                       'regex': '^\\S+$'
                     }],
-                    'hidden': true,
-                    'ruleChange': true
+                    'hidden': response.data.authorities.length === 3,
+                    'ruleChange': true,
+                    'items': response.data.clients
                   },
                   {
                     'name': 'modulesAuthorities',
@@ -179,20 +182,6 @@
                   },
                   backup: {
                     label: '返回列表'
-                  }
-                }
-              }
-              if (response.data) {
-                if (response.data.authorities) {
-                  for (var key in rules.items) {
-                    if (rules.items[key].name === 'authoritiesKey') {
-                      rules.items[key].items = response.data.authorities
-                    } else if (rules.items[key].name === 'clients') {
-                      rules.items[key].items = response.data.clients
-                      if (response.data.authorities.length === 2 && response.data.clients) {
-                        rules.items['clients'].hidden = false
-                      }
-                    }
                   }
                 }
               }

@@ -11,10 +11,11 @@
   import axios from 'axios'
   import huodhVuePlugins from 'huodh-vue-plugins'
   import {commonUrls} from '../../common/user'
+
   let panel = huodhVuePlugins.panel
   let tab = huodhVuePlugins.tab
   let vtable = huodhVuePlugins.vtable
-  export default{
+  export default {
     data () {
       return {
         actionUrls: {
@@ -33,7 +34,7 @@
               let config = {
                 url: commonUrls.userList,
                 method: 'post',
-                data: {pager, init: true}
+                data: {pager, filters, sorts, init: true}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
