@@ -15,7 +15,7 @@
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
   let initConfig = {
-    url: commonUrls.userInfo,
+    url: commonUrls.personalInfo,
     method: 'get'
   }
   export default {
@@ -108,7 +108,7 @@
                   {
                     'name': 'photoFiles',
                     'label': '头像',
-                    'type': 'file',
+                    'type': 'image',
                     'validate': [{
                       'errorMsg': '只能为图片文件',
                       'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
@@ -143,7 +143,7 @@
                     'label': '关联客户端',
                     'type': 'text',
                     'locked': true,
-                    'hidden': response.data.clientsStr ? false : true,
+                    'hidden': !response.data.clientsStr,
                     'defaultValue': response.data.clientsStr
                   },
                   {
@@ -151,8 +151,8 @@
                     'label': '模块权限',
                     'type': 'text',
                     'locked': true,
-                    'hidden': response.data.clientsStr ? false : true,
-                    'defaultValue': response.data.clientsStr
+                    'hidden': !response.data.modulesAuthoritiesStr,
+                    'defaultValue': response.data.modulesAuthoritiesStr
                   }
                 ],
                 action: {
@@ -175,100 +175,7 @@
             })
           },
           ruleChange: function (params) {
-            if (params.changed.authoritiesKey) {
-              if (params.changed.authoritiesKey === 'ROLE_super_admin') {
-                return [
-                  {
-                    'name': 'clients',
-                    'hidden': true
-                  },
-                  {
-                    'name': 'modulesAuthorities',
-                    'hidden': true
-                  }
-                ]
-              } else if (params.changed.authoritiesKey === 'ROLE_admin') {
-                return [
-                  {
-                    'name': 'clients',
-                    'hidden': false
-                  },
-                  {
-                    'name': 'modulesAuthorities',
-                    'hidden': true
-                  }
-                ]
-              } else {
-                for (let key in params.items) {
-                  if (params.items[key].name === 'clients') {
-                    if (params.items[key].defaultValue.length > 0) {
-                      ruleChangeConfig.data = {'clients': params.items[key].defaultValue}
-                      axios.request(ruleChangeConfig).then(function (response) {
-                        global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
-                          id: 'user-personal-form',
-                          data: [
-                            {
-                              'name': 'clients',
-                              'hidden': false
-                            },
-                            {
-                              'name': 'modulesAuthorities',
-                              'items': response.data.modulesAuthorities || [],
-                              'hidden': false
-                            }
-                          ]
-                        })
-                      }).catch(function (error) {
-                        console.log(error)
-                      })
-                      return
-                    }
-                  }
-                }
-                return [
-                  {
-                    'name': 'clients',
-                    'hidden': false
-                  },
-                  {
-                    'name': 'modulesAuthorities',
-                    'hidden': false
-                  }
-                ]
-              }
-            } else if (params.changed.clients) {
-              for (let key in params.items) {
-                if (params.items[key].name === 'authoritiesKey') {
-                  if (params.items[key].defaultValue === 'ROLE_common_user') {
-                    if (params.changed.clients.length > 0) {
-                      ruleChangeConfig.data = params.changed
-                      axios.request(ruleChangeConfig).then(function (response) {
-                        global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
-                          id: 'user-personal-form',
-                          data: [
-                            {
-                              'name': 'modulesAuthorities',
-                              'items': response.data.modulesAuthorities || [],
-                              'hidden': false
-                            }
-                          ]
-                        })
-                      }).catch(function (error) {
-                        console.log(error)
-                      })
-                    } else {
-                      return [
-                        {
-                          'name': 'modulesAuthorities',
-                          'items': [],
-                          'hidden': false
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            } else if (params.changed.repassword !== undefined) {
+            if (params.changed.repassword !== undefined) {
               for (let key in params.items) {
                 if (params.items[key].name === 'password') {
                   if (params.items[key].defaultValue !== params.changed.repassword) {
