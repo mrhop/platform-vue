@@ -137,12 +137,6 @@
                 global.store.commit('TABLE_FAILURE', {id: 'user-list', error})
               })
             }
-          },
-          edit: function (args) {
-            console.log('this is for editing')
-            if (args && args.headerItem && (args.headerItem.type === 'file' || args.headerItem.type === 'image')) {
-              return 'http://www.hopever.cn/mogilefs/images/user/photo/14817789496788475104059462733375755.jpg'
-            }
           }
         }
       }
@@ -154,13 +148,5 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-  div.user-list {
-    .table-wrapper {
-      thead.table-header {
-        tr, th {
-          max-width: 100px;
-        }
-      }
-    }
-  }
+
 </style>

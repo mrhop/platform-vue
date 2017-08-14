@@ -107,7 +107,7 @@
                   {
                     'name': 'photoFiles',
                     'label': '头像',
-                    'type': 'file',
+                    'type': 'image',
                     'validate': [{
                       'errorMsg': '只能为图片文件',
                       'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'

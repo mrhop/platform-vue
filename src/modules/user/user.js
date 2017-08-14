@@ -1,3 +1,5 @@
+require('./user.scss')
+
 import Vue from 'vue'
 import router from '../../router/user'
 import Vuex from 'vuex'
