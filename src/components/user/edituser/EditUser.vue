@@ -27,8 +27,8 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.userlist,
-          saveUrl: commonUrls.userUpdate
+          backupUrl: commonUrls.vuerouter.userlist
+//          saveUrl: commonUrls.userUpdate
         },
         actions: {
           init: function (params) {
@@ -76,12 +76,10 @@
                       'type': 'password',
                       'placeholder': '密码',
                       'validate': [{
-                        'errorMsg': '不能为空',
-                        'regex': '^\\S+$'
-                      }, {
                         'errorMsg': '至少包含数字，字母以及特殊字符【!@#$%^&*_】中任意两种,并在5-15字符之间',
                         'regex': '^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*_]+$)[\\w!@#$%^&*]{5,15}$'
                       }],
+                      'required': false,
                       'ruleChange': true
                     },
                     {
@@ -142,7 +140,8 @@
                         'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
                       }],
                       'maxSize': 50000,
-                      'path': response.data.photo ? [response.data.photo] : undefined
+                      'path': response.data.photo ? [response.data.photo] : undefined,
+                      'required': false
                     },
                     {
                       'name': 'enabled',
@@ -239,6 +238,31 @@
               })
             })
           },
+          save: function ({key, data, multipart}) {
+            let config = {
+              headers: {'Content-Type': 'multipart/form-data'},
+              url: commonUrls.userUpdate,
+              method: 'post',
+              params: {key},
+              data: this.$Vue.generateFormData(data)
+            }
+            const _this = this
+            axios.request(config).then(function (response) {
+              if (response.data && response.data.error) {
+                global.store.commit('FORM_SAVE_SUCCESS', {
+                  id: 'user-update-form',
+                  data: response.data
+                })
+              } else if (response.data && response.data.success) {
+                _this.$router.push(commonUrls.vuerouter.userlist)
+              }
+            }).catch(function (error) {
+              global.store.commit('FORM_SAVE_FAILURE', {
+                id: 'user-update-form',
+                error
+              })
+            })
+          }.bind(this),
           ruleChange: function (params) {
             if (params.changed.authoritiesKey) {
               if (params.changed.authoritiesKey === 'ROLE_super_admin') {
@@ -377,7 +401,7 @@
       }
     },
     methods: {
-      backToUserList: function backToUserList () {
+      backToUserList: function () {
         this.$router.push(commonUrls.vuerouter.userlist)
       }
     },
