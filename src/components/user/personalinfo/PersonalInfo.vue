@@ -35,9 +35,6 @@
                     'label': '账号',
                     'type': 'text',
                     'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }, {
                       'errorMsg': '账号由英文，数字和 _ 组成，并在5-40个字符之间',
                       'regex': '^\\w{5,40}$'
                     }],
@@ -68,11 +65,8 @@
                     'label': '姓名',
                     'type': 'text',
                     'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }, {
-                      'errorMsg': '账号由英文，数字和 _ 组成，并在2-40个字符之间',
-                      'regex': '^\\S{2,40}$'
+                      'errorMsg': '姓名在2-40个字符之间,且前后不能有空格',
+                      'regex': '^\\S.{0,38}\\S$'
                     }],
                     'placeholder': '姓名',
                     'defaultValue': response.data.name
@@ -82,9 +76,6 @@
                     'label': '电话',
                     'type': 'text',
                     'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }, {
                       'errorMsg': '请输入正确的手机号',
                       'regex': '^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|(17|18)[0|1|2|3|5|6|7|8|9])\\d{8}$'
                     }],
@@ -96,9 +87,6 @@
                     'label': 'Email',
                     'type': 'text',
                     'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }, {
                       'errorMsg': '请输入正确的Email',
                       'regex': '^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
                     }],
