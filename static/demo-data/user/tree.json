@@ -26,5 +26,19 @@
     "title": "角色管理",
     "url": "/rolelist",
     "iconClass": "glyphicon glyphicon-pawn"
+  },
+  {
+    "title": "应用管理",
+    "iconClass": "glyphicon glyphicon-user",
+    "children": [
+      {
+        "title": "应用列表",
+        "url": "/userlist"
+      },
+      {
+        "title": "新增应用",
+        "url": "/adduser"
+      }
+    ]
   }
 ]

@@ -203,9 +203,19 @@ body {
     }
     background: $base-background;
     .tree-wrapper {
-      .tree-item {
+      li.tree-item {
         font-size: 14px;
+        margin-bottom: 10px;
         white-space: nowrap;
+        > p {
+          .glyphicon {
+            margin-right: 10px;
+          }
+        }
+        ul {
+          margin-top: 10px;
+          padding-left: 30px;
+        }
       }
     }
     @include transition(all 400ms);
@@ -255,6 +265,13 @@ body {
               margin-bottom: 0;
             }
             padding: 5px 0;
+          }
+        }
+        tbody.table-body {
+          th, td {
+            > span {
+              line-height: 33px;
+            }
           }
         }
         tr {

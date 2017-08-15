@@ -137,6 +137,19 @@
                 global.store.commit('TABLE_FAILURE', {id: 'user-list', error})
               })
             }
+          },
+          edit: function (args) {
+            console.log('this is for editing')
+            if (args && args.headerItem && args.headerItem.name === 'enabled') {
+              let config = {
+                'axiosConfig': {
+                  url: commonUrls.setUserEnabled,
+                  method: 'get',
+                  params: {key: args.key, enabled: args.data['enabled']}
+                }
+              }
+              return config
+            }
           }
         }
       }

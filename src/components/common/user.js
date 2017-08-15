@@ -6,6 +6,7 @@ let basePath = 'http://localhost:9091/'
 var commonUrls = {
   leftTree: 'http://localhost:8080/static/demo-data/user/tree.json',
   userList: basePath + 'user/list',
+  setUserEnabled: basePath + 'user/setEnabled',
   deleteUser: basePath + 'user/delete',
   userInfo: basePath + 'user/info',
   userFormRuleUpdate: basePath + 'user/form/rulechange',
