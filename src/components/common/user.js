@@ -15,11 +15,21 @@ var commonUrls = {
   userUpdate: basePath + 'user/update',
   userSave: basePath + 'user/save',
   roleList: basePath + 'role/list',
+  // app
+  appList: basePath + 'client/list',
+  deleteApp: basePath + 'client/delete',
+  appInfo: basePath + 'client/info',
+  appUpdate: basePath + 'client/update',
+  appSave: basePath + 'client/save',
   vuerouter: {
     adduser: 'adduser',
     edituser: 'edituser',
     userdetail: 'userdetail',
-    userlist: 'userlist'
+    userlist: 'userlist',
+    addapp: 'addapp',
+    editapp: 'editapp',
+    appdetail: 'appdetail',
+    applist: 'applist'
   }
 }
 export {

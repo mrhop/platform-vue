@@ -7,6 +7,10 @@ import EditUser from '@/components/user/edituser/EditUser'
 import UserDetail from '@/components/user/userdetail/UserDetail'
 import PersonalInfo from '@/components/user/personalinfo/PersonalInfo'
 import RoleList from '@/components/user/rolelist/RoleList'
+import AppList from '@/components/user/applist/AppList'
+import AddApp from '@/components/user/addapp/AddApp'
+import EditApp from '@/components/user/editapp/EditApp'
+import AppDetail from '@/components/user/appdetail/AppDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +43,22 @@ export default new Router({
       path: '/rolelist',
       name: 'RoleList',
       component: RoleList
+    }, {
+      path: '/applist',
+      name: 'AppList',
+      component: AppList
+    }, {
+      path: '/addapp',
+      name: 'AddApp',
+      component: AddApp
+    }, {
+      path: '/editapp',
+      name: 'EditApp',
+      component: EditApp
+    }, {
+      path: '/appdetail',
+      name: 'AppDetail',
+      component: AppDetail
     }
   ]
 })

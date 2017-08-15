@@ -19,7 +19,4 @@ $ npm run dev # serve examples at localhost:8080
 然后user部分的实现，然后是
 需要提供一个直接的url post的方式，而不是json的方式？？默认是json，其他方式则是一个http post，另一个是action自行处理并返回的方式
 
-开始personalInfo的实现,，然后就是其他功能块的实现，最后是左侧树的实现，然后cms
-personalInfo的校验问题，另外一个就是更新时头像无显示
-后台在返回数据时，考虑一下判断数据为空时，返回最后一页有数据的处理！！
-目前除了这个，还有用户更新的保存操作
+开始client的处理，明确list以及form的数据结构，并和后台结合起来

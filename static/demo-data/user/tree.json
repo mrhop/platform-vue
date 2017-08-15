@@ -29,15 +29,15 @@
   },
   {
     "title": "应用管理",
-    "iconClass": "glyphicon glyphicon-user",
+    "iconClass": "glyphicon glyphicon-list-alt",
     "children": [
       {
         "title": "应用列表",
-        "url": "/userlist"
+        "url": "/applist"
       },
       {
         "title": "新增应用",
-        "url": "/adduser"
+        "url": "/addapp"
       }
     ]
   }
