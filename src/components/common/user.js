@@ -13,6 +13,7 @@ var commonUrls = {
   personalUpdate: basePath + 'user/personal/update',
   userUpdate: basePath + 'user/update',
   userSave: basePath + 'user/save',
+  roleList: basePath + 'role/list',
   vuerouter: {
     adduser: 'adduser',
     edituser: 'edituser',

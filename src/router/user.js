@@ -6,6 +6,7 @@ import AddUser from '@/components/user/adduser/AddUser'
 import EditUser from '@/components/user/edituser/EditUser'
 import UserDetail from '@/components/user/userdetail/UserDetail'
 import PersonalInfo from '@/components/user/personalinfo/PersonalInfo'
+import RoleList from '@/components/user/rolelist/RoleList'
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,10 @@ export default new Router({
       path: '/personalinfo',
       name: 'PersonalInfo',
       component: PersonalInfo
+    }, {
+      path: '/rolelist',
+      name: 'RoleList',
+      component: RoleList
     }
   ]
 })
