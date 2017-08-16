@@ -178,7 +178,10 @@
                 }
               })
             }).catch(function (error) {
-              console.log(error)
+              global.store.commit('FORM_FAILURE', {
+                id: 'user-add-form',
+                error
+              })
             })
           },
           ruleChange: function (params) {

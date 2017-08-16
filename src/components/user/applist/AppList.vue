@@ -47,58 +47,27 @@
                           'title': '#sn'
                         },
                         {
-                          'name': 'username',
-                          'title': '账号',
+                          'name': 'clientName',
+                          'title': '应用名称',
+                          'type': 'text',
+                          'filter': true
+                        },
+                        {
+                          'name': 'clientId',
+                          'title': '应用账号',
                           'type': 'text',
                           'filter': true,
                           'sortable': true
                         },
                         {
-                          'name': 'name',
-                          'title': '姓名',
-                          'type': 'text',
-                          'filter': true
-                        },
-                        {
-                          'name': 'email',
-                          'title': 'Email',
-                          'type': 'text',
-                          'filter': true
-                        },
-                        {
-                          'name': 'phone',
-                          'title': '手机',
-                          'type': 'text',
-                          'filter': true
-                        },
-                        {
-                          'name': 'enabled',
-                          'title': '已激活',
-                          'type': 'select',
-                          'editable': true,
-                          'filter': true,
-                          'sortable': true,
-                          'items': [
-                            {
-                              'label': '是',
-                              'value': true
-                            },
-                            {
-                              'label': '否',
-                              'value': false
-                            }
-                          ]
-                        },
-                        {
-                          'name': 'createUser',
-                          'title': '创建人',
+                          'name': 'authorizedGrantTypesStr',
+                          'title': '授权方式',
                           'type': 'text'
                         },
                         {
-                          'name': 'createdDate',
-                          'title': '创建日期',
-                          'type': 'date',
-                          'sortable': true
+                          'name': 'clientResouceScopesStr',
+                          'title': '授权范围',
+                          'type': 'text'
                         }
                       ],
                       'action': {
@@ -121,7 +90,7 @@
               })
             } else {
               let config = {
-                url: commonUrls.userList,
+                url: commonUrls.appList,
                 method: 'post',
                 data: {pager, filters, sorts}
               }

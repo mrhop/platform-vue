@@ -21,6 +21,8 @@ var commonUrls = {
   appInfo: basePath + 'client/info',
   appUpdate: basePath + 'client/update',
   appSave: basePath + 'client/save',
+  appFormRuleUpdate: basePath + 'client/form/rulechange',
+
   vuerouter: {
     adduser: 'adduser',
     edituser: 'edituser',

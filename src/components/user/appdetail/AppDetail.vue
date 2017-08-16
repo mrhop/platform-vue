@@ -30,56 +30,26 @@
               let rules = {
                 'items': [
                   {
-                    'name': 'username',
-                    'label': '账号',
+                    'name': 'clientName',
+                    'label': '应用名称',
                     'type': 'text',
                     'locked': true
                   },
                   {
-                    'name': 'name',
-                    'label': '姓名',
+                    'name': 'clientId',
+                    'label': '应用账号',
                     'type': 'text',
                     'locked': true
                   },
                   {
-                    'name': 'phone',
-                    'label': '电话',
+                    'name': 'authorizedGrantTypesStr',
+                    'label': '授权方式',
                     'type': 'text',
                     'locked': true
                   },
                   {
-                    'name': 'email',
-                    'label': 'Email',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'enabledStr',
-                    'label': '是否激活',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'limitedDate',
-                    'label': '有效期',
-                    'type': 'date',
-                    'locked': true
-                  },
-                  {
-                    'name': 'authoritiesStr',
-                    'label': '权限',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'clientsStr',
-                    'label': '关联客户端',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'modulesAuthoritiesStr',
-                    'label': '模块权限',
+                    'name': 'scopesStr',
+                    'label': '授权范围',
                     'type': 'text',
                     'locked': true
                   }
@@ -104,7 +74,10 @@
                 }
               })
             }).catch(function (error) {
-              console.log(error)
+              global.store.commit('FORM_FAILURE', {
+                id: 'app-detail-form',
+                error
+              })
             })
           }
         }
