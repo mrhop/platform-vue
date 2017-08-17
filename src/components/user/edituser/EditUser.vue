@@ -65,7 +65,8 @@
                         'regex': '^\\w{5,40}$'
                       }],
                       'placeholder': '账号',
-                      'defaultValue': response.data.username
+                      'defaultValue': response.data.username,
+                      'locked': true
                     },
                     {
                       'name': 'password',
