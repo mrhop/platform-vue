@@ -27,8 +27,7 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.applist,
-          saveUrl: commonUrls.appUpdate
+          backupUrl: commonUrls.vuerouter.applist
         },
         actions: {
           init: function (params) {
@@ -72,7 +71,8 @@
                         'errorMsg': '至少包含数字，字母以及特殊字符【!@#$%^&*_】中任意两种,并在5-15字符之间',
                         'regex': '^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*_]+$)[\\w!@#$%^&*]{5,15}$'
                       }],
-                      'ruleChange': true
+                      'ruleChange': true,
+                      required: false
                     },
                     {
                       'name': 'repassword',
@@ -159,7 +159,7 @@
           },
           save: function ({key, data, multipart}) {
             let config = {
-              url: commonUrls.userUpdate,
+              url: commonUrls.appUpdate,
               method: 'post',
               params: {key},
               data: data
