@@ -54,5 +54,33 @@
         "url": "/addresourcescope"
       }
     ]
+  },
+  {
+    "title": "模块角色管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "模块角色列表",
+        "url": "/modulerolelist"
+      },
+      {
+        "title": "新增模块角色",
+        "url": "/addmodulerole"
+      }
+    ]
+  },
+  {
+    "title": "模块管理",
+    "iconClass": "glyphicon glyphicon-th",
+    "children": [
+      {
+        "title": "模块列表",
+        "url": "/modulelist"
+      },
+      {
+        "title": "新增模块",
+        "url": "/addmodule"
+      }
+    ]
   }
 ]

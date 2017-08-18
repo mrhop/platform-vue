@@ -28,7 +28,20 @@ var commonUrls = {
   resourceScopeInfo: basePath + 'resourcescope/info',
   resourceScopeUpdate: basePath + 'resourcescope/update',
   resourceScopeSave: basePath + 'resourcescope/save',
-
+  // module role
+  moduleRoleList: basePath + 'modulerole/list',
+  deleteModuleRole: basePath + 'modulerole/delete',
+  moduleRoleInfo: basePath + 'modulerole/info',
+  moduleRoleUpdate: basePath + 'modulerole/update',
+  moduleRoleSave: basePath + 'modulerole/save',
+  moduleRoleFormRuleUpdate: basePath + 'modulerole/form/rulechange',
+  // module
+  moduleList: basePath + 'module/list',
+  deleteModule: basePath + 'module/delete',
+  moduleInfo: basePath + 'module/info',
+  moduleUpdate: basePath + 'module/update',
+  moduleSave: basePath + 'module/save',
+  moduleFormRuleUpdate: basePath + 'module/form/rulechange',
   vuerouter: {
     adduser: 'adduser',
     edituser: 'edituser',
@@ -41,7 +54,15 @@ var commonUrls = {
     addresourcescope: 'addresourcescope',
     editresourcescope: 'editresourcescope',
     resourcescopedetail: 'resourcescopedetail',
-    resourcescopelist: 'resourcescopelist'
+    resourcescopelist: 'resourcescopelist',
+    addmodulerole: 'addmodulerole',
+    editmodulerole: 'editmodulerole',
+    moduleroledetail: 'moduleroledetail',
+    modulerolelist: 'modulerolelist',
+    addmodule: 'addmodule',
+    editmodule: 'editmodule',
+    moduledetail: 'moduledetail',
+    modulelist: 'modulelist'
   }
 }
 export {

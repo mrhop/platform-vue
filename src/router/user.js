@@ -15,6 +15,14 @@ import ResourceScopeList from '@/components/user/resourcescopelist/ResourceScope
 import AddResourceScope from '@/components/user/addresourcescope/AddResourceScope'
 import EditResourceScope from '@/components/user/editresourcescope/EditResourceScope'
 import ResourceScopeDetail from '@/components/user/resourcescopedetail/ResourceScopeDetail'
+import ModuleRoleList from '@/components/user/modulerolelist/ModuleRoleList'
+import AddModuleRole from '@/components/user/addmodulerole/AddModuleRole'
+import EditModuleRole from '@/components/user/editmodulerole/EditModuleRole'
+import ModuleRoleDetail from '@/components/user/moduleroledetail/ModuleRoleDetail'
+import ModuleList from '@/components/user/modulelist/ModuleList'
+import AddModule from '@/components/user/addmodule/AddModule'
+import EditModule from '@/components/user/editmodule/EditModule'
+import ModuleDetail from '@/components/user/moduledetail/ModuleDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -79,6 +87,38 @@ export default new Router({
       path: '/resourcescopedetail',
       name: 'ResourceScopeDetail',
       component: ResourceScopeDetail
+    }, {
+      path: '/modulerolelist',
+      name: 'ModuleRoleList',
+      component: ModuleRoleList
+    }, {
+      path: '/addmodulerole',
+      name: 'AddModuleRole',
+      component: AddModuleRole
+    }, {
+      path: '/editmodulerole',
+      name: 'EditModuleRole',
+      component: EditModuleRole
+    }, {
+      path: '/moduleroledetail',
+      name: 'ModuleRoleDetail',
+      component: ModuleRoleDetail
+    }, {
+      path: '/modulelist',
+      name: 'ModuleList',
+      component: ModuleList
+    }, {
+      path: '/addmodule',
+      name: 'AddModule',
+      component: AddModule
+    }, {
+      path: '/editmodule',
+      name: 'EditModule',
+      component: EditModule
+    }, {
+      path: '/moduledetail',
+      name: 'ModuleDetail',
+      component: ModuleDetail
     }
   ]
 })
