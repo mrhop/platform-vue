@@ -11,6 +11,10 @@ import AppList from '@/components/user/applist/AppList'
 import AddApp from '@/components/user/addapp/AddApp'
 import EditApp from '@/components/user/editapp/EditApp'
 import AppDetail from '@/components/user/appdetail/AppDetail'
+import ResourceScopeList from '@/components/user/resourcescopelist/ResourceScopeList'
+import AddResourceScope from '@/components/user/addresourcescope/AddResourceScope'
+import EditResourceScope from '@/components/user/editresourcescope/EditResourceScope'
+import ResourceScopeDetail from '@/components/user/resourcescopedetail/ResourceScopeDetail'
 Vue.use(Router)
 
 export default new Router({
@@ -59,6 +63,22 @@ export default new Router({
       path: '/appdetail',
       name: 'AppDetail',
       component: AppDetail
+    }, {
+      path: '/resourcescopelist',
+      name: 'ResourceScopeList',
+      component: ResourceScopeList
+    }, {
+      path: '/addresourcescope',
+      name: 'AddResourceScope',
+      component: AddResourceScope
+    }, {
+      path: '/editresourcescope',
+      name: 'EditResourceScope',
+      component: EditResourceScope
+    }, {
+      path: '/resourcescopedetail',
+      name: 'ResourceScopeDetail',
+      component: ResourceScopeDetail
     }
   ]
 })

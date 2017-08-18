@@ -1,8 +1,8 @@
 <template>
-  <div class="app-list">
+  <div class="resourcescope-list">
     <panel>
-      <h1 slot="header">应用列表</h1>
-      <vtable id="app-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
+      <h1 slot="header">资源范围列表</h1>
+      <vtable id="resourcescope-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
     </panel>
   </div>
 </template>
@@ -19,10 +19,10 @@
     data () {
       return {
         actionUrls: {
-          addUrl: commonUrls.vuerouter.addapp,
-          detailUrl: commonUrls.vuerouter.appdetail,
-          infoUrl: commonUrls.vuerouter.editapp,
-          deleteUrl: commonUrls.deleteApp
+          addUrl: commonUrls.vuerouter.addresourcescope,
+          detailUrl: commonUrls.vuerouter.resourcescopedetail,
+          infoUrl: commonUrls.vuerouter.editresourcescope,
+          deleteUrl: commonUrls.deleteresourceScope
         },
         actions: {
           list: function (args) {
@@ -32,13 +32,13 @@
             var sorts = args.sorts
             if (init) {
               let config = {
-                url: commonUrls.appList,
+                url: commonUrls.resourceScopeList,
                 method: 'post',
                 data: {pager, filters, sorts, init: true}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
-                  id: 'app-list',
+                  id: 'resourcescope-list',
                   data: {
                     'rules': {
                       'header': [
@@ -47,26 +47,13 @@
                           'title': '#sn'
                         },
                         {
-                          'name': 'clientName',
-                          'title': '应用名称',
-                          'type': 'text',
-                          'filter': true
-                        },
-                        {
-                          'name': 'clientId',
-                          'title': '应用账号',
-                          'type': 'text',
-                          'filter': true,
-                          'sortable': true
-                        },
-                        {
-                          'name': 'authorizedGrantTypesStr',
-                          'title': '授权方式',
+                          'name': 'name',
+                          'title': '资源范围名称',
                           'type': 'text'
                         },
                         {
-                          'name': 'clientResourceScopesStr',
-                          'title': '授权范围',
+                          'name': 'scopeId',
+                          'title': '资源范围账号',
                           'type': 'text'
                         }
                       ],
@@ -77,7 +64,6 @@
                         'delete': true
                       },
                       'feature': {
-                        'filter': true,
                         'pager': true
                       }
                     },
@@ -86,24 +72,24 @@
                   callParameters: {pager, init: true}
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'app-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'resourcescope-list', error})
               })
             } else {
               let config = {
-                url: commonUrls.appList,
+                url: commonUrls.resourceScopeList,
                 method: 'post',
                 data: {pager, filters, sorts}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
-                  id: 'app-list',
+                  id: 'resourcescope-list',
                   data: {
                     'data': response.data
                   },
                   callParameters: {pager, filters, sorts}
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'app-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'resourcescope-list', error})
               })
             }
           }

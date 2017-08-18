@@ -22,6 +22,12 @@ var commonUrls = {
   appUpdate: basePath + 'client/update',
   appSave: basePath + 'client/save',
   appFormRuleUpdate: basePath + 'client/form/rulechange',
+  // resource scope
+  resourceScopeList: basePath + 'resourcescope/list',
+  deleteresourceScope: basePath + 'resourcescope/delete',
+  resourceScopeInfo: basePath + 'resourcescope/info',
+  resourceScopeUpdate: basePath + 'resourcescope/update',
+  resourceScopeSave: basePath + 'resourcescope/save',
 
   vuerouter: {
     adduser: 'adduser',
@@ -31,7 +37,11 @@ var commonUrls = {
     addapp: 'addapp',
     editapp: 'editapp',
     appdetail: 'appdetail',
-    applist: 'applist'
+    applist: 'applist',
+    addresourcescope: 'addresourcescope',
+    editresourcescope: 'editresourcescope',
+    resourcescopedetail: 'resourcescopedetail',
+    resourcescopelist: 'resourcescopelist'
   }
 }
 export {

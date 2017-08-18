@@ -40,5 +40,19 @@
         "url": "/addapp"
       }
     ]
+  },
+  {
+    "title": "资源范围管理",
+    "iconClass": "glyphicon glyphicon-modal-window",
+    "children": [
+      {
+        "title": "资源范围列表",
+        "url": "/resourcescopelist"
+      },
+      {
+        "title": "新增资源范围",
+        "url": "/addresourcescope"
+      }
+    ]
   }
 ]
