@@ -1,8 +1,8 @@
 <template>
-  <div class="app-list">
+  <div class="module-role-list">
     <panel>
-      <h1 slot="header">应用列表</h1>
-      <vtable id="app-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
+      <h1 slot="header">模块角色列表</h1>
+      <vtable id="module-role-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
     </panel>
   </div>
 </template>
@@ -15,14 +15,18 @@
   let panel = huodhVuePlugins.panel
   let tab = huodhVuePlugins.tab
   let vtable = huodhVuePlugins.vtable
+  let ruleChangeConfig = {
+    url: commonUrls.moduleRoleFormRuleUpdate,
+    method: 'post'
+  }
   export default {
     data () {
       return {
         actionUrls: {
-          addUrl: commonUrls.vuerouter.addapp,
-          detailUrl: commonUrls.vuerouter.appdetail,
-          infoUrl: commonUrls.vuerouter.editapp,
-          deleteUrl: commonUrls.deleteApp
+          addUrl: commonUrls.vuerouter.addmodulerole,
+          detailUrl: commonUrls.vuerouter.moduleroledetail,
+          infoUrl: commonUrls.vuerouter.editmodulerole,
+          deleteUrl: commonUrls.deleteModuleRole
         },
         actions: {
           list: function (args) {
@@ -32,78 +36,79 @@
             var sorts = args.sorts
             if (init) {
               let config = {
-                url: commonUrls.appList,
+                url: commonUrls.moduleRoleList,
                 method: 'post',
                 data: {pager, filters, sorts, init: true}
               }
               axios.request(config).then(function (response) {
-                global.store.commit('TABLE_SUCCESS', {
-                  id: 'app-list',
-                  data: {
-                    'rules': {
-                      'header': [
-                        {
-                          'name': '#sn',
-                          'title': '#sn'
+                delete ruleChangeConfig.data
+                axios.request(ruleChangeConfig).then(function (responseInner) {
+                  global.store.commit('TABLE_SUCCESS', {
+                    id: 'module-role-list',
+                    data: {
+                      'rules': {
+                        'header': [
+                          {
+                            'name': '#sn',
+                            'title': '#sn'
+                          },
+                          {
+                            'name': 'name',
+                            'title': '模块角色名称',
+                            'type': 'text',
+                            'filter': true
+                          },
+                          {
+                            'name': 'authority',
+                            'title': '模块角色ID',
+                            'type': 'text',
+                            'filter': true
+                          },
+                          {
+                            'name': 'clientId',
+                            'title': '所属客户端',
+                            'type': 'select',
+                            'items': responseInner.data.clientIds,
+                            'filter': true
+                          }
+                        ],
+                        'action': {
+                          'add': true,
+                          'detail': true,
+                          'update': true,
+                          'delete': true
                         },
-                        {
-                          'name': 'clientName',
-                          'title': '应用名称',
-                          'type': 'text',
-                          'filter': true
-                        },
-                        {
-                          'name': 'clientId',
-                          'title': '应用账号',
-                          'type': 'text',
+                        'feature': {
                           'filter': true,
-                          'sortable': true
-                        },
-                        {
-                          'name': 'authorizedGrantTypesStr',
-                          'title': '授权方式',
-                          'type': 'text'
-                        },
-                        {
-                          'name': 'clientResourceScopesStr',
-                          'title': '授权范围',
-                          'type': 'text'
+                          'pager': true
                         }
-                      ],
-                      'action': {
-                        'add': true,
-                        'detail': true,
-                        'update': true,
-                        'delete': true
                       },
-                      'feature': {
-                        'filter': true,
-                        'pager': true
-                      }
+                      'data': response.data
                     },
-                    'data': response.data
-                  },
-                  callParameters: {pager, init: true}
+                    callParameters: {pager, init: true}
+                  })
+                }).catch(function (error) {
+                  global.store.commit('TABLE_FAILURE', {id: 'module-role-list', error})
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'app-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'module-role-list', error})
               })
             } else {
               let config = {
-                url: commonUrls.appList,
+                url: commonUrls.moduleRoleList,
                 method: 'post',
                 data: {pager, filters, sorts}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
-                  id: 'app-list',
+                  id: 'module-role-list',
                   data: {
                     'data': response.data
                   },
                   callParameters: {pager, filters, sorts}
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'app-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'module-role-list', error})
               })
             }
           }

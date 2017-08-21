@@ -1,8 +1,8 @@
 <template>
-  <div class="form-app-detail form-detail">
+  <div class="form-module-role-detail form-detail">
     <panel>
-      <h1 slot="header">应用详情</h1>
-      <vform id="app-detail-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <h1 slot="header">模块角色详情</h1>
+      <vform id="module-role-detail-form" :actions="actions" :actionUrls="actionUrls"></vform>
     </panel>
   </div>
 </template>
@@ -17,12 +17,12 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.applist
+          backupUrl: commonUrls.vuerouter.modulerolelist
         },
         actions: {
           init: function (params) {
             let config = {
-              url: commonUrls.appInfo,
+              url: commonUrls.moduleRoleInfo,
               method: 'get',
               params: {key: params.key}
             }
@@ -30,27 +30,26 @@
               let rules = {
                 'items': [
                   {
+                    'name': 'name',
+                    'label': '模块角色名称',
+                    'type': 'text',
+                    'placeholder': '模块角色名称',
+                    'defaultValue': response.data.name,
+                    'locked': true
+                  },
+                  {
+                    'name': 'authority',
+                    'label': '模块角色ID',
+                    'type': 'text',
+                    'placeholder': '模块角色ID',
+                    'defaultValue': response.data.authority,
+                    'locked': true
+                  },
+                  {
                     'name': 'clientName',
-                    'label': '应用名称',
+                    'label': '所属客户端',
                     'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'clientId',
-                    'label': '应用账号',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'authorizedGrantTypesStr',
-                    'label': '授权方式',
-                    'type': 'text',
-                    'locked': true
-                  },
-                  {
-                    'name': 'scopesStr',
-                    'label': '授权范围',
-                    'type': 'text',
+                    'defaultValue': response.data.clientName,
                     'locked': true
                   }
                 ],
@@ -60,22 +59,15 @@
                   }
                 }
               }
-              if (response.data) {
-                for (var key in rules.items) {
-                  if (response.data.hasOwnProperty(rules.items[key].name)) {
-                    rules.items[key].defaultValue = response.data[rules.items[key].name]
-                  }
-                }
-              }
               global.store.commit('FORM_SUCCESS', {
-                id: 'app-detail-form',
+                id: 'module-role-detail-form',
                 data: {
                   rules
                 }
               })
             }).catch(function (error) {
               global.store.commit('FORM_FAILURE', {
-                id: 'app-detail-form',
+                id: 'module-role-detail-form',
                 error
               })
             })

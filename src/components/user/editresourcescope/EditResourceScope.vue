@@ -51,7 +51,8 @@
                       'regex': '^\\w{5,40}$'
                     }],
                     'placeholder': '资源范围账号',
-                    'defaultValue': response.data.scopeId
+                    'defaultValue': response.data.scopeId,
+                    'locked': true
                   }
                 ],
                 action: {
