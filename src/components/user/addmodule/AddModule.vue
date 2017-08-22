@@ -1,8 +1,8 @@
 <template>
-  <div class="form-app-detail form-detail">
+  <div class='form-module-detail form-detail'>
     <panel>
-      <h1 slot="header">新增应用</h1>
-      <vform id="app-add-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <h1 slot='header'>新增模块</h1>
+      <vform id='module-add-form' :actions='actions' :actionUrls='actionUrls'></vform>
     </panel>
   </div>
 </template>
@@ -15,99 +15,130 @@
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
   let ruleChangeConfig = {
-    url: commonUrls.appFormRuleUpdate,
+    url: commonUrls.moduleFormRuleUpdate,
     method: 'post'
   }
-  let scopeIdsItems = []
   export default {
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.applist,
-          saveUrl: commonUrls.appSave
+          backupUrl: commonUrls.vuerouter.modulelist,
+          saveUrl: commonUrls.moduleSave
         },
         actions: {
           init: function (params) {
             // 首先需要考虑权限，然后给出rule change
+            delete ruleChangeConfig.data
             axios.request(ruleChangeConfig).then(function (response) {
               let rules = {
                 'items': [
                   {
-                    'name': 'clientName',
-                    'label': '应用名称',
+                    'name': 'moduleName',
+                    'label': '模块名称',
                     'type': 'text',
                     'validate': [{
                       'errorMsg': '姓名在2-40个字符之间，且前后不能有空格',
                       'regex': '^\\S.{0,38}\\S$'
                     }],
-                    'placeholder': '应用名称'
+                    'placeholder': '模块名称'
                   },
                   {
-                    'name': 'clientId',
-                    'label': '应用账号',
+                    'name': 'moduleUrl',
+                    'title': '模块链接',
                     'type': 'text',
-                    'validate': [{
-                      'errorMsg': '账号由英文，数字和 _ 组成，并在5-40个字符之间',
-                      'regex': '^\\w{5,40}$'
-                    }],
-                    'placeholder': '应用账号'
+                    'validate': [
+                      {
+                        'errorMsg': '不能为空,且不包含空字符',
+                        'regex': '^\\S+$'
+                      }
+                    ],
+                    'placeholder': '模块链接'
                   },
                   {
-                    'name': 'clientSecret',
-                    'label': '应用密码',
-                    'type': 'password',
-                    'placeholder': '应用密码',
+                    'name': 'iconClass',
+                    'label': '图标样式',
+                    'type': 'text',
+                    'placeholder': '图标样式',
                     'validate': [{
-                      'errorMsg': '至少包含数字，字母以及特殊字符【!@#$%^&*_】中任意两种,并在5-15字符之间',
-                      'regex': '^(?![a-zA-Z]+$)(?!\\d+$)(?![!@#$%^&*_]+$)[\\w!@#$%^&*]{5,15}$'
+                      'errorMsg': '不能为空，且前后不能有空格,',
+                      'regex': '^\\S.*\\S$'
                     }],
                     'ruleChange': true
                   },
                   {
-                    'name': 'repassword',
-                    'label': '重复密码',
-                    'type': 'password',
-                    'placeholder': '重复密码',
-                    'ruleChange': true
-                  },
-                  {
-                    'name': 'authorizedGrantTypes',
-                    'label': '授权方式',
-                    'type': 'checkbox',
-                    'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }],
+                    'name': 'activated',
+                    'label': '已激活',
+                    'type': 'select',
                     'items': [
                       {
-                        'label': '授权码',
-                        'value': 'authorization_code'
+                        'label': '是',
+                        'value': true
                       },
                       {
-                        'label': '密码',
-                        'value': 'password'
-                      },
+                        'label': '否',
+                        'value': false
+                      }
+                    ],
+                    'validate': [
                       {
-                        'label': '客户端',
-                        'value': 'client_credentials'
+                        'errorMsg': '不能为空',
+                        'regex': '^\\S+$'
                       }
                     ]
                   },
                   {
-                    'name': 'scopeIds',
-                    'label': '授权范围',
+                    'name': 'available',
+                    'label': '是否可见',
+                    'type': 'select',
+                    'items': [
+                      {
+                        'label': '是',
+                        'value': true
+                      },
+                      {
+                        'label': '否',
+                        'value': false
+                      }
+                    ],
+                    'validate': [
+                      {
+                        'errorMsg': '不能为空',
+                        'regex': '^\\S+$'
+                      }
+                    ]
+                  },
+                  {
+                    'name': 'clientId',
+                    'label': '所属应用',
+                    'type': 'select',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    items: response.data.clientIds,
+                    ruleChange: true
+                  },
+                  {
+                    'name': 'parentId',
+                    'label': '父模块',
+                    'type': 'tree',
+                    hidden: true,
+                    ruleChange: true
+                  },
+                  {
+                    'name': 'beforeId',
+                    'label': '前置模块',
+                    'type': 'select',
+                    hidden: true
+                  },
+                  {
+                    'name': 'authorities',
+                    'label': '模块角色',
                     'type': 'checkbox',
                     'validate': [{
                       'errorMsg': '不能为空',
                       'regex': '^\\S+$'
                     }],
-                    items: response.data.scopeIds ? (scopeIdsItems = response.data.scopeIds) : scopeIdsItems,
-                    ruleChange: true
-                  },
-                  {
-                    'name': 'autoApprovaledScopeIds',
-                    'label': '自动授权',
-                    'type': 'checkbox',
                     hidden: true
                   }
                 ],
@@ -124,81 +155,90 @@
                 }
               }
               global.store.commit('FORM_SUCCESS', {
-                id: 'app-add-form',
+                id: 'module-add-form',
                 data: {
                   rules
                 }
               })
             }).catch(function (error) {
               global.store.commit('FORM_FAILURE', {
-                id: 'app-add-form',
+                id: 'module-add-form',
                 error
               })
             })
           },
           ruleChange: function (params) {
-            if (params.changed.scopeIds !== undefined) {
-              if (params.changed.scopeIds && params.changed.scopeIds.length > 0) {
-                let items = []
-                for (let key in scopeIdsItems) {
-                  if (params.changed.scopeIds.indexOf(scopeIdsItems[key].value) > -1) {
-                    items.push({label: scopeIdsItems[key].label, value: scopeIdsItems[key].value})
-                  }
-                }
-                return [
-                  {
-                    'name': 'autoApprovaledScopeIds',
-                    'hidden': false,
-                    items: items
-                  }
-                ]
+            if (params.changed.hasOwnProperty('clientId')) {
+              if (params.changed.clientId !== undefined) {
+                ruleChangeConfig.data = params.changed
+                axios.request(ruleChangeConfig).then(function (response) {
+                  global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
+                    id: 'module-add-form',
+                    data: [
+                      {
+                        'name': 'parentId',
+                        'treeData': response.data.parentTree || [],
+                        hidden: false
+                      }, {
+                        'name': 'beforeId',
+                        'items': response.data.beforeIds || [],
+                        hidden: false
+                      }, {
+                        'name': 'authorities',
+                        'items': response.data.authorityIds || [],
+                        hidden: false
+                      }
+                    ]
+                  })
+                }).catch(function (error) {
+                  global.store.commit('FORM_RULE_CHANGE_FAILURE', {
+                    id: 'module-add-form',
+                    error
+                  })
+                })
               } else {
                 return [
                   {
-                    'name': 'autoApprovaledScopeIds',
-                    'hidden': true,
-                    items: []
+                    'name': 'parentId',
+                    'treeData': [],
+                    hidden: true
+                  }, {
+                    'name': 'beforeId',
+                    'items': [],
+                    hidden: true
+                  }, {
+                    'name': 'authorities',
+                    'items': [],
+                    hidden: true
                   }
                 ]
               }
-            } else if (params.changed.repassword !== undefined) {
-              for (let key in params.items) {
-                if (params.items[key].name === 'clientSecret') {
-                  if (params.items[key].defaultValue !== params.changed.repassword) {
-                    return [
-                      {
-                        'name': 'repassword',
-                        'validatedMsg': '密码不一致'
-                      }
-                    ]
-                  } else {
-                    return [
-                      {
-                        'name': 'repassword'
-                      }
-                    ]
+            } else if (params.changed.hasOwnProperty('parentId')) {
+              ruleChangeConfig.data = params.changed
+              if (params.changed.parentId === undefined) {
+                ruleChangeConfig.data.beforeId = -1
+                for (let key in params.items) {
+                  if (params.items[key].name === 'clientId') {
+                    ruleChangeConfig.data.clientId = params.items[key].defaultValue
                   }
                 }
               }
-            } else if (params.changed.clientSecret !== undefined) {
-              for (let key in params.items) {
-                if (params.items[key].name === 'repassword') {
-                  if (params.items[key].defaultValue !== params.changed.clientSecret) {
-                    return [
-                      {
-                        'name': 'repassword',
-                        'validatedMsg': '密码不一致'
-                      }
-                    ]
-                  } else {
-                    return [
-                      {
-                        'name': 'repassword'
-                      }
-                    ]
+              axios.request(ruleChangeConfig).then(function (response) {
+                global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
+                  id: 'module-add-form',
+                  data: [{
+                    'name': 'beforeId',
+                    'items': response.data.beforeIds || [],
+                    hidden: false
                   }
-                }
-              }
+                  ]
+                })
+              }).catch(function (error) {
+                global.store.commit('FORM_RULE_CHANGE_FAILURE', {
+                  id: 'module-add-form',
+                  error
+                })
+              })
             }
           }
         }

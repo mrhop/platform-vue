@@ -208,7 +208,11 @@ body {
         margin-bottom: 10px;
         white-space: nowrap;
         > p {
-          .glyphicon {
+          color: $link-color;
+          &:hover {
+            color: $link-hover-color;
+          }
+          .icon {
             margin-right: 10px;
           }
         }
