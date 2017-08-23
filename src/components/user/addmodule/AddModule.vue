@@ -63,8 +63,7 @@
                     'validate': [{
                       'errorMsg': '不能为空，且前后不能有空格,',
                       'regex': '^\\S.*\\S$'
-                    }],
-                    'ruleChange': true
+                    }]
                   },
                   {
                     'name': 'activated',
