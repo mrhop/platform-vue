@@ -44,14 +44,15 @@
                   },
                   {
                     'name': 'moduleUrl',
-                    'title': '模块链接',
+                    'label': '模块链接',
                     'type': 'text',
                     'validate': [
                       {
-                        'errorMsg': '不能为空,且不包含空字符',
+                        'errorMsg': '不包含空字符',
                         'regex': '^\\S+$'
                       }
                     ],
+                    required: false,
                     'placeholder': '模块链接'
                   },
                   {
@@ -178,14 +179,17 @@
                       {
                         'name': 'parentId',
                         'treeData': response.data.parentTree || [],
+                        defaultValue: undefined,
                         hidden: false
                       }, {
                         'name': 'beforeId',
                         'items': response.data.beforeIds || [],
+                        defaultValue: undefined,
                         hidden: false
                       }, {
                         'name': 'authorities',
                         'items': response.data.authorityIds || [],
+                        defaultValue: [],
                         hidden: false
                       }
                     ]
@@ -201,14 +205,17 @@
                   {
                     'name': 'parentId',
                     'treeData': [],
+                    defaultValue: undefined,
                     hidden: true
                   }, {
                     'name': 'beforeId',
                     'items': [],
+                    defaultValue: undefined,
                     hidden: true
                   }, {
                     'name': 'authorities',
                     'items': [],
+                    defaultValue: [],
                     hidden: true
                   }
                 ]
@@ -229,6 +236,7 @@
                   data: [{
                     'name': 'beforeId',
                     'items': response.data.beforeIds || [],
+                    defaultValue: undefined,
                     hidden: false
                   }
                   ]

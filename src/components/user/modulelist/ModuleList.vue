@@ -148,10 +148,12 @@
                     data: [
                       {
                         'name': 'parentId',
-                        'treeData': response.data.parentTree || []
+                        'treeData': response.data.parentTree || [],
+                        defaultValue: undefined
                       }, {
                         'name': 'authorityId',
-                        'items': response.data.authorityIds || []
+                        'items': response.data.authorityIds || [],
+                        defaultValue: undefined
                       }
                     ]
                   })
@@ -165,11 +167,13 @@
                 return [
                   {
                     'name': 'parentId',
-                    'treeData': []
+                    'treeData': [],
+                    defaultValue: undefined
                   },
                   {
                     'name': 'authorityId',
-                    'items': []
+                    'items': [],
+                    defaultValue: undefined
                   }
                 ]
               }
