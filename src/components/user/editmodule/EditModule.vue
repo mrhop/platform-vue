@@ -146,18 +146,6 @@
                       hidden: !response.data.clientId,
                       items: responseInner.data.beforeIds || [],
                       defaultValue: response.data.beforeId
-                    },
-                    {
-                      'name': 'authorities',
-                      'label': '模块角色',
-                      'type': 'checkbox',
-                      'validate': [{
-                        'errorMsg': '不能为空',
-                        'regex': '^\\S+$'
-                      }],
-                      hidden: !response.data.clientId,
-                      items: responseInner.data.authorityIds || [],
-                      defaultValue: response.data.authorities || []
                     }
                   ],
                   action: {
@@ -233,11 +221,6 @@
                         'items': response.data.beforeIds || [],
                         defaultValue: undefined,
                         hidden: false
-                      }, {
-                        'name': 'authorities',
-                        'items': response.data.authorityIds || [],
-                        defaultValue: [],
-                        hidden: false
                       }
                     ]
                   })
@@ -258,11 +241,6 @@
                     'name': 'beforeId',
                     'items': [],
                     defaultValue: undefined,
-                    hidden: true
-                  }, {
-                    'name': 'authorities',
-                    'items': [],
-                    defaultValue: [],
                     hidden: true
                   }
                 ]

@@ -59,7 +59,18 @@
                       'errorMsg': '不能为空',
                       'regex': '^\\S+$'
                     }],
-                    'items': response.data.clientIds
+                    'items': response.data.clientIds,
+                    ruleChange: true
+                  },
+                  {
+                    'name': 'moduleIds',
+                    'label': '包含模块',
+                    'type': 'tree-checkbox',
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    hidden: true
                   }
                 ],
                 action: {
@@ -86,6 +97,40 @@
                 error
               })
             })
+          },
+          ruleChange: function (params) {
+            if (params.changed.hasOwnProperty('clientId')) {
+              if (params.changed.clientId !== undefined) {
+                ruleChangeConfig.data = params.changed
+                axios.request(ruleChangeConfig).then(function (response) {
+                  global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
+                    id: 'module-role-add-form',
+                    data: [
+                      {
+                        'name': 'moduleIds',
+                        'treeData': response.data.moduleIds || [],
+                        defaultValue: [],
+                        hidden: false
+                      }
+                    ]
+                  })
+                }).catch(function (error) {
+                  global.store.commit('FORM_RULE_CHANGE_FAILURE', {
+                    id: 'module-role-add-form',
+                    error
+                  })
+                })
+              } else {
+                return [
+                  {
+                    'name': 'moduleIds',
+                    'treeData': [],
+                    defaultValue: [],
+                    hidden: true
+                  }
+                ]
+              }
+            }
           }
         }
       }

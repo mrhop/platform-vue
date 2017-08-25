@@ -130,16 +130,6 @@
                     'label': '前置模块',
                     'type': 'select',
                     hidden: true
-                  },
-                  {
-                    'name': 'authorities',
-                    'label': '模块角色',
-                    'type': 'checkbox',
-                    'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }],
-                    hidden: true
                   }
                 ],
                 action: {
@@ -185,11 +175,6 @@
                         'items': response.data.beforeIds || [],
                         defaultValue: undefined,
                         hidden: false
-                      }, {
-                        'name': 'authorities',
-                        'items': response.data.authorityIds || [],
-                        defaultValue: [],
-                        hidden: false
                       }
                     ]
                   })
@@ -210,11 +195,6 @@
                     'name': 'beforeId',
                     'items': [],
                     defaultValue: undefined,
-                    hidden: true
-                  }, {
-                    'name': 'authorities',
-                    'items': [],
-                    defaultValue: [],
                     hidden: true
                   }
                 ]
