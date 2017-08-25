@@ -28,6 +28,7 @@
         actions: {
           init: function (params) {
             // 首先需要考虑权限，然后给出rule change
+            delete ruleChangeConfig.data
             axios.request(ruleChangeConfig).then(function (response) {
               let rules = {
                 'items': [
