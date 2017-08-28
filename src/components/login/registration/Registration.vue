@@ -110,7 +110,8 @@
                       'errorMsg': '只能为图片文件',
                       'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
                     }],
-                    'maxSize': 50000
+                    'maxSize': 50000,
+                    required: false
                   }
                 ],
                 'action': {

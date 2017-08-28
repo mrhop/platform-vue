@@ -70,6 +70,10 @@ export default new Router({
       path: '/actiontree',
       name: 'ActionTree',
       component: ActionTree
+    }, {
+      path: '/*',
+      name: 'Dashboard',
+      component: Dashboard
     }
   ]
 })

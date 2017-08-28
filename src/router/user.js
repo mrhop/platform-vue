@@ -119,6 +119,10 @@ export default new Router({
       path: '/moduledetail',
       name: 'ModuleDetail',
       component: ModuleDetail
+    }, {
+      path: '/*',
+      name: 'Dashboard',
+      component: Dashboard
     }
   ]
 })

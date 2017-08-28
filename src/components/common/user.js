@@ -4,7 +4,7 @@
 // global.basePath = '/test_a1b2/'
 let basePath = 'http://localhost:9091/'
 var commonUrls = {
-  leftTree: 'http://localhost:8080/static/demo-data/user/tree.json',
+  leftTree: basePath + 'module/leftmenu',
   userList: basePath + 'user/list',
   setUserEnabled: basePath + 'user/setEnabled',
   deleteUser: basePath + 'user/delete',
