@@ -57,20 +57,39 @@ module.exports = {
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
       },
+      process.env.NODE_ENV === 'production' ?
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: utils.assetsPath('images/[name].[hash:7].[ext]')
+          name: 'images/[name].[hash:7].[ext]',
+          outputPath: utils.assetsPath('/'),
+          publicPath: '../'
+        }
+      } : {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000,
+          name: utils.assetsPath('images/[name].[hash:7].[ext]'),
         }
       },
-      {
+      process.env.NODE_ENV === 'production' ? {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         query: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: 'fonts/[name].[hash:7].[ext]',
+          outputPath: utils.assetsPath('/'),
+          publicPath: '../'
+        }
+      } : {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000,
+          name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),
         }
       }
     ]

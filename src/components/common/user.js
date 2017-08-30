@@ -3,6 +3,7 @@
  */
 // global.basePath = '/test_a1b2/'
 let basePath = 'http://localhost:9091/'
+// let basePath = 'http://user.hopever.cn/'
 var commonUrls = {
   leftTree: basePath + 'module/leftmenu',
   userList: basePath + 'user/list',

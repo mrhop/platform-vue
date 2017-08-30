@@ -2,6 +2,7 @@
  * Created by Donghui Huo on 2017/3/21.
  */
 let basePath = 'http://localhost:9091/'
+// let basePath = 'http://user.hopever.cn/'
 var commonUrls = {
   login: basePath + 'login',
   registrationPage: 'registration',
