@@ -50,6 +50,18 @@
                       defaultValue: response.data.moduleName
                     },
                     {
+                      'name': 'moduleId',
+                      'label': '模块ID',
+                      'type': 'text',
+                      'validate': [{
+                        'errorMsg': '模块ID由英文，数字和 _ 组成，并在5-40个字符之间',
+                        'regex': '^\\w{5,40}$'
+                      }],
+                      'placeholder': '模块ID',
+                      'locked': true,
+                      'defaultValue': response.data.moduleId
+                    },
+                    {
                       'name': 'moduleUrl',
                       'label': '模块链接',
                       'type': 'text',

@@ -59,6 +59,12 @@
                             'filter': true
                           },
                           {
+                            'name': 'moduleId',
+                            'title': '模块ID',
+                            'type': 'text',
+                            'filter': true
+                          },
+                          {
                             'name': 'activated',
                             'title': '已激活',
                             'type': 'select',
