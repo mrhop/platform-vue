@@ -1,0 +1,50 @@
+[
+  {
+    "title": "主题",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "主题1",
+        "emitClick": true,
+        "emitClickArgs": {
+          "label": "主题1",
+          "value": 1,
+          "type": "theme"
+        }
+      },
+      {
+        "title": "主题2",
+        "emitClick": true,
+        "emitClickArgs": {
+          "label": "主题2",
+          "value": 2,
+          "type": "theme"
+        }
+      }
+    ]
+  },
+  {
+    "title": "网站",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "网站1",
+        "emitClick": true,
+        "emitClickArgs": {
+          "label": "网站1",
+          "value": 1,
+          "type": "website"
+        }
+      },
+      {
+        "title": "网站2",
+        "emitClick": true,
+        "emitClickArgs": {
+          "label": "网站2",
+          "value": 2,
+          "type": "website"
+        }
+      }
+    ]
+  }
+]

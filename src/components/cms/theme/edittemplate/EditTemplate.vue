@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">主题管理页面概览</div>
+  <div class="dashboard">网页管理页面概览</div>
 </template>
 
 <script>

@@ -1,0 +1,14 @@
+[
+  {
+    "label": "主题管理",
+    "value": "theme"
+  },
+  {
+    "label": "网站管理",
+    "value": "website"
+  },
+  {
+    "label": "功能Tag",
+    "value": "blocktag"
+  }
+]

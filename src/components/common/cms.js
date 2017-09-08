@@ -6,17 +6,148 @@ var commonUrls = {
   // leftTree: basePath + 'leftmenu',
   themeMenu: 'static/demo-data/cms/common_theme_menu.json',
   websiteMenu: 'static/demo-data/cms/common_website_menu.json',
+  blockTagMenu: 'static/demo-data/cms/common_block_tag.json',
   subThemeMenu: 'static/demo-data/cms/lefttree3.json',
   subWebsiteMenu: 'static/demo-data/cms/lefttree4.json',
   topTree: 'static/demo-data/cms/toptree.json',
   topnavigate: 'static/demo-data/cms/navigate.json',
-  articleList: basePath + 'article/list',
+  relatedUsers: basePath + 'relatedusers',
+  theme: {
+    list: basePath + 'theme/list',
+    info: basePath + 'theme/info',
+    update: basePath + 'theme/update',
+    save: basePath + 'theme/save',
+    delete: basePath + 'theme/delete'
+  },
+  template: {
+    list: basePath + 'template/list',
+    info: basePath + 'template/info',
+    update: basePath + 'template/update',
+    save: basePath + 'template/save',
+    delete: basePath + 'template/delete'
+  },
+  blockTag: {
+    list: basePath + 'blocktag/list',
+    info: basePath + 'blocktag/info',
+    update: basePath + 'blocktag/update',
+    save: basePath + 'blocktag/save',
+    delete: basePath + 'blocktag/delete'
+  },
+  website: {
+    list: basePath + 'website/list',
+    info: basePath + 'website/info',
+    update: basePath + 'website/update',
+    save: basePath + 'website/save',
+    delete: basePath + 'website/delete',
+    rulechange: basePath + 'website/form/rulechange'
+  },
+  article: {
+    list: basePath + 'article/list',
+    info: basePath + 'article/info',
+    update: basePath + 'article/update',
+    save: basePath + 'article/save',
+    delete: basePath + 'article/delete',
+    rulechange: basePath + 'article/form/rulechange'
+  },
+  news: {
+    list: basePath + 'news/list',
+    info: basePath + 'news/info',
+    update: basePath + 'news/update',
+    save: basePath + 'news/save',
+    delete: basePath + 'news/delete',
+    rulechange: basePath + 'news/form/rulechange'
+  },
+  event: {
+    list: basePath + 'event/list',
+    info: basePath + 'event/info',
+    update: basePath + 'event/update',
+    save: basePath + 'event/save',
+    delete: basePath + 'event/delete',
+    rulechange: basePath + 'event/form/rulechange'
+  },
+  mediaTag: {
+    list: basePath + 'mediatag/list',
+    info: basePath + 'mediatag/info',
+    update: basePath + 'mediatag/update',
+    save: basePath + 'mediatag/save',
+    delete: basePath + 'mediatag/delete'
+  },
+  media: {
+    list: basePath + 'media/list',
+    info: basePath + 'media/info',
+    update: basePath + 'media/update',
+    save: basePath + 'media/save',
+    delete: basePath + 'media/delete',
+    rulechange: basePath + 'media/form/rulechange'
+  },
+  navigate: {
+    list: basePath + 'navigate/list',
+    info: basePath + 'navigate/info',
+    update: basePath + 'navigate/update',
+    save: basePath + 'navigate/save',
+    delete: basePath + 'navigate/delete',
+    rulechange: basePath + 'navigate/form/rulechange'
+  },
   vuerouter: {
     theme: {
-      dashboard: '/theme/dashboard'
+      list: '/theme/list',
+      add: '/theme/add',
+      edit: '/theme/edit',
+      detail: '/theme/detail'
+    },
+    template: {
+      list: '/template/list',
+      add: '/template/add',
+      edit: '/template/edit',
+      detail: '/template/detail'
+    },
+    blockTag: {
+      list: '/blocktag/list',
+      add: '/blocktag/add',
+      edit: '/blocktag/edit',
+      detail: '/blocktag/detail'
     },
     website: {
-      dashboard: '/website/dashboard'
+      list: '/website/list',
+      add: '/website/add',
+      edit: '/website/edit',
+      detail: '/website/detail'
+    },
+    article: {
+      list: '/article/list',
+      add: '/article/add',
+      edit: '/article/edit',
+      detail: '/article/detail'
+    },
+    news: {
+      list: '/news/list',
+      add: '/news/add',
+      edit: '/news/edit',
+      detail: '/news/detail'
+    },
+    event: {
+      list: '/event/list',
+      add: '/event/add',
+      edit: '/event/edit',
+      detail: '/event/detail'
+    },
+    mediaTag: {
+      list: '/mediatag/list',
+      add: '/mediatag/add',
+      edit: '/mediatag/edit',
+      detail: '/mediatag/detail'
+    },
+    media: {
+      list: '/media/list',
+      add: '/media/add',
+      edit: '/media/edit',
+      detail: '/media/detail'
+    },
+    navigate: {
+      list: '/navigate/list',
+      add: '/navigate/add',
+      edit: '/navigate/edit',
+      detail: '/navigate/detail'
     }
   }
 }
