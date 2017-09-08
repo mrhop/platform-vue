@@ -17,7 +17,7 @@ export default new Router({
       component: Registration
     }, {
       path: '/*',
-      name: 'Login',
+      name: 'All',
       component: Login
     }
   ]

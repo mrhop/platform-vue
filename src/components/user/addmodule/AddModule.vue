@@ -70,8 +70,9 @@
                     'label': '图标样式',
                     'type': 'text',
                     'placeholder': '图标样式',
+                    required: false,
                     'validate': [{
-                      'errorMsg': '不能为空，且前后不能有空格,',
+                      'errorMsg': '大于2个字符，且前后不能有空格,',
                       'regex': '^\\S.*\\S$'
                     }]
                   },

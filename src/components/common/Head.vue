@@ -1,8 +1,18 @@
 <template>
   <div class="container-fluid head">
     <div class="pull-left">
-      <h3>{{appName}}<span class="brand">管理平台</span></h3>
+      <router-link v-if="!topTree" ref="brand" to="/"><h3>{{appName}}<span
+        class="brand">管理平台</span></h3>
+      </router-link>
+      <h3 v-else @click="treeClick" ref="brand">{{appName}}<span class="brand">管理平台</span></h3>
+      <tree id="top-tree" ref="topTreeEl" v-if="topTree" v-show="treeOpened" :treeData="topTree"
+            @click="treeItemClick"/>
       <a :class="menuClass" @click.prevent="menuClick"/>
+      <div v-if="localTopNavigate" class="top-navigate">
+        <a v-for="(item, key) in localTopNavigate" :key="key" @click.prevent="navigateClick(item)">
+          {{item.label}}
+        </a>
+      </div>
     </div>
     <div class="pull-right">
       <a href="logout" title="logout">Logout<span class="glyphicon glyphicon-menu-right"></span></a>
@@ -11,32 +21,124 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import huodhVuePlugins from 'huodh-vue-plugins'
+  let tree = huodhVuePlugins.tree
   export default{
     data () {
       return {
         menuClass: 'menu glyphicon glyphicon-list',
-        menuOpend: true
+        treeContainerClass: 'tree-container',
+        localTopNavigate: null,
+        menuOpened: true,
+        treeOpened: false
+      }
+    },
+    created () {
+      if (this.topNavigate && typeof this.topNavigate === 'string') {
+        let ruleChangeConfig = {
+          url: this.topNavigate,
+          method: 'get'
+        }
+        axios.request(ruleChangeConfig).then(function (response) {
+          this.localTopNavigate = response.data
+        }.bind(this))
+      } else {
+        this.localTopNavigate = this.topNavigate
       }
     },
     methods: {
       menuClick () {
-        if (this.menuOpend) {
+        if (this.menuOpened) {
           this.menuClass = 'menu glyphicon glyphicon-option-vertical'
         } else {
           this.menuClass = 'menu glyphicon glyphicon-list'
         }
-        this.menuOpend = !this.menuOpend
-        this.$emit('menuClick', this.menuOpend)
+        this.menuOpened = !this.menuOpened
+        this.$emit('menuClick', this.menuOpened)
+      },
+      treeClick () {
+        this.treeOpened = !this.treeOpened
+      },
+      closeTree (event) {
+        if (this.treeOpened && (!this.$refs.topTreeEl.$el.contains(event.target) && !this.$refs.brand.contains(event.target))) {
+          this.treeOpened = !this.treeOpened
+        }
+      },
+      treeItemClick (args) {
+        this.treeClick()
+        if (!this.menuOpened) {
+          this.menuClick()
+        }
+        this.$emit('topTreeClick', args)
+      },
+      navigateClick (args) {
+        this.$emit('navigateClick', args)
       }
+    },
+    mounted () {
+      window.addEventListener('click', this.closeTree)
     },
     props: {
       appName: {
         default: 'Hopever'
+      },
+      topTree: {
+        default: null
+      },
+      topNavigate: {
+        default: null
       }
+    },
+    components: {
+      tree
     }
   }
 </script>
 
 <!-- 加入scoped是为了防止本组件中的css渗透到其他组件，可以去掉看看结果 -->
-<style rel="stylesheet/scss" lang="scss" >
+<style rel="stylesheet/scss" lang="scss">
+  @import "../../scss/import";
+
+  .container-fluid.head {
+    position: relative;
+    z-index: 1;
+    .pull-left {
+      .tree-wrapper {
+        position: fixed;
+        top: 66px;
+        bottom: 50px;
+        width: 30%;
+        left: 0px;
+        background: rgba(0, 00, 00, .8);
+        @include transition(all 400ms);
+        @media(max-width: $screen-sm-max) {
+          width: 50%;
+        }
+        @media(max-width: $screen-xs-max) {
+          width: 100%;
+        }
+      }
+      .top-navigate {
+        display: block;
+        float: right;
+        a {
+          font-size: 14px;
+          font-size: 14px;
+          line-height: 26px;
+          background: rgba(211, 211, 211, .1);
+          padding: 0px 5px;
+          display: inline-block;
+          &:hover {
+            background: lighten($base-background, 15%);
+          }
+        }
+      }
+    }
+    .pull-right {
+      padding-top: 4px;
+      float: right !important;
+      vertical-align: bottom;
+    }
+  }
 </style>

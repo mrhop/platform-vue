@@ -72,7 +72,7 @@ export default new Router({
       component: ActionTree
     }, {
       path: '/*',
-      name: 'Dashboard',
+      name: 'All',
       component: Dashboard
     }
   ]

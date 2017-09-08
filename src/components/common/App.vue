@@ -1,6 +1,8 @@
 <template>
   <div>
-    <vhead :appName="appName" v-on:menuClick="menuClick"></vhead>
+    <vhead :appName="appName" :topTree="topTree" :topNavigate="topNavigate" v-on:menuClick="menuClick"
+           v-on:topTreeClick="topTreeClick"
+           v-on:navigateClick="navigateClick"></vhead>
     <mainContent :treeData="treeData"></mainContent>
     <vfoot></vfoot>
   </div>
@@ -39,6 +41,12 @@
           }
         }
       },
+      topTreeClick (args) {
+        this.$emit('topTreeClick', args)
+      },
+      navigateClick (args) {
+        this.$emit('navigateClick', args)
+      },
       doResize () {
         if (document.documentElement.clientWidth < 768) {
           document.querySelector('#index-app .left-tree').style.width = '0'
@@ -65,6 +73,12 @@
     props: {
       appName: {
         default: 'Hopever'
+      },
+      topTree: {
+        default: null
+      },
+      topNavigate: {
+        default: null
       },
       treeData: {
         default: null

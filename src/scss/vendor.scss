@@ -66,6 +66,7 @@ html, body {
 
 body {
   background: url(../assets/images/body-bg.jpg) 50% no-repeat;
+  min-width: 480px;
 }
 
 .head, .footer {
@@ -137,6 +138,8 @@ body {
 .form-element .date-picker {
   color: #333;
 }
+.tree-wrapper {
+  color: $text-color;}
 
 #login-wrapper, #registration-wrapper, #index-app {
   .form-wrapper {

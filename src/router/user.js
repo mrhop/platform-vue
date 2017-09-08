@@ -121,7 +121,7 @@ export default new Router({
       component: ModuleDetail
     }, {
       path: '/*',
-      name: 'Dashboard',
+      name: 'All',
       component: Dashboard
     }
   ]
