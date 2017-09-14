@@ -42,6 +42,16 @@
                     'placeholder': '主题名称'
                   },
                   {
+                    'name': 'themeId',
+                    'label': '主题ID',
+                    'type': 'text',
+                    'validate': [{
+                      'errorMsg': '账号由英文，数字和 _ 组成，并在5-40个字符之间',
+                      'regex': '^\\w{5,40}$'
+                    }],
+                    'placeholder': '主题ID'
+                  },
+                  {
                     'name': 'relatedUsers',
                     'label': '关联用户',
                     'type': 'checkbox',

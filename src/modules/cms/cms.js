@@ -51,10 +51,13 @@ new Vue({
     topTreeClick (args) {
       console.log('you got here1')
       if (args.type === 'theme') {
+        router.push(commonUrls.vuerouter.theme.info + '/' + args.value)
         this.leftTree = commonUrls.subThemeMenu + '?type=theme&id=' + args.value
       } else if (args.type === 'website') {
-        this.leftTree = commonUrls.subWebsiteMenu + '?type=website&id=' + args.value
+        router.push(commonUrls.vuerouter.website.info + '/' + args.value)
+        this.leftTree = commonUrls.subWebsiteMenu + '?id=' + args.value
       }
+      document.cookie = 'leftmenu=' + this.leftTree
     }
   },
   router,

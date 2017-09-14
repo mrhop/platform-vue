@@ -48,6 +48,13 @@ import NavigateList from '@/components/cms/website/navigatelist/NavigateList'
 import NewsDetail from '@/components/cms/website/newsdetail/NewsDetail'
 import NewsList from '@/components/cms/website/newslist/NewsList'
 
+import AddStaticResource from '@/components/cms/common/addstaticresource/AddStaticResource'
+import EditStaticResource from '@/components/cms/common/editstaticresource/EditStaticResource'
+import StaticResourceDetail from '@/components/cms/common/staticresourcedetail/StaticResourceDetail'
+
+import ThemeInfo from '@/components/cms/theme/themeinfo/ThemeInfo'
+import WebsiteInfo from '@/components/cms/website/websiteinfo/WebsiteInfo'
+
 Vue.use(Router)
 
 export default new Router({
@@ -256,6 +263,31 @@ export default new Router({
       path: '/navigate/detail',
       name: 'NavigateDetail',
       component: NavigateDetail
+    },
+    {
+      path: '/staticresource/add',
+      name: 'AddStaticResource',
+      component: AddStaticResource
+    },
+    {
+      path: '/staticresource/edit',
+      name: 'EditStaticResource',
+      component: EditStaticResource
+    },
+    {
+      path: '/staticresource/detail',
+      name: 'StaticResourceDetail',
+      component: StaticResourceDetail
+    },
+    {
+      path: '/website/info/:key',
+      name: 'WebsiteInfo',
+      component: WebsiteInfo
+    },
+    {
+      path: '/theme/info/:key',
+      name: 'ThemeInfo',
+      component: ThemeInfo
     },
     {
       path: '/*',

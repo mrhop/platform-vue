@@ -1,8 +1,8 @@
 <template>
-  <div class="form-template-detail form-detail">
+  <div class="form-staticresource-detail form-detail">
     <panel>
-      <h1 slot="header">新增模板</h1>
-      <vform id="template-add-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <h1 slot="header">新增静态资源</h1>
+      <vform id="staticresource-add-form" :actions="actions" :actionUrls="actionUrls"></vform>
     </panel>
   </div>
 </template>
@@ -17,8 +17,8 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.template.list,
-          saveUrl: commonUrls.template.save
+          backupUrl: global.staticResourceBackUrl,
+          saveUrl: commonUrls.staticresource.save
         },
         actions: {
           init: function (params) {
@@ -26,19 +26,20 @@
               'items': [
                 {
                   'name': 'name',
-                  'label': '模板名称',
+                  'label': '名称',
                   'type': 'text',
                   'validate': [{
-                    'errorMsg': '模板名称在2-40个字符之间，且前后不能有空格',
+                    'errorMsg': '主题名称在2-40个字符之间，且前后不能有空格',
                     'regex': '^\\S.{0,38}\\S$'
                   }],
-                  'placeholder': '模板名称'
+                  'placeholder': '名称'
                 },
                 {
-                  'name': 'contentPosition',
-                  'label': '内容位置',
-                  'type': 'text',
-                  locked: true
+                  'name': 'file',
+                  'label': '文件',
+                  'type': 'file',
+                  'maxSize': 10000000,
+                  required: true
                 }
               ],
               action: {
@@ -54,7 +55,7 @@
               }
             }
             global.store.commit('FORM_SUCCESS', {
-              id: 'template-add-form',
+              id: 'staticresource-add-form',
               data: {
                 rules
               }

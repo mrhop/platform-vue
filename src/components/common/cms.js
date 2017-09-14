@@ -16,6 +16,7 @@ var commonUrls = {
     list: basePath + 'theme/list',
     info: basePath + 'theme/info',
     update: basePath + 'theme/update',
+    updateinfo: basePath + 'theme/updateinfo',
     save: basePath + 'theme/save',
     delete: basePath + 'theme/delete'
   },
@@ -37,6 +38,7 @@ var commonUrls = {
     list: basePath + 'website/list',
     info: basePath + 'website/info',
     update: basePath + 'website/update',
+    updateinfo: basePath + 'website/updateinfo',
     save: basePath + 'website/save',
     delete: basePath + 'website/delete',
     rulechange: basePath + 'website/form/rulechange'
@@ -88,12 +90,21 @@ var commonUrls = {
     delete: basePath + 'navigate/delete',
     rulechange: basePath + 'navigate/form/rulechange'
   },
+  staticresource: {
+    list: basePath + 'staticresource/list',
+    info: basePath + 'staticresource/info',
+    update: basePath + 'staticresource/update',
+    save: basePath + 'staticresource/save',
+    delete: basePath + 'staticresource/delete',
+    rulechange: basePath + 'staticresource/form/rulechange'
+  },
   vuerouter: {
     theme: {
       list: '/theme/list',
       add: '/theme/add',
       edit: '/theme/edit',
-      detail: '/theme/detail'
+      detail: '/theme/detail',
+      info: '/theme/info' // 用于单个的theme处理
     },
     template: {
       list: '/template/list',
@@ -111,7 +122,8 @@ var commonUrls = {
       list: '/website/list',
       add: '/website/add',
       edit: '/website/edit',
-      detail: '/website/detail'
+      detail: '/website/detail',
+      info: '/website/info' // 用于单个的website处理
     },
     article: {
       list: '/article/list',
@@ -148,6 +160,12 @@ var commonUrls = {
       add: '/navigate/add',
       edit: '/navigate/edit',
       detail: '/navigate/detail'
+    },
+    staticresource: {
+      list: '/staticresource/list',
+      add: '/staticresource/add',
+      edit: '/staticresource/edit',
+      detail: '/staticresource/detail'
     }
   }
 }

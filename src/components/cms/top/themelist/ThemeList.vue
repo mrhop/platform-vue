@@ -52,6 +52,11 @@
                           'type': 'text'
                         },
                         {
+                          'name': 'themeId',
+                          'title': '主题ID',
+                          'type': 'text'
+                        },
+                        {
                           'name': 'relatedUsers',
                           'title': '关联用户',
                           'type': 'text'

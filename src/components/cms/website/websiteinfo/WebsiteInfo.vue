@@ -1,8 +1,8 @@
 <template>
-  <div class="form-theme-detail form-detail">
+  <div class="form-website-detail form-detail">
     <panel>
-      <h1 slot="header">更新主题</h1>
-      <vform id="theme-update-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <h1 slot="header">网站详情</h1>
+      <vform id="website-info-form" :actions="actions" :actionUrls="actionUrls"></vform>
     </panel>
     <panel canHide="true">
       <h1 slot="header">静态资源</h1>
@@ -20,112 +20,147 @@
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
   let vtable = huodhVuePlugins.vtable
-  let ruleChangeConfig = {
-    url: commonUrls.relatedUsers,
-    method: 'get'
-  }
+
   let initConfig = {
-    url: commonUrls.theme.info,
+    url: commonUrls.website.info,
     method: 'get'
   }
   export default {
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.theme.list,
-          saveUrl: commonUrls.theme.update,
-          afterSaveUrl: commonUrls.vuerouter.theme.list
+          saveUrl: commonUrls.website.updateinfo
         },
         actions: {
+          reinit: false,
           init: function (params) {
             initConfig.params = {key: params.key}
             axios.request(initConfig).then(function (response) {
-              axios.request(ruleChangeConfig).then(function (responseInner) {
-                let rules = {
-                  'items': [
-                    {
-                      'name': 'name',
-                      'label': '主题名称',
-                      'type': 'text',
-                      'validate': [{
-                        'errorMsg': '主题名称在2-40个字符之间，且前后不能有空格',
-                        'regex': '^\\S.{0,38}\\S$'
-                      }],
-                      'defaultValue': response.data.name,
-                      'placeholder': '主题名称'
-                    },
-                    {
-                      'name': 'themeId',
-                      'label': '主题ID',
-                      'type': 'text',
-                      locked: true,
-                      'defaultValue': response.data.themeId
-                    },
-                    {
-                      'name': 'relatedUsers',
-                      'label': '关联用户',
-                      'type': 'checkbox',
-                      'defaultValue': response.data.relatedUsers ? response.data.relatedUsers : [],
-                      items: responseInner.data,
-                      required: false
-                    },
-                    {
-                      'name': 'screenshotFiles',
-                      'label': '主题截图',
-                      'type': 'image',
-                      'validate': [{
-                        'errorMsg': '只能为图片文件',
-                        'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
-                      }],
-                      'path': response.data.screenshots ? response.data.screenshots : undefined,
-                      'maxSize': 200000,
-                      'quantity': 5,
-                      'required': false
-                    }
-                  ],
-                  action: {
-                    save: {
-                      label: '更新'
-                    },
-                    reset: {
-                      label: '重置'
-                    },
-                    backup: {
-                      label: '返回列表'
-                    }
+              let rules = {
+                'items': [
+                  {
+                    'name': 'name',
+                    'label': '网站名称',
+                    'type': 'text',
+                    'validate': [{
+                      'errorMsg': '网站名称在2-40个字符之间，且前后不能有空格',
+                      'regex': '^\\S.{0,38}\\S$'
+                    }],
+                    'defaultValue': response.data.name,
+                    'placeholder': '网站名称'
+                  },
+                  {
+                    'name': 'websiteId',
+                    'label': '网站ID',
+                    'type': 'text',
+                    locked: true,
+                    'defaultValue': response.data.websiteId
+                  },
+                  {
+                    'name': 'themeName',
+                    'label': '关联主题',
+                    'type': 'text',
+                    locked: true,
+                    'defaultValue': response.data.themeName
+                  },
+                  {
+                    'name': 'url',
+                    'label': '网站地址',
+                    'type': 'text',
+                    'validate': [{
+                      'errorMsg': '请填写符合格式的网站地址',
+                      'regex': '^http(s)?://[\\w-.]+(:[\\d]+)?(/[\\w-.#]*)*(/[\\w-.\\?%&=]*)?$'
+                    }],
+                    'placeholder': '网站地址',
+                    'defaultValue': response.data.url
+                  },
+                  {
+                    'name': 'title',
+                    'label': '网站标题',
+                    'type': 'text',
+                    'placeholder': '网站标题',
+                    'defaultValue': response.data.title
+                  },
+                  {
+                    'name': 'subtitle',
+                    'label': '网站子标题',
+                    'type': 'text',
+                    'placeholder': '网站子标题',
+                    'defaultValue': response.data.subtitle
+                  },
+                  {
+                    'name': 'phone',
+                    'label': '电话',
+                    'type': 'text',
+                    'validate': [{
+                      'errorMsg': '请输入正确的手机号',
+                      'regex': '^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|(17|18)[0|1|2|3|5|6|7|8|9])\\d{8}$'
+                    }],
+                    'placeholder': '手机号',
+                    required: false,
+                    'defaultValue': response.data.phone
+                  },
+                  {
+                    'name': 'email',
+                    'label': 'Email',
+                    'type': 'text',
+                    'validate': [{
+                      'errorMsg': '请输入正确的Email',
+                      'regex': '^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
+                    }],
+                    'placeholder': 'Email',
+                    required: false,
+                    'defaultValue': response.data.email
+                  },
+                  {
+                    'name': 'screenshotFiles',
+                    'label': '网站截图',
+                    'type': 'image',
+                    'validate': [{
+                      'errorMsg': '只能为图片文件',
+                      'regex': '\\.(png|jpe?g|gif|svg)(\\?.*)?$'
+                    }],
+                    'path': response.data.screenshots ? response.data.screenshots : undefined,
+                    'maxSize': 200000,
+                    'quantity': 5,
+                    'required': false
+                  }
+                ],
+                action: {
+                  save: {
+                    label: '更新'
+                  },
+                  reset: {
+                    label: '重置'
                   }
                 }
-                global.store.commit('FORM_SUCCESS', {
-                  id: 'theme-update-form',
-                  data: {
-                    rules
-                  }
-                })
-              }).catch(function (error) {
-                global.store.commit('FORM_FAILURE', {
-                  id: 'theme-update-form',
-                  error
-                })
+              }
+              global.store.commit('FORM_SUCCESS', {
+                id: 'website-info-form',
+                data: {
+                  rules
+                }
               })
             }).catch(function (error) {
               global.store.commit('FORM_FAILURE', {
-                id: 'theme-update-form',
+                id: 'website-info-form',
                 error
               })
             })
           }
         },
         staticresourceActionUrls: {
-          addUrl: commonUrls.vuerouter.staticresource.add + '?themeId=' + this.$route.query.key,
+          addUrl: commonUrls.vuerouter.staticresource.add + '?websiteId=' + this.$route.params.key,
           detailUrl: commonUrls.vuerouter.staticresource.detail,
           infoUrl: commonUrls.vuerouter.staticresource.edit,
           deleteUrl: commonUrls.staticresource.delete
         },
         staticresourceActions: {
+          reinit: false,
           list: function (args) {
             var pager = args.pager
             var init = args.init
-            var filters = {themeId: this.$route.query.key}
+            var filters = {websiteId: this.$route.params.key}
             var sorts = args.sorts
             if (init) {
               let config = {
@@ -196,7 +231,7 @@
                       'action': {
                         'add': true,
                         'detail': true,
-                        'update': true,
+                        'info': true,
                         'delete': true
                       },
                       'feature': {
@@ -238,6 +273,12 @@
     },
     created: function () {
       global.staticResourceBackUrl = this.$route.fullPath
+    },
+    watch: {
+      '$route': function () {
+        this.actions.reinit = true
+        this.staticresourceActions.reinit = true
+      }
     }
   }
 </script>
