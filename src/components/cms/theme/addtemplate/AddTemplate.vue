@@ -2,21 +2,26 @@
   <div class="form-template-add form-add">
     <panel>
       <h1 slot="header">新增模板</h1>
-      <vform ref="tplForm" id="template-add-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <vform ref="tplForm" id="template-add-form" :actions="actions" :actionUrls="actionUrls"
+             :updateRule="templateFormUpdateRule"></vform>
     </panel>
     <panel class="tabPanel">
-      <tabTpl>
+      <tabTpl :tabSelected="tabSelected" v-on:headerClick="tabClick">
         <ul slot="header">
-          <li class="active">block列表</li>
-          <li>新增block</li>
+          <li>block列表</li>
+          <li>新增/更新block</li>
+          <li>block Map</li>
         </ul>
         <ul>
-          <li class="active">
+          <li>
             <vtable id="block-list"
                     :actions="blockListActions"></vtable>
           </li>
           <li>
-            <vform ref="blockForm" id="block-add-form" :actions="blockAddactions"></vform>
+            <vform ref="blockForm" id="block-add-form" :actions="blockAddactions"
+                   :updateRule="blockFormUpdateRule"></vform>
+          </li>
+          <li ref="blockMap">
           </li>
         </ul>
       </tabTpl>
@@ -76,6 +81,7 @@
 
 <script>
   import lodash from 'lodash'
+  import Vue from 'vue'
   import huodhVuePlugins from 'huodh-vue-plugins'
   import {commonUrls} from '../../../common/cms'
 
@@ -83,15 +89,30 @@
   let tabTpl = huodhVuePlugins.tabTpl
   let vform = huodhVuePlugins.vform
   let vtable = huodhVuePlugins.vtable
-  let contentPosition = null
-  let nameChanged = null
-  let blockContentPosition = null
-  let blockNameChanged = null
-  let blockList = []
+  // let contentPosition = null
+  //  let blockContentPosition = {}
+  // blockadded
+  // list 使用
+
   export default {
     data () {
       return {
+        contentPosition: null,
+        //  let blockContentPosition = {}
+        blockContentPositionNew: null,
+        blockNameChanged: null,
+        blockContent: null,
+        blockScript: null,
+        blockIdChanged: -1,
+        positionMapAction: [],
+        blockPositionMapAction: [],
+        // blockadded
+        defaultBlockColor: 'rgb(0, 0, 0)',
+        // list 使用
+        blockList: [],
+        tabSelected: 1,
         positionShow: false,
+        positionCurrent: 'template',
         actionUrls: {
           backupUrl: commonUrls.vuerouter.template.list,
           saveUrl: commonUrls.template.save
@@ -109,21 +130,18 @@
                     'errorMsg': '模板名称在2-40个字符之间，且前后不能有空格',
                     'regex': '^\\S.{0,38}\\S$'
                   }],
-                  'placeholder': '模板名称',
-                  'ruleChange': true,
-                  defaultValue: nameChanged
+                  'placeholder': '模板名称'
                 },
                 {
                   'name': 'contentPosition',
                   'label': '内容位置',
                   'type': 'text',
-                  defaultValue: contentPosition && JSON.stringify(contentPosition),
+                  defaultValue: this.contentPosition && JSON.stringify(this.contentPosition),
                   locked: true
                 },
                 {
                   'name': 'blocks',
-                  'type': 'hidden',
-                  defaultValue: blockList
+                  'type': 'hidden'
                 }
               ],
               action: {
@@ -144,20 +162,12 @@
                 rules
               }
             })
-          },
-          ruleChange: function (params) {
-            if (params.changed.name) {
-              nameChanged = params.changed.name
-            }
-          }
+          }.bind(this)
         },
         blockListActions: {
           reinit: false,
           list: function (args) {
-            var pager = args.pager
             var init = args.init
-            var filters = {themeId: this.$route.params.key}
-            var sorts = args.sorts
             if (init) {
               global.store.commit('TABLE_SUCCESS', {
                 id: 'block-list',
@@ -180,27 +190,71 @@
                       }
                     ],
                     'action': {
-                      'info': true,
+                      'add': true,
+                      'update': true,
                       'delete': true
                     },
                     'feature': {
-                      'pager': true,
+                      'pager': false,
                       filter: false
                     }
                   },
-                  'data': blockList
+                  'data': {rows: this.blockList, totalCount: this.blockList.length}
                 },
-                callParameters: {pager, init: true}
+                callParameters: {init: true}
               })
             } else {
               global.store.commit('TABLE_SUCCESS', {
                 id: 'block-list',
                 data: {
-                  'data': blockList
+                  'data': this.blockList
                 },
-                callParameters: {pager, filters, sorts}
+                callParameters: {}
               })
             }
+          }.bind(this),
+          addAction: function (args) {
+            this.tabSelected = 1
+          }.bind(this),
+          updateAction: function (args) {
+            console.log('do update' + args.key)
+            this.blockIdChanged = args.key
+            this.blockContentPositionNew = JSON.parse(this.blockList[args.key].value[1])
+            this.blockNameChanged = this.blockList[args.key].value[0]
+            this.blockContent = this.blockList[args.key].value[2]
+            this.blockScript = this.blockList[args.key].value[3]
+            this.blockAddactions.reinit = true
+            this.tabSelected = 1
+            let position = this.blockContentPositionNew
+            let cols = this.$refs.positionMap.querySelectorAll('div.col')
+            for (let i in cols) {
+              if (i < cols.length) {
+                if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                  cols[i].setAttribute('class', 'col block-temp active')
+                  cols[i].removeAttribute('style')
+                  if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                    cols[i].innerHTML = ''
+                  }
+                }
+              }
+            }
+          }.bind(this),
+          delete: function (args) {
+            let position = JSON.parse(this.blockList[args.key].value[1])
+            let cols = this.$refs.positionMap.querySelectorAll('div.col')
+            for (let i in cols) {
+              if (i < cols.length) {
+                if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                  cols[i].setAttribute('class', 'col')
+                  cols[i].removeAttribute('style')
+                  if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                    cols[i].innerHTML = ''
+                  }
+                }
+              }
+            }
+            Vue.delete(this.blockList, args.key)
+            this.blockListActions.reinit = true
           }.bind(this)
         },
         blockAddactions: {
@@ -208,6 +262,11 @@
           init: function (params) {
             let rules = {
               'items': [
+                {
+                  'name': 'id',
+                  'type': 'hidden',
+                  defaultValue: this.blockIdChanged
+                },
                 {
                   'name': 'name',
                   'label': 'block名称',
@@ -217,18 +276,19 @@
                     'regex': '^\\S.{0,38}\\S$'
                   }],
                   'placeholder': 'block名称',
-                  'ruleChange': true,
-                  defaultValue: blockNameChanged
+                  defaultValue: this.blockNameChanged
                 },
                 {
                   'name': 'content',
                   'label': 'block内容',
-                  'type': 'ckeditor'
+                  'type': 'ckeditor',
+                  defaultValue: this.blockContent
                 },
                 {
                   'name': 'script',
                   'label': 'block脚本',
-                  'type': 'ckeditor'
+                  'type': 'textarea',
+                  defaultValue: this.blockScript
                 },
                 {
                   'name': 'position',
@@ -239,7 +299,7 @@
                     'regex': '^\\S+$'
                   }],
                   locked: true,
-                  defaultValue: blockContentPosition
+                  defaultValue: this.blockContentPositionNew && JSON.stringify(this.blockContentPositionNew)
                 }
               ],
               action: {
@@ -260,19 +320,57 @@
                 rules
               }
             })
-          },
-          save: function (params) {
-            blockList.add([params.data.name, params.data.position, params.data.content, params.data.script])
-            blockContentPosition = null
-            blockNameChanged = null
-            this.blockAddactions.reinit = true
           }.bind(this),
-          ruleChange: function (params) {
-            if (params.changed.name) {
-              blockNameChanged = params.changed.name
+          save: function (params) {
+            let color = null
+            if (params.data.id !== -1) {
+              this.blockList[params.data.id].value = [params.data.name, params.data.position, params.data.content, params.data.script]
+              color = this.blockList[params.data.id].color
+            } else {
+              this.defaultBlockColor = global.shadeRGBColor(this.defaultBlockColor, 0.2)
+              color = this.defaultBlockColor
+              this.blockList.push({
+                key: this.blockList.length,
+                value: [params.data.name, params.data.position, params.data.content, params.data.script],
+                color: this.defaultBlockColor
+              })
             }
-          }
-        }
+            let position = JSON.parse(params.data.position)
+            let cols = this.$refs.positionMap.querySelectorAll('div.col')
+            for (let i in cols) {
+              if (i < cols.length) {
+                if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                  cols[i].setAttribute('class', 'col block-added')
+                  cols[i].setAttribute('style', 'background-color:' + color)
+                  if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                    cols[i].innerHTML = '<p>' + params.data.name + '</p>'
+                  }
+                }
+              }
+            }
+            this.blockIdChanged = -1
+            this.blockContentPositionNew = null
+            this.blockNameChanged = null
+            this.blockContent = null
+            this.blockScript = null
+            this.blockAddactions.reinit = true
+            this.tabSelected = 0
+            this.blockListActions.reinit = true
+            global.store.commit('FORM_SAVE_SUCCESS', {
+              id: 'block-add-form',
+              data: {}
+            })
+            let templateBlocks = []
+            for (let templateBlockIndex in this.blockList) {
+              if (templateBlockIndex < this.blockList.length) {
+                templateBlocks.push(this.blockList[templateBlockIndex].value)
+              }
+            }
+            Vue.set(this.templateFormUpdateRule, 'blocks', templateBlocks)
+          }.bind(this)
+        },
+        templateFormUpdateRule: {},
+        blockFormUpdateRule: {}
       }
     },
     components: {
@@ -281,124 +379,328 @@
     methods: {
       colClick (index, event) {
         index = +index
-        if (event.altKey) {
-          // 根据算法连续选中
-          if (event.target.getAttribute('class').indexOf('content') < 0 && event.target.getAttribute('class').indexOf('block') < 0) {
-            let temp = lodash.cloneDeep(contentPosition)
-            if (index % 6 < contentPosition.begin.x) {
-              temp.begin.x = index % 6
-            } else if (index % 6 + 1 > contentPosition.end.x) {
-              temp.end.x = index % 6 + 1
-            }
-            if (Math.floor(index / 6) < contentPosition.begin.y) {
-              temp.begin.y = Math.floor(index / 6)
-            } else if (Math.floor(index / 6) + 1 > contentPosition.end.y) {
-              temp.end.y = Math.floor(index / 6) + 1
-            }
-            let positionsSelected = []
-            for (let x = temp.begin.x; x < temp.end.x; x++) {
-              for (let y = temp.begin.y; y < temp.end.y; y++) {
-                positionsSelected.push('' + (y * 6 + x))
+        if (event.target.getAttribute('class').indexOf('block') < 0) {
+          if (event.altKey) {
+            // 根据算法连续选中
+            if (this.contentPosition && event.target.getAttribute('class').indexOf('content') < 0) {
+              let temp = lodash.cloneDeep(this.contentPosition)
+              if (index % 6 < this.contentPosition.begin.x) {
+                temp.begin.x = index % 6
+              } else if (index % 6 + 1 > this.contentPosition.end.x) {
+                temp.end.x = index % 6 + 1
               }
-            }
-            let cols = this.$refs.positionMap.querySelectorAll('div.col')
-            for (let i in cols) {
-              if (i < cols.length) {
-                let className = cols[i].getAttribute('class')
-                if (className && className.indexOf('block') >= 0) {
-                  if (positionsSelected.includes(i)) {
-                    return
+              if (Math.floor(index / 6) < this.contentPosition.begin.y) {
+                temp.begin.y = Math.floor(index / 6)
+              } else if (Math.floor(index / 6) + 1 > this.contentPosition.end.y) {
+                temp.end.y = Math.floor(index / 6) + 1
+              }
+              let positionsSelected = []
+              for (let x = temp.begin.x; x < temp.end.x; x++) {
+                for (let y = temp.begin.y; y < temp.end.y; y++) {
+                  positionsSelected.push('' + (y * 6 + x))
+                }
+              }
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('block') >= 0) {
+                    if (positionsSelected.includes(i)) {
+                      return
+                    }
                   }
                 }
               }
-            }
-            contentPosition = temp
-            for (let j in cols) {
-              if (j < cols.length) {
-                let className = cols[j].getAttribute('class')
-                if (positionsSelected.includes(j) && className.indexOf('content') < 0) {
-                  cols[j].setAttribute('class', 'col content active')
+              this.contentPosition = temp
+              for (let j in cols) {
+                if (j < cols.length) {
+                  let className = cols[j].getAttribute('class')
+                  if (positionsSelected.includes(j) && className.indexOf('content') < 0) {
+                    cols[j].setAttribute('class', 'col content active')
+                  }
                 }
               }
-            }
-            if (contentPosition && (contentPosition.begin.x === contentPosition.end.x) && (contentPosition.begin.y === contentPosition.end.y)) {
-              contentPosition = null
-            }
-            this.actions.reinit = true
-          }
-        } else {
-          // 选中单独的col
-          if (event.target.getAttribute('class').indexOf('content') > -1) {
-            if (index % 6 === contentPosition.begin.x) {
-              contentPosition.begin.x += 1
-            } else if (index % 6 + 1 === contentPosition.end.x) {
-              contentPosition.end.x -= 1
-            }
-            if (Math.floor(index / 6) === contentPosition.begin.y) {
-              contentPosition.begin.y += 1
-            } else if (Math.floor(index / 6) + 1 === contentPosition.end.y) {
-              contentPosition.end.y -= 1
-            }
-            let positionsSelected = []
-            for (let x = contentPosition.begin.x; x < contentPosition.end.x; x++) {
-              for (let y = contentPosition.begin.y; y < contentPosition.end.y; y++) {
-                positionsSelected.push('' + (y * 6 + x))
+              if (this.contentPosition && (this.contentPosition.begin.x === this.contentPosition.end.x) && (this.contentPosition.begin.y === this.contentPosition.end.y)) {
+                this.contentPosition = null
               }
             }
+          } else {
+            // 选中单独的col
+            if (event.target.getAttribute('class').indexOf('content') > -1) {
+              if (index % 6 === this.contentPosition.begin.x) {
+                this.contentPosition.begin.x += 1
+              } else if (index % 6 + 1 === this.contentPosition.end.x) {
+                this.contentPosition.end.x -= 1
+              }
+              if (Math.floor(index / 6) === this.contentPosition.begin.y) {
+                this.contentPosition.begin.y += 1
+              } else if (Math.floor(index / 6) + 1 === this.contentPosition.end.y) {
+                this.contentPosition.end.y -= 1
+              }
+              let positionsSelected = []
+              for (let x = this.contentPosition.begin.x; x < this.contentPosition.end.x; x++) {
+                for (let y = this.contentPosition.begin.y; y < this.contentPosition.end.y; y++) {
+                  positionsSelected.push('' + (y * 6 + x))
+                }
+              }
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('block') < 0) {
+                    if (!positionsSelected.includes(i)) {
+                      cols[i].setAttribute('class', 'col')
+                    }
+                  }
+                }
+              }
+            } else {
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('block') < 0) {
+                    cols[i].setAttribute('class', 'col')
+                  }
+                }
+              }
+              event.target.setAttribute('class', 'col content active')
+              this.contentPosition = {
+                begin: {x: index % 6, y: Math.floor(index / 6)}, end: {x: index % 6 + 1, y: Math.floor(index / 6) + 1}
+              }
+            }
+            if (this.contentPosition && (this.contentPosition.begin.x === this.contentPosition.end.x) && (this.contentPosition.begin.y === this.contentPosition.end.y)) {
+              this.contentPosition = null
+            }
+          }
+          Vue.set(this.templateFormUpdateRule, 'contentPosition', this.contentPosition && JSON.stringify(this.contentPosition))
+        }
+      },
+      blockColClick (index, event) {
+        index = +index
+        if (event.target.getAttribute('class').indexOf('content') < 0 && event.target.getAttribute('class').indexOf('block-added') < 0) {
+          if (event.altKey) {
+            // 根据算法连续选中
+            if (this.blockContentPositionNew && event.target.getAttribute('class').indexOf('content') < 0 && event.target.getAttribute('class').indexOf('block-added') < 0) {
+              let temp = lodash.cloneDeep(this.blockContentPositionNew)
+              if (index % 6 < this.blockContentPositionNew.begin.x) {
+                temp.begin.x = index % 6
+              } else if (index % 6 + 1 > this.blockContentPositionNew.end.x) {
+                temp.end.x = index % 6 + 1
+              }
+              if (Math.floor(index / 6) < this.blockContentPositionNew.begin.y) {
+                temp.begin.y = Math.floor(index / 6)
+              } else if (Math.floor(index / 6) + 1 > this.blockContentPositionNew.end.y) {
+                temp.end.y = Math.floor(index / 6) + 1
+              }
+              let positionsSelected = []
+              for (let x = temp.begin.x; x < temp.end.x; x++) {
+                for (let y = temp.begin.y; y < temp.end.y; y++) {
+                  positionsSelected.push('' + (y * 6 + x))
+                }
+              }
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('content') >= 0 || className && className.indexOf('block-added') >= 0) {
+                    if (positionsSelected.includes(i)) {
+                      return
+                    }
+                  }
+                }
+              }
+              this.blockContentPositionNew = temp
+              for (let j in cols) {
+                if (j < cols.length) {
+                  let className = cols[j].getAttribute('class')
+                  if (positionsSelected.includes(j) && className.indexOf('block-temp') < 0) {
+                    cols[j].setAttribute('class', 'col block-temp active')
+                  }
+                }
+              }
+              if (this.blockContentPositionNew && (this.blockContentPositionNew.begin.x === this.blockContentPositionNew.end.x) && (this.blockContentPositionNew.begin.y === this.blockContentPositionNew.end.y)) {
+                this.blockContentPositionNew = null
+              }
+              Vue.set(this.blockFormUpdateRule, 'position', this.blockContentPositionNew && JSON.stringify(this.blockContentPositionNew))
+            }
+          } else {
+            // 选中单独的col
+            if (event.target.getAttribute('class').indexOf('block-temp') > -1) {
+              if (index % 6 === this.blockContentPositionNew.begin.x) {
+                this.blockContentPositionNew.begin.x += 1
+              } else if (index % 6 + 1 === this.blockContentPositionNew.end.x) {
+                this.blockContentPositionNew.end.x -= 1
+              }
+              if (Math.floor(index / 6) === this.blockContentPositionNew.begin.y) {
+                this.blockContentPositionNew.begin.y += 1
+              } else if (Math.floor(index / 6) + 1 === this.blockContentPositionNew.end.y) {
+                this.blockContentPositionNew.end.y -= 1
+              }
+              let positionsSelected = []
+              for (let x = this.blockContentPositionNew.begin.x; x < this.blockContentPositionNew.end.x; x++) {
+                for (let y = this.blockContentPositionNew.begin.y; y < this.blockContentPositionNew.end.y; y++) {
+                  positionsSelected.push('' + (y * 6 + x))
+                }
+              }
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('content') < 0 && className.indexOf('block-added') < 0) {
+                    if (!positionsSelected.includes(i)) {
+                      cols[i].setAttribute('class', 'col')
+                    }
+                  }
+                }
+              }
+            } else {
+              let cols = this.$refs.positionMap.querySelectorAll('div.col')
+              for (let i in cols) {
+                if (i < cols.length) {
+                  let className = cols[i].getAttribute('class')
+                  if (className && className.indexOf('content') < 0 && className.indexOf('block-added') < 0) {
+                    cols[i].setAttribute('class', 'col')
+                  }
+                }
+              }
+              event.target.setAttribute('class', 'col block-temp active')
+              this.blockContentPositionNew = {
+                begin: {x: index % 6, y: Math.floor(index / 6)}, end: {x: index % 6 + 1, y: Math.floor(index / 6) + 1}
+              }
+            }
+            if (this.blockContentPositionNew && (this.blockContentPositionNew.begin.x === this.blockContentPositionNew.end.x) && (this.blockContentPositionNew.begin.y === this.blockContentPositionNew.end.y)) {
+              this.blockContentPositionNew = null
+            }
+            Vue.set(this.blockFormUpdateRule, 'position', this.blockContentPositionNew && JSON.stringify(this.blockContentPositionNew))
+          }
+        }
+      },
+      tabClick: function (index, event) {
+        this.tabSelected = index
+        if (index === 0) {
+          this.blockListActions.reinit = true
+        } else if (index === 1) {
+          if (this.positionCurrent !== 'block-tab' && this.positionCurrent !== 'block') {
+            this.positionCurrent = 'block-tab'
+            let cols = this.$refs.positionMap.querySelectorAll('div.col')
+            if (this.blockIdChanged !== -1) {
+              let position = JSON.parse(this.blockList[this.blockIdChanged].value[1])
+              for (let i in cols) {
+                if (i < cols.length) {
+                  if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                    cols[i].setAttribute('class', 'col block-temp active')
+                    cols[i].removeAttribute('style')
+                    if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                      cols[i].innerHTML = ''
+                    }
+                  }
+                }
+              }
+              Vue.set(this.blockFormUpdateRule, 'position', this.blockList[this.blockIdChanged].value[1])
+            }
+          }
+        } else if (index === 2) {
+          // remove click？继续完成，同时在第一个模块上给出title，同时给出不同的颜色
+          this.positionShow = true
+          if (this.positionCurrent !== 'blockMap') {
+            this.positionCurrent = 'blockMap'
+            this.$refs.blockMap.appendChild(this.$refs.positionMap)
             let cols = this.$refs.positionMap.querySelectorAll('div.col')
             for (let i in cols) {
               if (i < cols.length) {
-                let className = cols[i].getAttribute('class')
-                if (className && className.indexOf('block') < 0) {
-                  if (!positionsSelected.includes(i)) {
+                cols[i].removeEventListener('click', this.blockPositionMapAction[i])
+                cols[i].removeEventListener('click', this.positionMapAction[i])
+                if (this.blockIdChanged !== -1) {
+                  let position = JSON.parse(this.blockList[this.blockIdChanged].value[1])
+                  let color = this.blockList[this.blockIdChanged].color
+                  if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                    cols[i].setAttribute('class', 'col block-added')
+                    cols[i].setAttribute('style', 'background-color:' + color)
+                    if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                      cols[i].innerHTML = '<p>' + this.blockList[this.blockIdChanged].value[0] + '</p>'
+                    }
+                  }
+                  if (cols[i].getAttribute('class').indexOf('block-temp') > -1) {
                     cols[i].setAttribute('class', 'col')
                   }
                 }
               }
             }
-          } else {
-            let cols = this.$refs.positionMap.querySelectorAll('div.col')
-            for (let i in cols) {
-              if (i < cols.length) {
-                let className = cols[i].getAttribute('class')
-                if (className && className.indexOf('block') < 0) {
-                  cols[i].setAttribute('class', 'col')
-                }
-              }
-            }
-            event.target.setAttribute('class', 'col content active')
-            contentPosition = {
-              begin: {x: index % 6, y: Math.floor(index / 6)}, end: {x: index % 6 + 1, y: Math.floor(index / 6) + 1}
-            }
           }
-          if (contentPosition && (contentPosition.begin.x === contentPosition.end.x) && (contentPosition.begin.y === contentPosition.end.y)) {
-            contentPosition = null
-          }
-          this.actions.reinit = true
         }
       }
     },
     mounted () {
+//      //  let blockContentPosition = {}
+//      // blockadded
+//      // list 使用
       let formEl = this.$refs.tplForm.$el.querySelector('input[name="contentPosition"]')
       formEl.addEventListener('click', function () {
-        console.log('you click it')
-        this.positionShow = !this.positionShow
+        if (this.positionCurrent !== 'template') {
+          this.positionCurrent = 'template'
+          this.positionShow = true
+          formEl.parentNode.appendChild(this.$refs.positionMap)
+          let cols = this.$refs.positionMap.querySelectorAll('div.col')
+          for (let i in cols) {
+            if (i < cols.length) {
+              let className = cols[i].getAttribute('class')
+              cols[i].removeEventListener('click', this.blockPositionMapAction[i])
+              if (className && className.indexOf('block-added') < 0 && className && className.indexOf('block-temp') < 0) {
+                cols[i].addEventListener('click', this.positionMapAction[i])
+              }
+            }
+          }
+        } else {
+          this.positionShow = !this.positionShow
+        }
       }.bind(this))
       formEl.parentNode.appendChild(this.$refs.positionMap)
       let cols = this.$refs.positionMap.querySelectorAll('div.col')
       for (let i in cols) {
         if (i < cols.length) {
           let className = cols[i].getAttribute('class')
-          if (className && className.indexOf('block') < 0) {
-            cols[i].addEventListener('click', this.colClick.bind(this, i))
+          if (className && className.indexOf('block-added') < 0) {
+            let clickCol = this.colClick.bind(this, i)
+            this.positionMapAction.push(clickCol)
+            cols[i].addEventListener('click', clickCol)
           }
         }
       }
+      let blockFormEl = this.$refs.blockForm.$el.querySelector('input[name="position"]')
+      blockFormEl.addEventListener('click', function () {
+        if (this.positionCurrent !== 'block') {
+          blockFormEl.parentNode.appendChild(this.$refs.positionMap)
+          this.positionCurrent = 'block'
+          this.positionShow = true
+          let cols = this.$refs.positionMap.querySelectorAll('div.col')
+          for (let i in cols) {
+            if (i < cols.length) {
+              cols[i].removeEventListener('click', this.positionMapAction[i])
+              let className = cols[i].getAttribute('class')
+              if (className && className.indexOf('content') < 0 && className.indexOf('block-added') < 0) {
+                if (this.blockPositionMapAction[i]) {
+                  cols[i].addEventListener('click', this.blockPositionMapAction[i])
+                } else {
+                  let clickCol = this.blockColClick.bind(this, i)
+                  this.blockPositionMapAction.push(clickCol)
+                  cols[i].addEventListener('click', clickCol)
+                }
+              }
+            }
+          }
+        } else {
+          this.positionShow = !this.positionShow
+        }
+      }.bind(this))
+      formEl.parentNode.appendChild(this.$refs.positionMap)
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
+  @import "../../../../scss/import";
+
   .form-template-add {
     .position-map {
       padding: 15px;
@@ -413,8 +715,11 @@
           &:hover {
             background-color: #ccc;
           }
-          &:active, &.content.active {
-            background-color: #00ccff;
+          &.content.active {
+            background-color: #fff;
+          }
+          &.block-temp.active {
+            background-color: $brand-warning;
           }
           width: 16.66%;
           float: left;
