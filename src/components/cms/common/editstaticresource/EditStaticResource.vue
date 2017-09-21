@@ -27,7 +27,7 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: global.staticResourceBackUrl,
+          backupUrl: global.getCookie('staticResourceBackUrl'),
           saveUrl: commonUrls.staticresource.update
         },
         actions: {
@@ -58,6 +58,7 @@
                         'errorMsg': '图片类型应保持一致',
                         'regex': '\\.' + response.data.fileType + '(\\?.*)?$'
                       }],
+                      'path': response.data.url ? [response.data.url] : undefined,
                       required: false
                     },
                     {

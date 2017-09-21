@@ -294,7 +294,7 @@
       panel, vform, vtable
     },
     created: function () {
-      global.staticResourceBackUrl = this.$route.fullPath
+      document.cookie = 'staticResourceBackUrl=' + this.$route.fullPath
     }
   }
 </script>

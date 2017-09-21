@@ -18,7 +18,7 @@
     data () {
       return {
         actionUrls: {
-          backupUrl: global.staticResourceBackUrl,
+          backupUrl: global.getCookie('staticResourceBackUrl'),
           saveUrl: commonUrls.staticresource.save
         },
         actions: {

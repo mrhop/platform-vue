@@ -176,7 +176,7 @@
                       'action': {
                         'add': true,
                         'detail': true,
-                        'info': true,
+                        'update': true,
                         'delete': true
                       },
                       'feature': {
@@ -217,7 +217,7 @@
       panel, vform, vtable
     },
     created: function () {
-      global.staticResourceBackUrl = this.$route.fullPath
+      document.cookie = 'staticResourceBackUrl=' + this.$route.fullPath
     },
     watch: {
       '$route': function () {
