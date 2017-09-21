@@ -27,6 +27,13 @@ var commonUrls = {
     save: basePath + 'template/save',
     delete: basePath + 'template/delete'
   },
+  block: {
+    list: basePath + 'block/list',
+    info: basePath + 'block/info',
+    update: basePath + 'block/update',
+    save: basePath + 'block/save',
+    delete: basePath + 'block/delete'
+  },
   blockTag: {
     list: basePath + 'blocktag/list',
     info: basePath + 'blocktag/info',

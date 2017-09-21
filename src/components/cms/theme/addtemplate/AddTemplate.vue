@@ -112,7 +112,7 @@
         blockList: [],
         tabSelected: 1,
         positionShow: false,
-        positionCurrent: 'template',
+        positionCurrent: null,
         actionUrls: {
           backupUrl: commonUrls.vuerouter.template.list,
           saveUrl: commonUrls.template.save
@@ -632,13 +632,10 @@
       }
     },
     mounted () {
-//      //  let blockContentPosition = {}
-//      // blockadded
-//      // list 使用
       let formEl = this.$refs.tplForm.$el.querySelector('input[name="contentPosition"]')
       formEl.addEventListener('click', function () {
+        formEl.parentNode.appendChild(this.$refs.positionMap)
         if (this.positionCurrent !== 'template') {
-          this.positionCurrent = 'template'
           this.positionShow = true
           formEl.parentNode.appendChild(this.$refs.positionMap)
           let cols = this.$refs.positionMap.querySelectorAll('div.col')
@@ -654,8 +651,8 @@
         } else {
           this.positionShow = !this.positionShow
         }
+        this.positionCurrent = 'template'
       }.bind(this))
-      formEl.parentNode.appendChild(this.$refs.positionMap)
       let cols = this.$refs.positionMap.querySelectorAll('div.col')
       for (let i in cols) {
         if (i < cols.length) {
@@ -663,7 +660,8 @@
           if (className && className.indexOf('block-added') < 0) {
             let clickCol = this.colClick.bind(this, i)
             this.positionMapAction.push(clickCol)
-            cols[i].addEventListener('click', clickCol)
+            let blockColClick = this.blockColClick.bind(this, i)
+            this.blockPositionMapAction.push(blockColClick)
           }
         }
       }
@@ -671,7 +669,6 @@
       blockFormEl.addEventListener('click', function () {
         if (this.positionCurrent !== 'block') {
           blockFormEl.parentNode.appendChild(this.$refs.positionMap)
-          this.positionCurrent = 'block'
           this.positionShow = true
           let cols = this.$refs.positionMap.querySelectorAll('div.col')
           for (let i in cols) {
@@ -679,19 +676,14 @@
               cols[i].removeEventListener('click', this.positionMapAction[i])
               let className = cols[i].getAttribute('class')
               if (className && className.indexOf('content') < 0 && className.indexOf('block-added') < 0) {
-                if (this.blockPositionMapAction[i]) {
-                  cols[i].addEventListener('click', this.blockPositionMapAction[i])
-                } else {
-                  let clickCol = this.blockColClick.bind(this, i)
-                  this.blockPositionMapAction.push(clickCol)
-                  cols[i].addEventListener('click', clickCol)
-                }
+                cols[i].addEventListener('click', this.blockPositionMapAction[i])
               }
             }
           }
         } else {
           this.positionShow = !this.positionShow
         }
+        this.positionCurrent = 'block'
       }.bind(this))
       formEl.parentNode.appendChild(this.$refs.positionMap)
     }
@@ -703,14 +695,12 @@
 
   .form-template-add {
     .position-map {
-      padding: 15px;
+      margin: 15px 0;
+      overflow: hidden;
       .row {
+        margin: 0;
         height: 100px;
-        border: 1px solid #ccc;
-        border-bottom: none;
-        &:last-child {
-          border-bottom: 1px solid #ccc;
-        }
+        border:none;
         .col {
           &:hover {
             background-color: #ccc;
