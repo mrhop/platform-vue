@@ -1,8 +1,8 @@
 <template>
-  <div class="template-list">
+  <div class="articletag-list">
     <panel>
-      <h1 slot="header">模板列表</h1>
-      <vtable id="template-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
+      <h1 slot="header">文章TAG列表</h1>
+      <vtable id="articletag-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
     </panel>
   </div>
 </template>
@@ -19,13 +19,12 @@
     data () {
       return {
         actionUrls: {
-          addUrl: commonUrls.vuerouter.template.add,
-          detailUrl: commonUrls.vuerouter.template.detail,
-          infoUrl: commonUrls.vuerouter.template.edit,
-          deleteUrl: commonUrls.template.delete
+          addUrl: commonUrls.vuerouter.articleTag.add,
+          detailUrl: commonUrls.vuerouter.articleTag.detail,
+          infoUrl: commonUrls.vuerouter.articleTag.edit,
+          deleteUrl: commonUrls.articleTag.delete
         },
         actions: {
-          reinit: false,
           list: function (args) {
             var pager = args.pager
             var init = args.init
@@ -33,13 +32,13 @@
             var sorts = args.sorts
             if (init) {
               let config = {
-                url: commonUrls.template.list,
+                url: commonUrls.articleTag.list,
                 method: 'post',
                 data: {pager, filters, sorts, init: true}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
-                  id: 'template-list',
+                  id: 'articletag-list',
                   data: {
                     'rules': {
                       'header': [
@@ -53,8 +52,8 @@
                           'type': 'text'
                         },
                         {
-                          'name': 'contentPosition',
-                          'title': '内容位置',
+                          'name': 'tagId',
+                          'title': 'TAGID',
                           'type': 'text'
                         }
                       ],
@@ -62,13 +61,7 @@
                         'add': true,
                         'detail': true,
                         'update': true,
-                        'delete': true,
-                        events: [
-                          {
-                            key: 'copyTpl',
-                            label: '复制模板'
-                          }
-                        ]
+                        'delete': true
                       },
                       'feature': {
                         'filter': false,
@@ -80,39 +73,27 @@
                   callParameters: {pager, init: true}
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'template-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'articletag-list', error})
               })
             } else {
               let config = {
-                url: commonUrls.template.list,
+                url: commonUrls.articleTag.list,
                 method: 'post',
                 data: {pager, filters, sorts}
               }
               axios.request(config).then(function (response) {
                 global.store.commit('TABLE_SUCCESS', {
-                  id: 'template-list',
+                  id: 'articletag-list',
                   data: {
                     'data': response.data
                   },
                   callParameters: {pager, filters, sorts}
                 })
               }).catch(function (error) {
-                global.store.commit('TABLE_FAILURE', {id: 'template-list', error})
+                global.store.commit('TABLE_FAILURE', {id: 'articletag-list', error})
               })
             }
-          },
-          copyTpl: function (key) {
-            let config = {
-              url: commonUrls.template.copyTpl,
-              method: 'get'
-            }
-            config.params = {key}
-            axios.request(config).then(function (response) {
-              this.actions.reinit = true
-            }.bind(this)).catch(function (error) {
-              console.log('error' + error)
-            })
-          }.bind(this)
+          }
         }
       }
     },

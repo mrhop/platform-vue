@@ -38,7 +38,8 @@ new Vue({
     return {
       leftTree: leftMenu,
       topTree: commonUrls.topTree,
-      topNavigate: commonUrls.topnavigate
+      topNavigate: commonUrls.topnavigate,
+      subTitle: global.getCookie('topSubTitle')
     }
   },
   methods: {
@@ -47,29 +48,38 @@ new Vue({
       if (args.value === 'theme') {
         router.push(commonUrls.vuerouter.theme.list)
         this.leftTree = commonUrls.themeMenu + '?type=theme'
+        document.cookie = 'topSubTitle=' + '主题管理'
+        this.subTitle = '主题管理'
       } else if (args.value === 'website') {
         router.push(commonUrls.vuerouter.website.list)
         this.leftTree = commonUrls.websiteMenu + '?type=website'
+        document.cookie = 'topSubTitle=' + '网站管理'
+        this.subTitle = '网站管理'
       } else if (args.value === 'blocktag') {
         router.push(commonUrls.vuerouter.blockTag.list)
         this.leftTree = commonUrls.blockTagMenu + '?type=blocktag'
+        document.cookie = 'topSubTitle=' + 'blockTag管理'
+        this.subTitle = 'blockTag管理'
       }
       document.cookie = 'leftmenu=' + this.leftTree
     },
     topTreeClick (args) {
-      console.log('you got here1')
       if (args.type === 'theme') {
         router.push(commonUrls.vuerouter.theme.info + '/' + args.value)
         this.leftTree = commonUrls.subThemeMenu + '?type=theme&id=' + args.value
+        document.cookie = 'topSubTitle=' + '主题[' + args.label + ']管理'
+        this.subTitle = '主题[' + args.label + ']管理'
       } else if (args.type === 'website') {
         router.push(commonUrls.vuerouter.website.info + '/' + args.value)
         this.leftTree = commonUrls.subWebsiteMenu + '?id=' + args.value
+        document.cookie = 'topSubTitle=' + '网站[' + args.label + ']管理'
+        this.subTitle = '网站[' + args.label + ']管理'
       }
       document.cookie = 'leftmenu=' + this.leftTree
     }
   },
   router,
   store: global.store,
-  template: '<App appName="内容"  :treeData="leftTree" :topTree="topTree" :topNavigate="topNavigate" v-on:topTreeClick="topTreeClick" v-on:navigateClick="navigateClick"/>',
+  template: '<App appName="内容" :subTitle="subTitle" :treeData="leftTree" :topTree="topTree" :topNavigate="topNavigate" v-on:topTreeClick="topTreeClick" v-on:navigateClick="navigateClick"/>',
   components: {App}
 })

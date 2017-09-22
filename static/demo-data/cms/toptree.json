@@ -9,7 +9,7 @@
         "emitClick": true,
         "emitClickArgs": {
           "label": "主题1",
-          "value": 5,
+          "value": 1,
           "type": "theme"
         }
       },
@@ -18,7 +18,7 @@
         "emitClick": true,
         "emitClickArgs": {
           "label": "主题2",
-          "value": 6,
+          "value": 2,
           "type": "theme"
         }
       }

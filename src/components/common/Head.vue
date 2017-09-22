@@ -1,18 +1,21 @@
 <template>
   <div class="container-fluid head">
     <div class="pull-left">
-      <router-link v-if="!topTree" ref="brand" to="/"><h3>{{appName}}<span
+      <router-link v-if="!topTree" ref="brand" to="/"><h3 class="head-brand">{{appName}}<span
         class="brand">管理平台</span></h3>
       </router-link>
-      <h3 v-else @click="treeClick" ref="brand">{{appName}}<span class="brand">管理平台</span></h3>
+      <h3 class="head-brand" v-else @click="treeClick" ref="brand">{{appName}}<span class="brand">管理平台</span>
+        <span class="h5" v-if="subTitle">{{subTitle}}</span>
+      </h3>
+
       <tree id="top-tree" ref="topTreeEl" v-if="topTree" v-show="treeOpened" :treeData="topTree"
             @click="treeItemClick"/>
-      <a :class="menuClass" @click.prevent="menuClick"/>
       <div v-if="localTopNavigate" class="top-navigate">
         <a v-for="(item, key) in localTopNavigate" :key="key" @click.prevent="navigateClick(item)">
           {{item.label}}
         </a>
       </div>
+      <a :class="menuClass" @click.prevent="menuClick"/>
     </div>
     <div class="pull-right">
       <a href="logout" title="logout">Logout<span class="glyphicon glyphicon-menu-right"></span></a>
@@ -88,6 +91,9 @@
       },
       topNavigate: {
         default: null
+      },
+      subTitle: {
+        default: null
       }
     },
     components: {
@@ -104,6 +110,18 @@
     position: relative;
     z-index: 1;
     .pull-left {
+      h3.head-brand {
+        span.h5 {
+          margin: 0;
+          margin-top: 3px;
+          color: $brand-warning;
+          display: block;
+        }
+      }
+      a.menu {
+        float: right;
+        display: block;
+      }
       .tree-wrapper {
         position: fixed;
         top: 66px;

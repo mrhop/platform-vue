@@ -1,6 +1,7 @@
 <template>
   <div>
-    <vhead :appName="appName" :topTree="topTree" :topNavigate="topNavigate" v-on:menuClick="menuClick"
+    <vhead :appName="appName" :subTitle="subTitle" :topTree="topTree" :topNavigate="topNavigate"
+           v-on:menuClick="menuClick"
            v-on:topTreeClick="topTreeClick"
            v-on:navigateClick="navigateClick"></vhead>
     <mainContent :treeData="treeData"></mainContent>
@@ -81,6 +82,9 @@
         default: null
       },
       treeData: {
+        default: null
+      },
+      subTitle: {
         default: null
       }
     }

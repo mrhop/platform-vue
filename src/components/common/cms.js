@@ -22,6 +22,7 @@ var commonUrls = {
   },
   template: {
     list: basePath + 'template/list',
+    copyTpl: basePath + 'template/copy',
     info: basePath + 'template/info',
     update: basePath + 'template/update',
     save: basePath + 'template/save',
@@ -56,7 +57,16 @@ var commonUrls = {
     update: basePath + 'article/update',
     save: basePath + 'article/save',
     delete: basePath + 'article/delete',
-    rulechange: basePath + 'article/form/rulechange'
+    rulechange: basePath + 'article/form/rulechange',
+    publish: basePath + 'article/publish'
+  },
+  articleTag: {
+    list: basePath + 'articletag/list',
+    info: basePath + 'articletag/info',
+    update: basePath + 'articletag/update',
+    save: basePath + 'articletag/save',
+    delete: basePath + 'articletag/delete',
+    rulechange: basePath + 'articletag/form/rulechange'
   },
   news: {
     list: basePath + 'news/list',
@@ -137,6 +147,12 @@ var commonUrls = {
       add: '/article/add',
       edit: '/article/edit',
       detail: '/article/detail'
+    },
+    articleTag: {
+      list: '/articletag/list',
+      add: '/articletag/add',
+      edit: '/articletag/edit',
+      detail: '/articletag/detail'
     },
     news: {
       list: '/news/list',

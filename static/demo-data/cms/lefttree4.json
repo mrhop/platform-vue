@@ -16,6 +16,24 @@
       {
         "title": "模板列表",
         "url": "/template/list"
+      },
+      {
+        "title": "新增模板",
+        "url": "/template/add"
+      }
+    ]
+  },
+  {
+    "title": "文章Tag管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "文章Tag列表",
+        "url": "/articletag/list"
+      },
+      {
+        "title": "新增文章Tag",
+        "url": "/articletag/add"
       }
     ]
   },

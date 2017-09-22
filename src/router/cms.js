@@ -55,6 +55,11 @@ import TemplateList from '@/components/cms/common/templatelist/TemplateList'
 import ThemeInfo from '@/components/cms/theme/themeinfo/ThemeInfo'
 import WebsiteInfo from '@/components/cms/website/websiteinfo/WebsiteInfo'
 
+import ArticleTagDetail from '@/components/cms/website/articletagdetail/ArticleTagDetail'
+import AddArticleTag from '@/components/cms/website/addarticletag/AddArticleTag'
+import EditArticleTag from '@/components/cms/website/editarticletag/EditArticleTag'
+import ArticleTagList from '@/components/cms/website/articletaglist/ArticleTagList'
+
 Vue.use(Router)
 
 export default new Router({
@@ -288,6 +293,26 @@ export default new Router({
       path: '/theme/info/:key',
       name: 'ThemeInfo',
       component: ThemeInfo
+    },
+    {
+      path: '/articletag/detail',
+      name: 'ArticleTagDetail',
+      component: ArticleTagDetail
+    },
+    {
+      path: '/articletag/add',
+      name: 'AddArticleTag',
+      component: AddArticleTag
+    },
+    {
+      path: '/articletag/edit',
+      name: 'EditArticleTag',
+      component: EditArticleTag
+    },
+    {
+      path: '/articletag/list',
+      name: 'ArticleTagList',
+      component: ArticleTagList
     },
     {
       path: '/*',

@@ -724,7 +724,6 @@
           display: none;
         }
       }
-
     }
   }
 </style>
