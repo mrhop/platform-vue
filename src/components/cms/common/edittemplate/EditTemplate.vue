@@ -129,6 +129,7 @@
         blockPositionMapAction: [],
         blockList: {},
         defaultBlockColor: 'rgb(0, 0, 0)',
+        defaultBlockBorderColor: 'rgb(240, 173, 78)',
         colorList: {},
         tabSelected: 1,
         positionShow: false,
@@ -206,25 +207,34 @@
                 _this.blockList = {}
                 if (response.data.rows && response.data.rows.length > 0) {
                   let cols = _this.$refs.positionMap.querySelectorAll('div.col')
-                  let color = _this.defaultBlockColor
                   for (let k in response.data.rows) {
                     _this.blockList[response.data.rows[k].key] = {
-                      value: [response.data.rows[k].value[0], response.data.rows[k].value[1]],
-                      color
+                      value: [response.data.rows[k].value[0], response.data.rows[k].value[1]]
                     }
                     let position = JSON.parse(response.data.rows[k].value[1])
                     for (let i in cols) {
                       if (i < cols.length) {
                         if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                          cols[i].removeAttribute('style')
                           cols[i].setAttribute('class', 'col block-added')
-                          cols[i].setAttribute('style', 'background-color:' + color)
+                          if (i % 6 === position.begin.x) {
+                            cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-left-color:' + _this.defaultBlockBorderColor) : ('border-left-color:' + _this.defaultBlockBorderColor))
+                          }
+                          if (i % 6 === (position.end.x - 1)) {
+                            cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-right-color:' + _this.defaultBlockBorderColor) : ('border-right-color:' + _this.defaultBlockBorderColor))
+                          }
+                          if (Math.floor(i / 6) === position.begin.y) {
+                            cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-top-color:' + _this.defaultBlockBorderColor) : ('border-top-color:' + _this.defaultBlockBorderColor))
+                          }
+                          if (Math.floor(i / 6) === (position.end.y - 1)) {
+                            cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-bottom-color:' + _this.defaultBlockBorderColor) : ('border-bottom-color:' + _this.defaultBlockBorderColor))
+                          }
                           if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
                             cols[i].innerHTML = '<p>' + response.data.rows[k].value[0] + '</p>'
                           }
                         }
                       }
                     }
-                    color = global.shadeRGBColor(color, 0.2)
                   }
                 }
                 global.store.commit('TABLE_SUCCESS', {
@@ -652,8 +662,20 @@
               for (let i in cols) {
                 if (i < cols.length) {
                   if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                    cols[i].removeAttribute('style')
                     cols[i].setAttribute('class', 'col block-added')
-                    cols[i].setAttribute('style', 'background-color:' + this.blockList[k].color)
+                    if (i % 6 === position.begin.x) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-left-color:' + this.defaultBlockBorderColor) : ('border-left-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (i % 6 === (position.end.x - 1)) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-right-color:' + this.defaultBlockBorderColor) : ('border-right-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (Math.floor(i / 6) === position.begin.y) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-top-color:' + this.defaultBlockBorderColor) : ('border-top-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (Math.floor(i / 6) === (position.end.y - 1)) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-bottom-color:' + this.defaultBlockBorderColor) : ('border-bottom-color:' + this.defaultBlockBorderColor))
+                    }
                     if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
                       cols[i].innerHTML = '<p>' + this.blockList[k].value[0] + '</p>'
                     }
@@ -697,10 +719,21 @@
                 cols[i].removeEventListener('click', this.positionMapAction[i])
                 if (this.blockIdChanged !== -1) {
                   let position = JSON.parse(this.blockList[this.blockIdChanged].value[1])
-                  let color = this.blockList[this.blockIdChanged].color
                   if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                    cols[i].removeAttribute('style')
                     cols[i].setAttribute('class', 'col block-added')
-                    cols[i].setAttribute('style', 'background-color:' + color)
+                    if (i % 6 === position.begin.x) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-left-color:' + this.defaultBlockBorderColor) : ('border-left-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (i % 6 === (position.end.x - 1)) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-right-color:' + this.defaultBlockBorderColor) : ('border-right-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (Math.floor(i / 6) === position.begin.y) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-top-color:' + this.defaultBlockBorderColor) : ('border-top-color:' + this.defaultBlockBorderColor))
+                    }
+                    if (Math.floor(i / 6) === (position.end.y - 1)) {
+                      cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-bottom-color:' + this.defaultBlockBorderColor) : ('border-bottom-color:' + this.defaultBlockBorderColor))
+                    }
                     if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
                       cols[i].innerHTML = '<p>' + this.blockList[this.blockIdChanged].value[0] + '</p>'
                     }
@@ -783,7 +816,7 @@
       .row {
         margin: 0;
         height: 100px;
-        border:none;
+        border: none;
         .col {
           &:hover {
             background-color: #ccc;

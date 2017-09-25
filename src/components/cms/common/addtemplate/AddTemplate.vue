@@ -80,6 +80,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import lodash from 'lodash'
   import Vue from 'vue'
   import huodhVuePlugins from 'huodh-vue-plugins'
@@ -93,7 +94,10 @@
   //  let blockContentPosition = {}
   // blockadded
   // list 使用
-
+  let tplSaveConfig = {
+    url: commonUrls.template.save,
+    method: 'post'
+  }
   export default {
     data () {
       return {
@@ -107,15 +111,14 @@
         positionMapAction: [],
         blockPositionMapAction: [],
         // blockadded
-        defaultBlockColor: 'rgb(0, 0, 0)',
+        defaultBlockBorderColor: 'rgb(240, 173, 78)',
         // list 使用
         blockList: [],
         tabSelected: 1,
         positionShow: false,
         positionCurrent: null,
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.template.list,
-          saveUrl: commonUrls.template.save
+          backupUrl: commonUrls.vuerouter.template.list
         },
         actions: {
           reinit: false,
@@ -161,6 +164,24 @@
               data: {
                 rules
               }
+            })
+          }.bind(this),
+          save: function (params) {
+            let templateBlocks = []
+            for (let templateBlockIndex in this.blockList) {
+              if (templateBlockIndex < this.blockList.length) {
+                templateBlocks.push(this.blockList[templateBlockIndex].value)
+              }
+            }
+            params.data.blocks = templateBlocks
+            tplSaveConfig.data = params.data
+            axios.request(tplSaveConfig).then(function (response) {
+              global.store.commit('FORM_SAVE_SUCCESS', {
+                id: 'template-add-form',
+                data: {}
+              })
+            }).catch(function (error) {
+              global.store.commit('FORM_SAVE_FAILURE', {id: 'template-add-form', error})
             })
           }.bind(this)
         },
@@ -218,43 +239,53 @@
           }.bind(this),
           updateAction: function (args) {
             console.log('do update' + args.key)
-            this.blockIdChanged = args.key
-            this.blockContentPositionNew = JSON.parse(this.blockList[args.key].value[1])
-            this.blockNameChanged = this.blockList[args.key].value[0]
-            this.blockContent = this.blockList[args.key].value[2]
-            this.blockScript = this.blockList[args.key].value[3]
-            this.blockAddactions.reinit = true
-            this.tabSelected = 1
-            let position = this.blockContentPositionNew
-            let cols = this.$refs.positionMap.querySelectorAll('div.col')
-            for (let i in cols) {
-              if (i < cols.length) {
-                if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
-                  cols[i].setAttribute('class', 'col block-temp active')
-                  cols[i].removeAttribute('style')
-                  if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
-                    cols[i].innerHTML = ''
+            for (var keyInnner in this.blockList) {
+              if (this.blockList[keyInnner].key === args.key) {
+                this.blockIdChanged = args.key
+                this.blockContentPositionNew = JSON.parse(this.blockList[keyInnner].value[1])
+                this.blockNameChanged = this.blockList[keyInnner].value[0]
+                this.blockContent = this.blockList[keyInnner].value[2]
+                this.blockScript = this.blockList[keyInnner].value[3]
+                this.blockAddactions.reinit = true
+                this.tabSelected = 1
+                let position = this.blockContentPositionNew
+                let cols = this.$refs.positionMap.querySelectorAll('div.col')
+                for (let i in cols) {
+                  if (i < cols.length) {
+                    if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                      cols[i].setAttribute('class', 'col block-temp active')
+                      cols[i].removeAttribute('style')
+                      if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                        cols[i].innerHTML = ''
+                      }
+                    }
                   }
                 }
+                break
               }
             }
           }.bind(this),
           delete: function (args) {
-            let position = JSON.parse(this.blockList[args.key].value[1])
-            let cols = this.$refs.positionMap.querySelectorAll('div.col')
-            for (let i in cols) {
-              if (i < cols.length) {
-                if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
-                  cols[i].setAttribute('class', 'col')
-                  cols[i].removeAttribute('style')
-                  if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
-                    cols[i].innerHTML = ''
+            for (var keyInnner in this.blockList) {
+              if (this.blockList[keyInnner].key === args.key) {
+                let position = JSON.parse(this.blockList[keyInnner].value[1])
+                let cols = this.$refs.positionMap.querySelectorAll('div.col')
+                for (let i in cols) {
+                  if (i < cols.length) {
+                    if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                      cols[i].setAttribute('class', 'col')
+                      cols[i].removeAttribute('style')
+                      if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                        cols[i].innerHTML = ''
+                      }
+                    }
                   }
                 }
+                Vue.delete(this.blockList, +keyInnner)
+                this.blockListActions.reinit = true
+                break
               }
             }
-            Vue.delete(this.blockList, args.key)
-            this.blockListActions.reinit = true
           }.bind(this)
         },
         blockAddactions: {
@@ -322,17 +353,17 @@
             })
           }.bind(this),
           save: function (params) {
-            let color = null
             if (params.data.id !== -1) {
-              this.blockList[params.data.id].value = [params.data.name, params.data.position, params.data.content, params.data.script]
-              color = this.blockList[params.data.id].color
+              for (var keyInnner in this.blockList) {
+                if (this.blockList[keyInnner].key === params.data.id) {
+                  this.blockList[keyInnner].value = [params.data.name, params.data.position, params.data.content, params.data.script]
+                  break
+                }
+              }
             } else {
-              this.defaultBlockColor = global.shadeRGBColor(this.defaultBlockColor, 0.2)
-              color = this.defaultBlockColor
               this.blockList.push({
-                key: this.blockList.length,
-                value: [params.data.name, params.data.position, params.data.content, params.data.script],
-                color: this.defaultBlockColor
+                key: new Date().getTime(),
+                value: [params.data.name, params.data.position, params.data.content, params.data.script]
               })
             }
             let position = JSON.parse(params.data.position)
@@ -341,7 +372,18 @@
               if (i < cols.length) {
                 if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
                   cols[i].setAttribute('class', 'col block-added')
-                  cols[i].setAttribute('style', 'background-color:' + color)
+                  if (i % 6 === position.begin.x) {
+                    cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-left-color:' + this.defaultBlockBorderColor) : ('border-left-color:' + this.defaultBlockBorderColor))
+                  }
+                  if (i % 6 === (position.end.x - 1)) {
+                    cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-right-color:' + this.defaultBlockBorderColor) : ('border-right-color:' + this.defaultBlockBorderColor))
+                  }
+                  if (Math.floor(i / 6) === position.begin.y) {
+                    cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-top-color:' + this.defaultBlockBorderColor) : ('border-top-color:' + this.defaultBlockBorderColor))
+                  }
+                  if (Math.floor(i / 6) === (position.end.y - 1)) {
+                    cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-bottom-color:' + this.defaultBlockBorderColor) : ('border-bottom-color:' + this.defaultBlockBorderColor))
+                  }
                   if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
                     cols[i].innerHTML = '<p>' + params.data.name + '</p>'
                   }
@@ -360,13 +402,6 @@
               id: 'block-add-form',
               data: {}
             })
-            let templateBlocks = []
-            for (let templateBlockIndex in this.blockList) {
-              if (templateBlockIndex < this.blockList.length) {
-                templateBlocks.push(this.blockList[templateBlockIndex].value)
-              }
-            }
-            Vue.set(this.templateFormUpdateRule, 'blocks', templateBlocks)
           }.bind(this)
         },
         templateFormUpdateRule: {},
@@ -579,25 +614,31 @@
       tabClick: function (index, event) {
         this.tabSelected = index
         if (index === 0) {
+          this.positionCurrent = 'blockList'
           this.blockListActions.reinit = true
         } else if (index === 1) {
           if (this.positionCurrent !== 'block-tab' && this.positionCurrent !== 'block') {
             this.positionCurrent = 'block-tab'
             let cols = this.$refs.positionMap.querySelectorAll('div.col')
             if (this.blockIdChanged !== -1) {
-              let position = JSON.parse(this.blockList[this.blockIdChanged].value[1])
-              for (let i in cols) {
-                if (i < cols.length) {
-                  if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
-                    cols[i].setAttribute('class', 'col block-temp active')
-                    cols[i].removeAttribute('style')
-                    if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
-                      cols[i].innerHTML = ''
+              for (let keyInnner in this.blockList) {
+                if (this.blockList[keyInnner].key === this.blockIdChanged) {
+                  let position = JSON.parse(this.blockList[keyInnner].value[1])
+                  for (let i in cols) {
+                    if (i < cols.length) {
+                      if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                        cols[i].setAttribute('class', 'col block-temp active')
+                        cols[i].removeAttribute('style')
+                        if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                          cols[i].innerHTML = ''
+                        }
+                      }
                     }
                   }
+                  Vue.set(this.blockFormUpdateRule, 'position', this.blockList[keyInnner].value[1])
+                  break
                 }
               }
-              Vue.set(this.blockFormUpdateRule, 'position', this.blockList[this.blockIdChanged].value[1])
             }
           }
         } else if (index === 2) {
@@ -611,19 +652,38 @@
               if (i < cols.length) {
                 cols[i].removeEventListener('click', this.blockPositionMapAction[i])
                 cols[i].removeEventListener('click', this.positionMapAction[i])
-                if (this.blockIdChanged !== -1) {
-                  let position = JSON.parse(this.blockList[this.blockIdChanged].value[1])
-                  let color = this.blockList[this.blockIdChanged].color
-                  if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
-                    cols[i].setAttribute('class', 'col block-added')
-                    cols[i].setAttribute('style', 'background-color:' + color)
-                    if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
-                      cols[i].innerHTML = '<p>' + this.blockList[this.blockIdChanged].value[0] + '</p>'
+                if (cols[i].getAttribute('class').indexOf('block-temp') > -1) {
+                  cols[i].setAttribute('class', 'col')
+                }
+              }
+            }
+            if (this.blockIdChanged !== -1) {
+              for (let keyInnner in this.blockList) {
+                if (this.blockList[keyInnner].key === this.blockIdChanged) {
+                  let position = JSON.parse(this.blockList[keyInnner].value[1])
+                  for (let i in cols) {
+                    if (i < cols.length) {
+                      if (i % 6 >= position.begin.x && i % 6 < position.end.x && Math.floor(i / 6) >= position.begin.y && Math.floor(i / 6) < position.end.y) {
+                        cols[i].setAttribute('class', 'col block-added')
+                        if (i % 6 === position.begin.x) {
+                          cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-left-color:' + this.defaultBlockBorderColor) : ('border-left-color:' + this.defaultBlockBorderColor))
+                        }
+                        if (i % 6 === (position.end.x - 1)) {
+                          cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-right-color:' + this.defaultBlockBorderColor) : ('border-right-color:' + this.defaultBlockBorderColor))
+                        }
+                        if (Math.floor(i / 6) === position.begin.y) {
+                          cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-top-color:' + this.defaultBlockBorderColor) : ('border-top-color:' + this.defaultBlockBorderColor))
+                        }
+                        if (Math.floor(i / 6) === (position.end.y - 1)) {
+                          cols[i].setAttribute('style', cols[i].getAttribute('style') ? (cols[i].getAttribute('style') + ';border-bottom-color:' + this.defaultBlockBorderColor) : ('border-bottom-color:' + this.defaultBlockBorderColor))
+                        }
+                        if (i % 6 === position.begin.x && Math.floor(i / 6) === position.begin.y) {
+                          cols[i].innerHTML = '<p>' + this.blockList[keyInnner].value[0] + '</p>'
+                        }
+                      }
                     }
                   }
-                  if (cols[i].getAttribute('class').indexOf('block-temp') > -1) {
-                    cols[i].setAttribute('class', 'col')
-                  }
+                  break
                 }
               }
             }
@@ -700,7 +760,7 @@
       .row {
         margin: 0;
         height: 100px;
-        border:none;
+        border: none;
         .col {
           &:hover {
             background-color: #ccc;
