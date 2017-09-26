@@ -1,8 +1,8 @@
 <template>
-  <div class="form-blocktag-detail form-detail">
+  <div class="form-articletag-detail form-detail">
     <panel>
-      <h1 slot="header">功能TAG详情</h1>
-      <vform id="blocktag-detail-form" :actions="actions" :actionUrls="actionUrls"></vform>
+      <h1 slot="header">文章TAG详情</h1>
+      <vform id="articletag-detail-form" :actions="actions" :actionUrls="actionUrls"></vform>
     </panel>
   </div>
 </template>
@@ -14,70 +14,52 @@
 
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
-  let ruleChangeConfig = {
-    url: commonUrls.relatedUsers,
-    method: 'get'
-  }
   let initConfig = {
-    url: commonUrls.blockTag.info,
+    url: commonUrls.articleTag.info,
     method: 'get'
   }
   export default {
     data () {
       return {
         actionUrls: {
-          backupUrl: commonUrls.vuerouter.blockTag.list
+          backupUrl: commonUrls.vuerouter.articleTag.list
         },
         actions: {
           init: function (params) {
             initConfig.params = {key: params.key}
             axios.request(initConfig).then(function (response) {
-              axios.request(ruleChangeConfig).then(function (responseInner) {
-                let rules = {
-                  'items': [
-                    {
-                      'name': 'name',
-                      'label': '功能TAG名称',
-                      'type': 'text',
-                      locked: true,
-                      'defaultValue': response.data.name
-                    },
-                    {
-                      'name': 'tagId',
-                      'label': '功能TAGID',
-                      'type': 'text',
-                      locked: true,
-                      'defaultValue': response.data.tagId
-                    },
-                    {
-                      'name': 'description',
-                      'label': '详细说明',
-                      'type': 'textarea',
-                      locked: true,
-                      'defaultValue': response.data.description
-                    }
-                  ],
-                  action: {
-                    backup: {
-                      label: '返回列表'
-                    }
+              let rules = {
+                'items': [
+                  {
+                    'name': 'name',
+                    'label': '文章TAG名称',
+                    'type': 'text',
+                    locked: true,
+                    'defaultValue': response.data.name
+                  },
+                  {
+                    'name': 'tagId',
+                    'label': '文章TAGID',
+                    'type': 'text',
+                    locked: true,
+                    'defaultValue': response.data.tagId
+                  }
+                ],
+                action: {
+                  backup: {
+                    label: '返回列表'
                   }
                 }
-                global.store.commit('FORM_SUCCESS', {
-                  id: 'blocktag-detail-form',
-                  data: {
-                    rules
-                  }
-                })
-              }).catch(function (error) {
-                global.store.commit('FORM_FAILURE', {
-                  id: 'blocktag-detail-form',
-                  error
-                })
+              }
+              global.store.commit('FORM_SUCCESS', {
+                id: 'articletag-detail-form',
+                data: {
+                  rules
+                }
               })
             }).catch(function (error) {
               global.store.commit('FORM_FAILURE', {
-                id: 'blocktag-detail-form',
+                id: 'articletag-detail-form',
                 error
               })
             })

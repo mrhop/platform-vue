@@ -96,6 +96,7 @@ var commonUrls = {
     info: basePath + 'media/info',
     update: basePath + 'media/update',
     save: basePath + 'media/save',
+    publish: basePath + 'media/publish',
     delete: basePath + 'media/delete',
     rulechange: basePath + 'media/form/rulechange'
   },

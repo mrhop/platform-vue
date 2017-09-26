@@ -144,7 +144,7 @@
                 'axiosConfig': {
                   url: commonUrls.article.publish,
                   method: 'get',
-                  params: {key: args.key, published: args.data['enabled']}
+                  params: {key: args.key, published: args.data['published']}
                 }
               }
               return config
