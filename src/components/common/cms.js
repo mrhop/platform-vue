@@ -103,6 +103,7 @@ var commonUrls = {
   navigate: {
     list: basePath + 'navigate/list',
     info: basePath + 'navigate/info',
+    activate: basePath + 'navigate/activate',
     update: basePath + 'navigate/update',
     save: basePath + 'navigate/save',
     delete: basePath + 'navigate/delete',

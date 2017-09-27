@@ -138,42 +138,45 @@ body {
 .form-element .date-picker {
   color: #333;
 }
+
 .tree-wrapper {
-  color: $text-color;}
+  color: $text-color;
+}
 
 #login-wrapper, #registration-wrapper, #index-app {
-  .form-wrapper {
-    .form-element {
-      .form-control {
+  .form-element {
+    .form-control {
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      box-shadow: none;
+      color: #fff;
+    }
+    .date-picker {
+      div.input-wrapper {
         background: rgba(0, 0, 0, 0.3);
         border: none;
-        box-shadow: none;
         color: #fff;
-      }
-      .date-picker {
-        div.input-wrapper {
-          background: rgba(0, 0, 0, 0.3);
-          border: none;
-          color: #fff;
-          .cancel-btn {
-            background-image: url("../assets/images/cancel-btn.png");
-          }
-        }
-      }
-      .select-block {
-        select {
-          option {
-            background: rgba(0, 0, 0, .6);
-          }
-        }
         .cancel-btn {
           background-image: url("../assets/images/cancel-btn.png");
         }
       }
-      .tree-block {
-        .cancel-btn {
-          background-image: url("../assets/images/cancel-btn.png");
+    }
+    .select-block {
+      select {
+        option {
+          background: rgba(0, 0, 0, .6);
         }
+      }
+      .cancel-btn {
+        background-image: url("../assets/images/cancel-btn.png");
+      }
+    }
+    .tree-block {
+      .cancel-btn {
+        background-image: url("../assets/images/cancel-btn.png");
+      }
+      .tree-wrapper {
+        background: $base-background;
       }
     }
   }
