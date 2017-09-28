@@ -34,6 +34,7 @@
           deleteUrl: commonUrls.article.delete
         },
         actions: {
+          reinit: false,
           list: function (args) {
             var pager = args.pager
             var init = args.init
@@ -102,7 +103,13 @@
                           'add': true,
                           'detail': true,
                           'update': true,
-                          'delete': true
+                          'delete': true,
+                          events: [
+                            {
+                              key: 'copyArticle',
+                              label: '复制文章'
+                            }
+                          ]
                         },
                         'feature': {
                           'filter': true,
@@ -149,7 +156,19 @@
               }
               return config
             }
-          }
+          },
+          copyArticle: function (key) {
+            let config = {
+              url: commonUrls.article.copyArticle,
+              method: 'get'
+            }
+            config.params = {key}
+            axios.request(config).then(function (response) {
+              this.actions.reinit = true
+            }.bind(this)).catch(function (error) {
+              console.log('error' + error)
+            })
+          }.bind(this)
         }
       }
     },

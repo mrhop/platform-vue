@@ -54,6 +54,7 @@ var commonUrls = {
   article: {
     list: basePath + 'article/list',
     info: basePath + 'article/info',
+    copyArticle: basePath + 'article/copy',
     update: basePath + 'article/update',
     save: basePath + 'article/save',
     delete: basePath + 'article/delete',

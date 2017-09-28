@@ -75,6 +75,11 @@
         <div class="col"></div>
       </div>
     </div>
+    <panel canHide="true">
+      <h1 slot="header">静态资源</h1>
+      <vtable id="staticresource-list" :actionUrls="staticresourceActionUrls"
+              :actions="staticresourceActions"></vtable>
+    </panel>
   </div>
 </template>
 
@@ -688,7 +693,125 @@
           }.bind(this)
         },
         articleFormUpdateRule: {},
-        blockFormUpdateRule: {}
+        blockFormUpdateRule: {},
+        staticresourceActionUrls: {
+          addUrl: commonUrls.vuerouter.staticresource.add + '?articleId=' + this.$route.query.key,
+          detailUrl: commonUrls.vuerouter.staticresource.detail,
+          infoUrl: commonUrls.vuerouter.staticresource.edit,
+          deleteUrl: commonUrls.staticresource.delete
+        },
+        staticresourceActions: {
+          list: function (args) {
+            var pager = args.pager
+            var init = args.init
+            var filters = {articleId: this.$route.query.key}
+            var sorts = args.sorts
+            if (init) {
+              let config = {
+                url: commonUrls.staticresource.list,
+                method: 'post',
+                data: {pager, filters, sorts, init: true}
+              }
+              axios.request(config).then(function (response) {
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'staticresource-list',
+                  data: {
+                    'rules': {
+                      'header': [
+                        {
+                          'name': '#sn',
+                          'title': '#sn'
+                        },
+                        {
+                          'name': 'name',
+                          'title': '名称',
+                          'type': 'text',
+                          filter: true
+                        },
+                        {
+                          'name': 'type',
+                          'title': '类型',
+                          'type': 'select',
+                          items: [
+                            {
+                              label: 'css',
+                              value: 'stylesheet'
+                            },
+                            {
+                              label: 'js',
+                              value: 'script'
+                            },
+                            {
+                              label: 'image',
+                              value: 'image'
+                            },
+                            {
+                              label: 'font',
+                              value: 'font'
+                            },
+                            {
+                              label: 'document',
+                              value: 'document'
+                            }
+                          ],
+                          filter: true
+                        },
+                        {
+                          'name': 'fileType',
+                          'title': '文件类型',
+                          'type': 'text'
+                        },
+                        {
+                          'name': 'size',
+                          'title': '文件大小（Byte）',
+                          'type': 'text'
+                        },
+                        {
+                          'name': 'resourceOrder',
+                          'title': '资源顺序（Byte）',
+                          'type': 'text'
+                        }
+                      ],
+                      'action': {
+                        'add': true,
+                        'detail': true,
+                        'update': true,
+                        'delete': true
+                      },
+                      'feature': {
+                        'pager': true,
+                        filter: true
+                      }
+                    },
+                    'data': response.data
+                  },
+                  callParameters: {pager, init: true}
+                })
+              }).catch(function (error) {
+                global.store.commit('TABLE_FAILURE', {id: 'staticresource-list', error})
+              })
+            } else {
+              args.filters = args.filters || {}
+              args.filters.articleId = this.$route.query.key
+              let config = {
+                url: commonUrls.staticresource.list,
+                method: 'post',
+                data: {pager, filters: args.filters, sorts}
+              }
+              axios.request(config).then(function (response) {
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'staticresource-list',
+                  data: {
+                    'data': response.data
+                  },
+                  callParameters: {pager, filters, sorts}
+                })
+              }).catch(function (error) {
+                global.store.commit('TABLE_FAILURE', {id: 'staticresource-list', error})
+              })
+            }
+          }.bind(this)
+        }
       }
     },
     components: {
@@ -923,6 +1046,9 @@
         }
         this.positionCurrent = 'block'
       }.bind(this))
+    },
+    created: function () {
+      document.cookie = 'staticResourceBackUrl=' + this.$route.fullPath
     }
   }
 </script>

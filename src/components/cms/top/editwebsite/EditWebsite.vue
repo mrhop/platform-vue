@@ -269,6 +269,8 @@
                 global.store.commit('TABLE_FAILURE', {id: 'staticresource-list', error})
               })
             } else {
+              args.filters = args.filters || {}
+              args.filters.websiteId = this.$route.query.key
               let config = {
                 url: commonUrls.staticresource.list,
                 method: 'post',

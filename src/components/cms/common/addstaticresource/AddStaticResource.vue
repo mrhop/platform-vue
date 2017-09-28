@@ -33,6 +33,13 @@
                 'name': 'websiteId',
                 'type': 'hidden',
                 defaultValue: this.$route.query.websiteId
+              } : null
+            }
+            if (!hiddenId) {
+              hiddenId = this.$route.query.articleId ? {
+                'name': 'articleId',
+                'type': 'hidden',
+                defaultValue: this.$route.query.articleId
               } : {}
             }
             let rules = {
