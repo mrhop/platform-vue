@@ -249,7 +249,8 @@
                       'name': '',
                       'label': '内容',
                       'type': 'ckeditor',
-                      defaultValue: response.data.content
+                      defaultValue: response.data.content,
+                      config: global.CKEditorConfig
                     },
                     {
                       'name': 'script',
@@ -632,7 +633,8 @@
                   'name': 'content',
                   'label': 'block内容',
                   'type': 'ckeditor',
-                  defaultValue: this.blockContent
+                  defaultValue: this.blockContent,
+                  config: global.CKEditorConfig
                 },
                 {
                   'name': 'script',

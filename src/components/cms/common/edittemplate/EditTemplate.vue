@@ -388,7 +388,8 @@
                   'name': 'content',
                   'label': 'block内容',
                   'type': 'ckeditor',
-                  defaultValue: this.blockContent
+                  defaultValue: this.blockContent,
+                  config: global.CKEditorConfig
                 },
                 {
                   'name': 'script',

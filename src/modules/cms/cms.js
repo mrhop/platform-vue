@@ -19,12 +19,14 @@ global.shadeRGBColor = function (color, percent) {
   var f = color.split(','), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent, R = parseInt(f[0].slice(4)), G = parseInt(f[1]), B = parseInt(f[2])
   return 'rgb(' + (Math.round((t - R) * p) + R) + ',' + (Math.round((t - G) * p) + G) + ',' + (Math.round((t - B) * p) + B) + ')'
 }
+import CKEditorConfig from './CKEditorConfig'
 import Vue from 'vue'
 import router from '../../router/cms'
 import Vuex from 'vuex'
 import App from '../../components/common/App'
 import huodhVuePlugins from 'huodh-vue-plugins'
 import {commonUrls} from '../../components/common/cms'
+global.CKEditorConfig = CKEditorConfig
 Vue.use(Vuex)
 Vue.use(huodhVuePlugins.config)
 global.store = huodhVuePlugins.generateStore()

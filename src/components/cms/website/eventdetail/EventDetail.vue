@@ -160,7 +160,8 @@
                       'label': '内容',
                       'type': 'ckeditor',
                       'locked': true,
-                      defaultValue: response.data.content
+                      defaultValue: response.data.content,
+                      config: global.CKEditorConfig
                     },
                     {
                       'name': 'script',
