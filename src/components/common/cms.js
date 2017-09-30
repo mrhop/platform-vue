@@ -87,6 +87,7 @@ var commonUrls = {
   },
   mediaTag: {
     list: basePath + 'mediatag/list',
+    selectOptions: basePath + 'mediatag/options',
     info: basePath + 'mediatag/info',
     update: basePath + 'mediatag/update',
     save: basePath + 'mediatag/save',

@@ -5,11 +5,14 @@
  * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
+import {commonUrls} from '../../components/common/cms'
 let config = {
   language: 'zh-cn',
   uiColor: '#9AB8F3',
   bodyClass: 'main-content'
 }
+config.mediaTagsUrl = commonUrls.mediaTag.selectOptions
+config.filebrowserBrowseUrl = commonUrls.mediaTag.selectOptions
 config.toolbarGroups = [
   {name: 'clipboard', groups: ['clipboard', 'undo']},
   {name: 'editing', groups: ['find', 'selection', 'spellchecker']},
@@ -34,8 +37,6 @@ config.extraPlugins = 'functiontag'
 config.removeButtons = 'Underline,Subscript,Superscript,FMathEditor'
 
 // Set the most common block elements.
-
-config.format_p = {element: 'p', attributes: {'class': 'normalPara'}}
 
 config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre;address;div'
 

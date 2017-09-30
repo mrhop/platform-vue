@@ -2,19 +2,26 @@
  * Created by Donghui Huo on 2017/9/29.
  */
 CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
-  // Function called in onShow to load selected element.
-  var linkTypeChanged = function () {
-    var dialog = this.getDialog(),
-      typeValue = this.getValue()
 
-    var element = dialog.getContentElement('info', 'mediaTags');
+  function createRangeForFunctionTag(editor, functionTag) {
+    var range = editor.createRange();
+
+    range.setStartBefore(functionTag);
+    range.setEndAfter(functionTag);
+
+    return range;
+  }
+
+  var linkTypeChanged = function () {
+    var dialog = this.getDialog()
+    var element = dialog.getContentElement('info', 'mediaTag');
     if (this.getValue() === 'hotfiles' || this.getValue() === 'newfiles') {
       element.getElement().show();
     } else {
       element.getElement().hide();
     }
     dialog.layout();
-  };
+  }
 
   return {
     title: '插入功能Tag',
@@ -23,17 +30,11 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
     onOk: function () {
       console.log('ok')
     },
-
     onHide: function () {
       console.log('hide')
     },
-
     onShow: function () {
       console.log('show')
-      this.getContentElement('info', 'tagType').focus();
-      // 这个data从edit window中得来
-      var data = {}
-      this.setupContent(data);
     },
     contents: [{
       id: 'info',
@@ -43,13 +44,7 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         id: 'tagType',
         label: 'Tag类型',
         required: true,
-        validate: function () {
-          if (!this.getValue()) {
-            alert('请选择Tag类型'); // jshint ignore:line
-            return false;
-          }
-          return true;
-        },
+        validate: CKEDITOR.dialog.validate.notEmpty("请选择Tag类型."),
         'default': 'hotnews',
         items: [
           ['最热新闻', 'hotnews'],
@@ -59,59 +54,85 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
           ['最热媒体文件', 'hotfiles'],
           ['最新媒体文件', 'newfiles']
         ],
-        setup: function (data) {
-          if (data.tagType) {
-            this.setValue(data.tagType);
+        setup: function (widget) {
+          if (widget.data.type) {
+            this.setValue(widget.data.type)
           }
         },
-        commit: function (data) {
-          data.tagType = this.getValue();
+        commit: function (widget) {
+          widget.setData('type', this.getValue());
+          for (var key in this.items) {
+            if (this.items[key][1] === this.getValue()) {
+              widget.setData('typeLabel', this.items[key][0]);
+              return
+            }
+          }
         },
         onChange: linkTypeChanged,
       }, {
         type: 'select',
-        id: 'mediaTags',
+        id: 'mediaTag',
         label: '媒体库',
         required: true,
         items: [],
         validate: function () {
-          var dialog = this.getDialog();
-          if (!dialog.getContentElement('info', 'tagType') || (dialog.getValueOf('info', 'tagType') !== 'hotfiles' && dialog.getValueOf('info', 'tagType') !== 'newfiles')) {
+          if (!this.getElement().isEditable()) {
             return true;
           }
           if (!this.getValue()) {
-            alert('请选择媒体库'); // jshint ignore:line
+            alert('请选择媒体库');
             return false;
           }
           return true;
         },
-        setup: function (data) {
-          var dialog = this.getDialog();
-          if (!dialog.getContentElement('info', 'tagType') || (dialog.getValueOf('info', 'tagType') !== 'hotfiles' && dialog.getValueOf('info', 'tagType') !== 'newfiles')) {
-            this.getElement().hide();
-            return;
+        onLoad: function (widget) {
+        },
+        setup: function (widget) {
+          if(widget.data.mediaTags){
+            for (var k in widget.data.mediaTags) {
+              this.add(widget.data.mediaTags[k].label,widget.data.mediaTags[k].value);
+            }
           }
-          // ajax 读取数据
-          // 然后设置初值
-          if (data.mediaTag) {
-            this.setValue(data.mediaTag);
+          if (widget.data.mediaTag) {
+            this.setValue(widget.data.mediaTag)
+          } else {
+            this.getElement().hide();
           }
         },
-        commit: function (data) {
-          data.mediaTag = this.getValue();
+        commit: function (widget) {
+          if (this.isVisible()) {
+            widget.setData('mediaTag', this.getValue());
+            for (var key in this.items) {
+              if (this.items[key][1] === this.getValue()) {
+                widget.setData('mediaTagLabel', this.items[key][0]);
+                return
+              }
+            }
+          }
         }
       }, {
         type: 'text',
         id: 'num',
         label: '显示数量',
         'default': 0,
-        setup: function (data) {
-          if (data.num) {
-            this.setValue(data.num);
+        setup: function (widget) {
+          if (widget.data.num) {
+            this.setValue(widget.data.num)
           }
         },
-        commit: function (data) {
-          data.num = this.getValue();
+        validate: function () {
+          if (this.getValue() && !/^\+?[1-9][0-9]*$/.test(this.getValue())) {
+            alert('请输入正确的正整数');
+            return false;
+          }
+          return true;
+        },
+        commit: function (widget) {
+          if (this.getValue()) {
+            widget.setData('num', this.getValue());
+          } else {
+            widget.setData('num', 10);
+          }
         }
       }]
     }]
