@@ -38,13 +38,21 @@ custom----------
 dialog.css
 /** custom **/.cke_dialog .cke_dialog_contents_body:hover,.cke_dialog .cke_dialog_contents_body *:hover{background: #fff}
 
+contents.css
+/** custom **/
+.ckeditor-function-tag {
+  padding: 5px 10px;
+  text-align: center
+}
 
 iframely.com for config.embed_provider when using Media Embed plugin
 153***@
 ec2d47de556ce05483578b
 
 
-需要新增一个tag插件以及尝试嵌入youku的插件
+ajax的bug需要处理
+
+需要新增一个tag插件以及尝试嵌入youku的插件,以及fileBrowser
 
 ckeditor---------end------------------------------------------------
 
