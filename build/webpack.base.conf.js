@@ -5,7 +5,7 @@ var vueLoaderConfig = require('./vue-loader.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var lodash = require('lodash');
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -37,6 +37,7 @@ module.exports = {
       {
         test: /basic\.scss$/,
         loader: ExtractTextPlugin.extract({use: ['css-loader', 'postcss-loader', 'sass-loader']}),
+        include: [resolve('src'), resolve('test')]
       },
       {
         test: /\.(js|vue)$/,
@@ -58,26 +59,29 @@ module.exports = {
         include: [resolve('src'), resolve('test')]
       },
       process.env.NODE_ENV === 'production' ?
-      {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: 'images/[name].[hash:7].[ext]',
-          outputPath: utils.assetsPath('/'),
-          publicPath: '../'
-        }
-      } : {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('images/[name].[hash:7].[ext]'),
-        }
-      },
+        {
+          test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+          loader: 'url-loader',
+          include: [resolve('src'), resolve('test')],
+          query: {
+            limit: 10000,
+            name: 'images/[name].[hash:7].[ext]',
+            outputPath: utils.assetsPath('/'),
+            publicPath: '../'
+          }
+        } : {
+          test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+          loader: 'url-loader',
+          include: [resolve('src'), resolve('test')],
+          query: {
+            limit: 10000,
+            name: utils.assetsPath('images/[name].[hash:7].[ext]'),
+          }
+        },
       process.env.NODE_ENV === 'production' ? {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
+        include: [resolve('src'), resolve('test')],
         query: {
           limit: 10000,
           name: 'fonts/[name].[hash:7].[ext]',
@@ -87,6 +91,7 @@ module.exports = {
       } : {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
+        include: [resolve('src'), resolve('test')],
         query: {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]'),

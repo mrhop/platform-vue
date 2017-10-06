@@ -25,15 +25,15 @@ CKEDITOR.plugins.add('functiontag', {
           this.setData('num', this.element.getAttribute('num'));
         }
         // 进行mediatag 的ajax获取
-        var mediaTags = []
-        if (editor.config.mediaTagsUrl) {
-          CKEDITOR.ajax.load(editor.config.mediaTagsUrl, function (data) {
-            if (data) {
-              var dataParsed = JSON.parse(data)
-              this.setData('mediaTags', dataParsed);
-            }
-          }.bind(this))
-        }
+        // var mediaTags = []
+        // if (editor.config.mediaTagsUrl) {
+        //   CKEDITOR.ajax.load(editor.config.mediaTagsUrl, function (data) {
+        //     if (data) {
+        //       var dataParsed = JSON.parse(data)
+        //       this.setData('mediaTags', dataParsed);
+        //     }
+        //   }.bind(this))
+        // }
       },
       data: function () {
         if (this.data.type) {

@@ -3,7 +3,7 @@
  */
 CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
 
-  function createRangeForFunctionTag(editor, functionTag) {
+  function createRangeForFunctionTag (editor, functionTag) {
     var range = editor.createRange();
 
     range.setStartBefore(functionTag);
@@ -86,13 +86,19 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
           return true;
         },
         onLoad: function (widget) {
+          if (editor.config.mediaTagsUrl) {
+            CKEDITOR.ajax.load(editor.config.mediaTagsUrl, function (data) {
+              if (data) {
+                var dataParsed = JSON.parse(data)
+                this.dataParsed = dataParsed
+                for (var k in dataParsed) {
+                  this.add(dataParsed[k].label, dataParsed[k].value);
+                }
+              }
+            }.bind(this))
+          }
         },
         setup: function (widget) {
-          if(widget.data.mediaTags){
-            for (var k in widget.data.mediaTags) {
-              this.add(widget.data.mediaTags[k].label,widget.data.mediaTags[k].value);
-            }
-          }
           if (widget.data.mediaTag) {
             this.setValue(widget.data.mediaTag)
           } else {
@@ -102,9 +108,9 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         commit: function (widget) {
           if (this.isVisible()) {
             widget.setData('mediaTag', this.getValue());
-            for (var key in this.items) {
-              if (this.items[key][1] === this.getValue()) {
-                widget.setData('mediaTagLabel', this.items[key][0]);
+            for (var key in this.dataParsed) {
+              if (this.dataParsed[key].value + '' === this.getValue()) {
+                widget.setData('mediaTagLabel', this.dataParsed[key].label);
                 return
               }
             }
