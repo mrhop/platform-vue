@@ -6,13 +6,27 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 import {commonUrls} from '../../components/common/cms'
+
 let config = {
   language: 'zh-cn',
   uiColor: '#9AB8F3',
   bodyClass: 'main-content'
 }
+// 因为无法判定文件类型
+// 所以浏览的时候，除去图片，其他都按照名称浏览
+// 图片按照名称浏览，放上去时候显示图片
+// 但是给出tag分类来进行处理
+// 上传的时候需要考虑到后台进行细分，判断文件类型，图片则不需要
+// 以后会考虑给出额外的url和后缀的校验判定处理
+// 仍然需要一个file module来实现filebrowser？分类和列表做统一的名称处理
 config.mediaTagsUrl = commonUrls.mediaTag.selectOptions
-config.filebrowserBrowseUrl = commonUrls.mediaTag.selectOptions
+let mediaUploadUrl = commonUrls.media.upload
+config.filebrowserBrowseUrl = 'file.html'
+config.filebrowserImageBrowseUrl = 'file.html?type=image'
+config.filebrowserFlashUploadUrl = 'file.html?type=flash'
+config.filebrowserUploadUrl = mediaUploadUrl
+config.filebrowserImageUploadUrl = mediaUploadUrl + '?type=image'
+config.filebrowserFlashUploadUrl = mediaUploadUrl + '?type=flash'
 config.toolbarGroups = [
   {name: 'clipboard', groups: ['clipboard', 'undo']},
   {name: 'editing', groups: ['find', 'selection', 'spellchecker']},
