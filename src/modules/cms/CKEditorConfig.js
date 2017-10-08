@@ -18,7 +18,7 @@ let config = {
 // 但是给出tag分类来进行处理
 // 上传的时候需要考虑到后台进行细分，判断文件类型，图片则不需要
 // 以后会考虑给出额外的url和后缀的校验判定处理
-// 仍然需要一个file module来实现filebrowser？分类和列表做统一的名称处理
+// 仍然需要一个file module来实现filebrowser？分类和列表做统一的名称处理，然后统一给出分类和过滤处理
 config.mediaTagsUrl = commonUrls.mediaTag.selectOptions
 let mediaUploadUrl = commonUrls.media.upload
 config.filebrowserBrowseUrl = 'file.html'
