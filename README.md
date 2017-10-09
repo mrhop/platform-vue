@@ -49,11 +49,6 @@ iframely.com for config.embed_provider when using Media Embed plugin
 153***@
 ec2d47de556ce05483578b
 
-
-ajax的bug需要处理
-
-需要新增一个tag插件以及尝试嵌入youku的插件,以及fileBrowser
-
 ckeditor---------end------------------------------------------------
 
 
