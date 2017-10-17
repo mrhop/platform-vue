@@ -1,0 +1,129 @@
+[
+  {
+    "title": "DASHBOARD",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "url": "/dashboard"
+  },
+  {
+    "title": "客户管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "客户级别列表",
+        "url": "/clientlevel/list"
+      },
+      {
+        "title": "新增客户级别",
+        "url": "/clientlevel/add"
+      },
+      {
+        "title": "客户来源列表",
+        "url": "/clientorigin/list"
+      },
+      {
+        "title": "新增客户来源",
+        "url": "/clientorigin/add"
+      },
+      {
+        "title": "客户列表",
+        "url": "/client/list"
+      },
+      {
+        "title": "新增客户",
+        "url": "/client/add"
+      }
+    ]
+  },
+  {
+    "title": "订单管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "付款方式列表",
+        "url": "/paytype/list"
+      },
+      {
+        "title": "新增付款方式",
+        "url": "/paytype/add"
+      },
+      {
+        "title": "递送方式列表",
+        "url": "/deliverymethod/list"
+      },
+      {
+        "title": "新增递送方式",
+        "url": "/deliverymethod/add"
+      },
+      {
+        "title": "订单状态列表",
+        "url": "/orderstatus/list"
+      },
+      {
+        "title": "新增订单状态",
+        "url": "/orderstatus/add"
+      },
+      {
+        "title": "订单折扣列表",
+        "url": "/orderdiscount/list"
+      },
+      {
+        "title": "新增订单折扣",
+        "url": "/orderdiscount/add"
+      },
+      {
+        "title": "订单列表",
+        "url": "/order/list"
+      },
+      {
+        "title": "新增订单",
+        "url": "/orderstatus/add"
+      }
+    ]
+  },
+  {
+    "title": "商品管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "商品类别列表",
+        "url": "/productcategory/list"
+      },
+      {
+        "title": "新增商品类别",
+        "url": "/productcategory/add"
+      },
+      {
+        "title": "商品列表",
+        "url": "/product/list"
+      },
+      {
+        "title": "新增商品",
+        "url": "/product/add"
+      }
+    ]
+  },
+  {
+    "title": "国家管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "国家列表",
+        "url": "/country/list"
+      },
+      {
+        "title": "新增国家",
+        "url": "/country/add"
+      }
+    ]
+  },
+  {
+    "title": "用户管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "用户列表",
+        "url": "/user/list"
+      }
+    ]
+  }
+]
