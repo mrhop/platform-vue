@@ -1,0 +1,21 @@
+@import "../../scss/import";
+
+#index-app {
+  .right-content {
+    .tabPanel {
+      .panel-wrapper {
+        > header {
+          display: none;
+        }
+      }
+    }
+    .form-group {
+      .file-block {
+        > img {
+          height: 100px;
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}

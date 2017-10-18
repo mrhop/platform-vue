@@ -100,7 +100,7 @@ var commonUrls = {
     save: basePath + 'productcategory/save',
     delete: basePath + 'productcategory/delete'
   },
-  productPriceCategory: {
+  productPriceHistory: {
     list: basePath + 'productpricehistory/list'
   },
   user: {
