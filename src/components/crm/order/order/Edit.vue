@@ -652,8 +652,8 @@
         useCustomDiscount: false,
         prePrice: 0.0,
         costPrice: 0.0,
-        preDiscount: 1
-        orderStatusCode:global.store.getters.
+        preDiscount: 1,
+        orderStatusCode: global.store.getters.getOrderStatusCode()
       }
     },
     methods: {
