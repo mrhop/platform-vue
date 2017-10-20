@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from 'axios'
+import {commonUrls} from '@/components/common/crm.js'
 import Dashboard from '@/components/crm/dashboard/Dashboard'
 
 import AddClientLevel from '@/components/crm/client/clientlevel/Add'
@@ -202,7 +204,21 @@ export default new Router({
     {
       path: '/order/edit',
       name: 'EditOrder',
-      component: EditOrder
+      component: EditOrder,
+      beforeEnter: (to, from, next) => {
+        // 将值设置给state
+        let config = {
+          url: commonUrls.order.rulechange,
+          params: {
+            key: to.query.key
+          },
+          method: 'get'
+        }
+        axios.request(config).then(function (response) {
+          global.store.commit('setOrderStatusCode', {code: response})
+          next()
+        })
+      }
     },
     {
       path: '/order/list',

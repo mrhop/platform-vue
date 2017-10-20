@@ -353,6 +353,22 @@ body {
           }
         }
       }
+      div.form-wrapper {
+        .form-group {
+          .form-element {
+            input[type=button] {
+              color: #fff;
+              width: auto;
+              background: $brand-primary;
+              border: $brand-primary;
+              &:hover {
+                background: darken($brand-primary, 15%);
+                border: darken($brand-primary, 15%);
+              }
+            }
+          }
+        }
+      }
     }
     .panel-sample {
       overflow: hidden;

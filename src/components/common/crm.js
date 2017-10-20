@@ -55,7 +55,9 @@ var commonUrls = {
     update: basePath + 'order/update',
     save: basePath + 'order/save',
     delete: basePath + 'order/delete',
-    rulechange: basePath + 'order/form/rulechange'
+    rulechange: basePath + 'order/form/rulechange',
+    status: basePath + 'order/status',
+    priceestimate: basePath + 'order/price/estimate'
   },
   orderDiscount: {
     list: basePath + 'orderdiscount/list',
@@ -106,7 +108,8 @@ var commonUrls = {
   user: {
     list: basePath + 'relateduser/list',
     info: basePath + 'relateduser/info',
-    update: basePath + 'relateduser/update'
+    update: basePath + 'relateduser/update',
+    validate: basePath + 'relateduser/validate'
   },
   vuerouter: {
     clientLevel: {

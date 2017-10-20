@@ -17,5 +17,28 @@
         }
       }
     }
+    .form-order-productlist {
+      .modal-dialog {
+        width: 90%;
+        .form-element {
+          .form-control {
+            background: rgba(0, 0, 0, .5);
+          }
+        }
+        .table-wrapper {
+          .td-actions {
+            .btn-default {
+              color: #fff;
+              background: $brand-primary;
+              border: $brand-primary;
+              &:hover {
+                background: lighten($brand-primary, 15%);
+                border: lighten($brand-primary, 15%);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
