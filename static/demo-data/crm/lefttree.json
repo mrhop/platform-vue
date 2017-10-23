@@ -76,7 +76,7 @@
       },
       {
         "title": "新增订单",
-        "url": "/orderstatus/add"
+        "url": "/order/add"
       }
     ]
   },

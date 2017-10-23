@@ -60,6 +60,7 @@
                   'label': '关联客户',
                   'type': 'select',
                   items: responseInner.data.clients,
+                  ruleChange: true,
                   'validate': [{
                     'errorMsg': '不能为空',
                     'regex': '^\\S+$'
@@ -185,7 +186,7 @@
               this.modalTrigger = !this.modalTrigger
             } else if (params.changed.hasOwnProperty('discountType')) {
               // 给出商品的列表 dialog
-              if (params.changed.discountType === 1) {
+              if (params.changed.discountType === 'custom') {
                 this.useCustomDiscount = true
                 return [{
                   name: 'discount',
@@ -228,6 +229,9 @@
                   }
                 }
               }
+            } else if (params.changed.hasOwnProperty('clientId')) {
+              this.clientId = params.changed.clientId || undefined
+              this.changePrices()
             }
           }.bind(this),
           reset: function (params) {
@@ -240,6 +244,7 @@
             this.preDiscount = 1
             this.orderProducts = []
             this.orderSelectedProductActions.reinit = true
+            this.clientId = undefined
           }.bind(this)
         },
         orderProductActions: {
@@ -489,7 +494,8 @@
         prePrice: 0.0,
         costPrice: 0.0,
         preDiscount: 1,
-        orderProducts: []
+        orderProducts: [],
+        clientId: undefined
       }
     },
     methods: {
@@ -514,6 +520,9 @@
           })
         } else {
           orderPriceChangeConfig.params.price = dicountPrice
+          if (this.clientId) {
+            orderPriceChangeConfig.params.clientId = this.clientId
+          }
           axios.request(orderPriceChangeConfig).then(function (response) {
             global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
               id: 'order-add-form',

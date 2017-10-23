@@ -3,7 +3,7 @@
     <panel class="form-order-productlist">
       <h1 slot="header">更新订单</h1>
       <vform id="order-update-form" :actions="actions" :actionUrls="actionUrls"></vform>
-      <modalTpl :confirmModal="false"
+      <modalTpl v-if="orderStatusCode === 'created'||orderStatusCode === 'quoting'" :confirmModal="false"
                 type="info"
                 :trigger="modalTrigger">
         <span slot="header">请选择商品</span>
@@ -23,6 +23,7 @@
   import axios from 'axios'
   import huodhVuePlugins from 'huodh-vue-plugins'
   import {commonUrls} from '../../../common/crm'
+  import lodash from 'lodash'
 
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
@@ -32,6 +33,12 @@
     url: commonUrls.order.info,
     params: {},
     method: 'get'
+  }
+  let productsSelectedListConfig = {
+    url: commonUrls.orderProduct.list,
+    params: {},
+    method: 'post',
+    data: {}
   }
   let ruleChangeConfig = {
     url: commonUrls.order.rulechange,
@@ -74,33 +81,35 @@
                       'errorMsg': '不能为空',
                       'regex': '^\\S+$'
                     }],
-                    'placeholder': '订单状态'
+                    'placeholder': '订单状态',
+                    defaultValue: response.data.orderStatusId
                   },
                   {
                     'name': 'costPrice',
                     'label': '成本',
                     'type': 'text',
-                    defaultValue: 0.0,
                     locked: true,
                     'validate': [{
                       'errorMsg': '请添加商品',
                       'regex': '^(([1-9]\\d*)|(([1-9]\\d*)\\.\\d{1,2}))|(0\\.[1-9][0-9]*)|(0\\.0[1-9])$'
                     }],
-                    'placeholder': '成本'
+                    'placeholder': '成本',
+                    defaultValue: response.data.costPrice
                   },
                   {
                     'name': 'preQuotation',
                     'label': '预估销售价',
                     'type': 'text',
-                    defaultValue: 0.0,
                     locked: true,
-                    'placeholder': '预估销售价'
+                    'placeholder': '预估销售价',
+                    defaultValue: response.data.preQuotation
                   },
                   {
                     'name': 'additionalMsg',
                     'label': '补充信息',
                     'type': 'textarea',
-                    'placeholder': '寄送地址等补充信息'
+                    'placeholder': '寄送地址等补充信息',
+                    defaultValue: response.data.additionalMsg
                   },
                   {
                     'name': 'orderProducts',
@@ -108,8 +117,8 @@
                     defaultValue: this.orderProducts
                   }
                 ]
-                if (response.data.orderStatusCode === 'created' || response.data.orderStatusCode === 'quoting') {
-                  items.splice(0, 0,
+                if (this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting') {
+                  items.splice(1, 0,
                     {
                       'name': 'clientId',
                       'label': '关联客户',
@@ -119,7 +128,9 @@
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
                       }],
-                      'placeholder': '关联客户'
+                      'placeholder': '关联客户',
+                      defaultValue: response.data.clientId,
+                      ruleChange: true
                     },
                     {
                       'name': 'countryId',
@@ -130,7 +141,8 @@
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
                       }],
-                      'placeholder': '关联客户'
+                      'placeholder': '所属国家',
+                      defaultValue: response.data.countryId
                     },
                     {
                       'name': 'addProduct',
@@ -140,7 +152,7 @@
                       'ruleChange': true
                     })
                   if (responseInner.data.customDiscount !== undefined) {
-                    items.splice(3, 0, {
+                    items.splice(4, 0, {
                       'name': 'discountType',
                       'label': '折扣类型',
                       'type': 'select',
@@ -159,24 +171,25 @@
                         'regex': '^\\S+$'
                       }],
                       ruleChange: true,
-                      'placeholder': '折扣类型'
+                      'placeholder': '折扣类型',
+                      defaultValue: response.data.discountType
                     }, {
                       'name': 'discount',
                       'label': '折扣',
                       'type': 'text',
                       hidden: true,
-                      defaultValue: 1,
                       'validate': [{
                         'errorMsg': '请输入小于1的且小数位小于2的小数',
                         'regex': '^(1|(0?\\.\\d{1,2}))$'
                       }],
                       ruleChange: true,
-                      'placeholder': '折扣值'
+                      'placeholder': '折扣值',
+                      defaultValue: response.data.discount
                     })
                     this.customDiscount = responseInner.data.customDiscount
                   }
                 } else {
-                  items.splice(0, 0,
+                  items.splice(1, 0,
                     {
                       'name': 'clientName',
                       'label': '关联客户',
@@ -217,6 +230,16 @@
                         'errorMsg': '请输入整数或者2小数位的小数',
                         'regex': '^((\\d+)|((\\d*)\\.\\d{1,2}))$'
                       }]
+                    }, {
+                      'name': 'contractSignDate',
+                      'label': '合同签订时间',
+                      'type': 'date',
+                      'placeholder': '合同签订时间',
+                      'validate': [{
+                        'errorMsg': '不能为空',
+                        'regex': '^\\S+$'
+                      }],
+                      defaultValue: response.data.contractSignDate
                     })
                   } else if (response.data.orderStatusCode === 'payed') {
                     items.splice(4, 0, {
@@ -228,7 +251,8 @@
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
                       }],
-                      'placeholder': '支付方式'
+                      'placeholder': '支付方式',
+                      defaultValue: response.data.payTypeId
                     })
                   } else if (response.data.orderStatusCode === 'shipped') {
                     items.splice(4, 0, {
@@ -240,55 +264,18 @@
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
                       }],
-                      'placeholder': '递送方式'
+                      'placeholder': '递送方式',
+                      defaultValue: response.data.deliveryMethodId
                     }, {
                       'name': 'deliveryDate',
                       'label': '递送时间',
                       'type': 'date',
                       'placeholder': '递送时间',
-                      'validate': [{
-                        'errorMsg': '不能为空',
-                        'regex': '^\\S+$'
-                      }]
-                    }, {
-                      'name': 'tracingNumber',
-                      'label': '追踪号',
-                      'type': 'text',
-                      'placeholder': '追踪号',
-                      'validate': [{
-                        'errorMsg': '不能为空',
-                        'regex': '^\\S+$'
-                      }]
-                    }, {
-                      'name': 'freight',
-                      'label': '运费',
-                      'type': 'text',
-                      'placeholder': '运费',
-                      'validate': [{
-                        'errorMsg': '请输入整数或者2小数位的小数',
-                        'regex': '^((\\d+)|((\\d*)\\.\\d{1,2}))$'
-                      }]
-                    })
-                  } else if (response.data.orderStatusCode === 'shipped') {
-                    items.splice(4, 0, {
-                      'name': 'deliveryMethodId',
-                      'label': '递送方式',
-                      'type': 'select',
-                      items: responseInner.data.deliveryMethods,
                       'validate': [{
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
                       }],
-                      'placeholder': '递送方式'
-                    }, {
-                      'name': 'deliveryDate',
-                      'label': '递送时间',
-                      'type': 'date',
-                      'placeholder': '递送时间',
-                      'validate': [{
-                        'errorMsg': '不能为空',
-                        'regex': '^\\S+$'
-                      }]
+                      defaultValue: response.data.deliveryDate
                     }, {
                       'name': 'tracingNumber',
                       'label': '追踪号',
@@ -297,7 +284,8 @@
                       'validate': [{
                         'errorMsg': '不能为空',
                         'regex': '^\\S+$'
-                      }]
+                      }],
+                      defaultValue: response.data.tracingNumber
                     }, {
                       'name': 'freight',
                       'label': '运费',
@@ -306,7 +294,8 @@
                       'validate': [{
                         'errorMsg': '请输入整数或者2小数位的小数',
                         'regex': '^((\\d+)|((\\d*)\\.\\d{1,2}))$'
-                      }]
+                      }],
+                      defaultValue: response.data.freight
                     })
                   }
                 }
@@ -330,6 +319,16 @@
                     rules
                   }
                 })
+                this.prePrice = response.data.preQuotation
+                this.backup.prePrice = this.prePrice
+                this.costPrice = response.data.costPrice
+                this.backup.costPrice = this.costPrice
+                this.preDiscount = response.data.discountType === 'custom' ? response.data.discount : 1
+                this.backup.preDiscount = this.preDiscount
+                this.useCustomDiscount = response.data.discountType === 'custom' || false
+                this.backup.useCustomDiscount = this.useCustomDiscount
+                this.clientId = response.data.clientId
+                this.backup.useCustomDiscount = this.useCustomDiscount
               }.bind(this)).catch(function (error) {
                 global.store.commit('FORM_FAILURE', {
                   id: 'order-update-form',
@@ -349,7 +348,7 @@
               this.modalTrigger = !this.modalTrigger
             } else if (params.changed.hasOwnProperty('discountType')) {
               // 给出商品的列表 dialog
-              if (params.changed.discountType === 1) {
+              if (params.changed.discountType === 'custom') {
                 this.useCustomDiscount = true
                 return [{
                   name: 'discount',
@@ -392,17 +391,21 @@
                   }
                 }
               }
+            } else if (params.changed.hasOwnProperty('clientId')) {
+              this.clientId = params.changed.clientId || undefined
+              this.changePrices()
             }
           }.bind(this),
           reset: function (params) {
             console.log('reset it')
-            this.orderProductSelectedData = {rows: [], totalCount: 0}
-            this.customDiscount = 1
-            this.useCustomDiscount = false
-            this.prePrice = 0.0
-            this.costPrice = 0.0
-            this.preDiscount = 1
-            this.orderProducts = []
+            this.orderProductSelectedData = this.backup.orderProductSelectedData
+            this.customDiscount = this.backup.customDiscount
+            this.useCustomDiscount = this.backup.useCustomDiscount
+            this.prePrice = this.backup.prePrice
+            this.costPrice = this.backup.costPrice
+            this.preDiscount = this.backup.preDiscount
+            this.orderProducts = this.backup.orderProducts
+            this.clientId = this.backup.clientId
             this.orderSelectedProductActions.reinit = true
           }.bind(this)
         },
@@ -545,57 +548,97 @@
         orderSelectedProductActions: {
           reinit: false,
           list: function (args) {
-            if (args.init) {
-              global.store.commit('TABLE_SUCCESS', {
-                id: 'orderselectedproduct-list',
-                data: {
-                  'rules': {
-                    'header': [
-                      {
-                        'name': '#sn',
-                        'title': '#sn'
-                      },
-                      {
-                        'name': 'name',
-                        'title': '名称',
-                        'type': 'text'
-                      },
-                      {
-                        'name': 'code',
-                        'title': '商品码',
-                        'type': 'text'
-                      },
-                      {
-                        'name': 'num',
-                        'title': '数量',
-                        'type': 'text',
-                        editable: true,
-                        'validate': [{
-                          'errorMsg': '请输入正整数',
-                          'regex': '^[1-9][0-9]*$'
-                        }]
-                      }
-                    ],
-                    'action': {
-                      'delete': true
-                    },
-                    'feature': {
-                      'filter': false,
-                      'pager': false
-                    }
-                  },
-                  'data': this.orderProductSelectedData
+            let rules = {
+              'header': [
+                {
+                  'name': '#sn',
+                  'title': '#sn'
                 },
-                callParameters: {init: true}
+                {
+                  'name': 'name',
+                  'title': '名称',
+                  'type': 'text'
+                },
+                {
+                  'name': 'code',
+                  'title': '商品码',
+                  'type': 'text'
+                },
+                {
+                  'name': 'num',
+                  'title': '数量',
+                  'type': 'text',
+                  editable: this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting',
+                  'validate': [{
+                    'errorMsg': '请输入正整数',
+                    'regex': '^[1-9][0-9]*$'
+                  }]
+                }
+              ],
+              'action': {
+                'delete': this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting'
+              },
+              'feature': {
+                'filter': false,
+                'pager': false
+              }
+            }
+            if (!productsSelectedListConfig.params.orderId) {
+              productsSelectedListConfig.params.orderId = this.$route.query.key
+              axios.request(productsSelectedListConfig).then(function (response) {
+                this.orderProductSelectedData = response.data
+                this.backup.orderProductSelectedData = lodash.cloneDeep(this.orderProductSelectedData)
+
+                if (this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting') {
+                  for (let key in this.orderProductSelectedData.rows) {
+                    this.orderProducts.push({
+                      productId: this.orderProductSelectedData.rows[key].key,
+                      num: this.orderProductSelectedData.rows[key].value[2]
+                    })
+                  }
+                  this.backup.orderProducts = lodash.cloneDeep(this.orderProducts)
+                }
+                if (args.init) {
+                  global.store.commit('TABLE_SUCCESS', {
+                    id: 'orderselectedproduct-list',
+                    data: {
+                      rules,
+                      'data': this.orderProductSelectedData
+                    },
+                    callParameters: {init: true}
+                  })
+                } else {
+                  global.store.commit('TABLE_SUCCESS', {
+                    id: 'orderselectedproduct-list',
+                    data: {
+                      'data': this.orderProductSelectedData
+                    }
+                  })
+                }
+              }.bind(this)).catch(function (error) {
+                global.store.commit('TABLE_FAILURE', {
+                  id: 'orderselectedproduct-list',
+                  error
+                })
               })
             } else {
-              global.store.commit('TABLE_SUCCESS', {
-                id: 'orderselectedproduct-list',
-                data: {
-                  'data': this.orderProductSelectedData
-                },
-                callParameters: {}
-              })
+              if (args.init) {
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'orderselectedproduct-list',
+                  data: {
+                    rules,
+                    'data': this.orderProductSelectedData
+                  },
+                  callParameters: {init: args.init}
+                })
+              } else {
+                global.store.commit('TABLE_SUCCESS', {
+                  id: 'orderselectedproduct-list',
+                  data: {
+                    'data': this.orderProductSelectedData
+                  }
+                })
+              }
             }
           }.bind(this),
           delete: function (params) {
@@ -653,7 +696,19 @@
         prePrice: 0.0,
         costPrice: 0.0,
         preDiscount: 1,
-        orderStatusCode: global.store.getters.getOrderStatusCode()
+        orderProducts: [],
+        orderStatusCode: global.store.getters.getOrderStatusCode,
+        clientId: undefined,
+        backup: {
+          orderProductSelectedData: {rows: [], totalCount: 0},
+          customDiscount: 1,
+          useCustomDiscount: false,
+          prePrice: 0.0,
+          costPrice: 0.0,
+          preDiscount: 1,
+          orderProducts: [],
+          clientId: undefined
+        }
       }
     },
     methods: {
@@ -678,6 +733,9 @@
           })
         } else {
           orderPriceChangeConfig.params.price = dicountPrice
+          if (this.clientId) {
+            orderPriceChangeConfig.params.clientId = this.clientId
+          }
           axios.request(orderPriceChangeConfig).then(function (response) {
             global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
               id: 'order-update-form',

@@ -208,14 +208,14 @@ export default new Router({
       beforeEnter: (to, from, next) => {
         // 将值设置给state
         let config = {
-          url: commonUrls.order.rulechange,
+          url: commonUrls.order.status,
           params: {
             key: to.query.key
           },
           method: 'get'
         }
         axios.request(config).then(function (response) {
-          global.store.commit('setOrderStatusCode', {code: response})
+          global.store.commit('setOrderStatusCode', {code: response.data})
           next()
         })
       }
