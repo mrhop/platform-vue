@@ -1,4 +1,5 @@
 require('./crm.scss')
+import utils from '../../components/common/utils'
 import Vue from 'vue'
 import router from '../../router/crm'
 import Vuex from 'vuex'
@@ -6,6 +7,8 @@ import App from '../../components/common/App'
 import huodhVuePlugins from 'huodh-vue-plugins'
 import crmStore from './crmStore'
 import {commonUrls} from '../../components/common/crm'
+global.getCookie = utils.getCookie
+
 Vue.use(Vuex)
 Vue.use(huodhVuePlugins.config)
 global.store = huodhVuePlugins.generateStore({additionalModules: {crm: crmStore}})
