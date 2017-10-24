@@ -39,6 +39,10 @@
             var filters = args.filters
             var sorts = args.sorts
             if (init) {
+              filters = filters || {}
+              if (this.$route.query.clientId) {
+                filters.clientId = this.$route.query.clientId
+              }
               let config = {
                 url: commonUrls.order.list,
                 method: 'post',
@@ -62,6 +66,7 @@
                       'title': '所属客户',
                       'type': 'select',
                       items: responseInner.data.clients,
+                      defaultValue: filters.clientId || undefined,
                       filter: true
                     },
                     {
@@ -72,19 +77,15 @@
                       filter: true
                     },
                     {
-                      'name': 'costPrice',
-                      'title': '成本',
-                      'type': 'text'
-                    },
-                    {
-                      'name': 'preQuotation',
-                      'title': '预估价',
-                      'type': 'text'
-                    },
-                    {
                       'name': 'salePrice',
                       'title': '订单金额',
                       'type': 'text'
+                    },
+                    {
+                      'name': 'tracingNumber',
+                      'title': '发货追踪',
+                      'type': 'text',
+                      filter: true
                     },
                     {
                       'name': 'createdDate',
@@ -147,7 +148,7 @@
                 global.store.commit('TABLE_FAILURE', {id: 'order-list', error})
               })
             }
-          }
+          }.bind(this)
         }
       }
     },

@@ -94,16 +94,21 @@
                   'validate': [{
                     'errorMsg': '请添加商品',
                     'regex': '^(([1-9]\\d*)|(([1-9]\\d*)\\.\\d{1,2}))|(0\\.[1-9][0-9]*)|(0\\.0[1-9])$'
-                  }],
-                  'placeholder': '成本'
+                  }]
+                },
+                {
+                  'name': 'preSalePrice',
+                  'label': '预估折前价',
+                  'type': 'text',
+                  defaultValue: 0.0,
+                  locked: true
                 },
                 {
                   'name': 'preQuotation',
-                  'label': '预估销售价',
+                  'label': '预估折后价',
                   'type': 'text',
                   defaultValue: 0.0,
-                  locked: true,
-                  'placeholder': '预估销售价'
+                  locked: true
                 },
                 {
                   'name': 'additionalMsg',
@@ -505,9 +510,13 @@
         let dicountPrice = this.prePrice
         if (this.useCustomDiscount) {
           dicountPrice = dicountPrice * this.preDiscount
+          dicountPrice = +dicountPrice.toFixed(2)
           global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
             id: 'order-add-form',
             data: [{
+              name: 'preSalePrice',
+              defaultValue: this.prePrice
+            }, {
               name: 'preQuotation',
               defaultValue: dicountPrice
             }, {
@@ -527,6 +536,10 @@
             global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
               id: 'order-add-form',
               data: [{
+                name: 'preSalePrice',
+                defaultValue: this.prePrice,
+                validatedMsg: undefined
+              }, {
                 name: 'preQuotation',
                 defaultValue: response.data,
                 validatedMsg: undefined

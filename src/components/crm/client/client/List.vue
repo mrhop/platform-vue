@@ -79,14 +79,10 @@
                       filter: true
                     },
                     {
-                      'name': 'cellphone',
-                      'title': '手机',
-                      'type': 'text'
-                    },
-                    {
-                      'name': 'email',
-                      'title': '邮箱',
-                      'type': 'text'
+                      'name': 'orderAmount',
+                      'title': '成交额',
+                      'type': 'text',
+                      sortable: true
                     },
                     {
                       'name': 'clientOriginId',
@@ -101,12 +97,6 @@
                       'type': 'select',
                       filter: true,
                       items: responseInner.data.clientLevels
-                    },
-                    {
-                      'name': 'createdDate',
-                      'title': '创建日期',
-                      'type': 'date',
-                      sortable: true
                     }
                   ]
                   if (responseInner.data.createdUsers) {
@@ -127,7 +117,13 @@
                           'add': true,
                           'detail': true,
                           'update': true,
-                          'delete': true
+                          'delete': true,
+                          events: [
+                            {
+                              key: 'goToOrders',
+                              label: '查看订单'
+                            }
+                          ]
                         },
                         'feature': {
                           'filter': true,
@@ -162,13 +158,17 @@
                 global.store.commit('TABLE_FAILURE', {id: 'client-list', error})
               })
             }
-          }
+          },
+          goToOrders: function (key) {
+            this.$router.push({name: 'OrderList', query: {clientId: key}})
+          }.bind(this)
         }
       }
     },
     components: {
       panel, tab, vtable
-    }
+    },
+    methods: {}
   }
 </script>
 

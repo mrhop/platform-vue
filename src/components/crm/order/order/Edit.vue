@@ -73,18 +73,6 @@
               axios.request(ruleChangeConfig).then(function (responseInner) {
                 let items = [
                   {
-                    'name': 'orderStatusId',
-                    'label': '订单状态',
-                    'type': 'select',
-                    items: responseInner.data.orderStatuses,
-                    'validate': [{
-                      'errorMsg': '不能为空',
-                      'regex': '^\\S+$'
-                    }],
-                    'placeholder': '订单状态',
-                    defaultValue: response.data.orderStatusId
-                  },
-                  {
                     'name': 'costPrice',
                     'label': '成本',
                     'type': 'text',
@@ -93,15 +81,20 @@
                       'errorMsg': '请添加商品',
                       'regex': '^(([1-9]\\d*)|(([1-9]\\d*)\\.\\d{1,2}))|(0\\.[1-9][0-9]*)|(0\\.0[1-9])$'
                     }],
-                    'placeholder': '成本',
                     defaultValue: response.data.costPrice
                   },
                   {
+                    'name': 'preSalePrice',
+                    'label': '预估折前价',
+                    'type': 'text',
+                    defaultValue: response.data.preSalePrice,
+                    locked: true
+                  },
+                  {
                     'name': 'preQuotation',
-                    'label': '预估销售价',
+                    'label': '预估折后价',
                     'type': 'text',
                     locked: true,
-                    'placeholder': '预估销售价',
                     defaultValue: response.data.preQuotation
                   },
                   {
@@ -117,6 +110,27 @@
                     defaultValue: this.orderProducts
                   }
                 ]
+                if (responseInner.data.orderStatuses) {
+                  items.splice(0, 0, {
+                    'name': 'orderStatusId',
+                    'label': '订单状态',
+                    'type': 'select',
+                    items: responseInner.data.orderStatuses,
+                    'validate': [{
+                      'errorMsg': '不能为空',
+                      'regex': '^\\S+$'
+                    }],
+                    'placeholder': '订单状态',
+                    defaultValue: response.data.orderStatusId
+                  })
+                } else {
+                  items.splice(0, 0, {
+                    'name': 'orderStatusName',
+                    'label': '订单状态',
+                    'type': 'text',
+                    defaultValue: response.data.orderStatusName
+                  })
+                }
                 if (this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting') {
                   items.splice(1, 0,
                     {
@@ -319,7 +333,7 @@
                     rules
                   }
                 })
-                this.prePrice = response.data.preQuotation
+                this.prePrice = response.data.preSalePrice
                 this.backup.prePrice = this.prePrice
                 this.costPrice = response.data.costPrice
                 this.backup.costPrice = this.costPrice
@@ -718,9 +732,13 @@
         let dicountPrice = this.prePrice
         if (this.useCustomDiscount) {
           dicountPrice = dicountPrice * this.preDiscount
+          dicountPrice = +dicountPrice.toFixed(2)
           global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
             id: 'order-update-form',
             data: [{
+              name: 'preSalePrice',
+              defaultValue: this.prePrice
+            }, {
               name: 'preQuotation',
               defaultValue: dicountPrice
             }, {
@@ -740,6 +758,10 @@
             global.store.commit('FORM_RULE_CHANGE_SUCCESS', {
               id: 'order-update-form',
               data: [{
+                name: 'preSalePrice',
+                defaultValue: this.prePrice,
+                validatedMsg: undefined
+              }, {
                 name: 'preQuotation',
                 defaultValue: response.data,
                 validatedMsg: undefined
