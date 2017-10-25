@@ -176,7 +176,8 @@
                   } else {
                     return [
                       {
-                        'name': 'repassword'
+                        'name': 'repassword',
+                        'validatedMsg': undefined
                       }
                     ]
                   }
@@ -195,7 +196,8 @@
                   } else {
                     return [
                       {
-                        'name': 'repassword'
+                        'name': 'repassword',
+                        'validatedMsg': undefined
                       }
                     ]
                   }

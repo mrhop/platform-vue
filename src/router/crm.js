@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import axios from 'axios'
 import {commonUrls} from '@/components/common/crm.js'
 import Dashboard from '@/components/crm/dashboard/Dashboard'
+import NotFound from '@/components/crm/dashboard/NotFound'
 
 import AddClientLevel from '@/components/crm/client/clientlevel/Add'
 import ClientLevelDetail from '@/components/crm/client/clientlevel/Detail'
@@ -74,7 +75,36 @@ export default new Router({
     {
       path: '/',
       name: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      beforeEnter: (to, from, next) => {
+        let userStatus = global.store.getters.getUserStatus
+        if (userStatus.firstPage) {
+          if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+            next()
+          } else {
+            next(userStatus.firstPage)
+          }
+        } else {
+          let config = {
+            url: commonUrls.userStatus,
+            method: 'get'
+          }
+          axios.request(config).then(function (response) {
+            userStatus = response.data
+            global.store.commit('setUserStatus', {userStatus})
+            if (userStatus.firstPage) {
+              if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+                next()
+              } else {
+                next(userStatus.firstPage)
+              }
+            }
+          }).catch(function (error) {
+            console.log(error)
+            next('/404')
+          })
+        }
+      }
     },
     {
       path: '/clientlevel/add',
@@ -341,9 +371,14 @@ export default new Router({
       component: UserList
     },
     {
+      path: '/404',
+      name: 'All',
+      component: NotFound
+    },
+    {
       path: '/*',
       name: 'All',
-      component: Dashboard
+      component: NotFound
     }
   ]
 })

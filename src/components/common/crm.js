@@ -3,8 +3,9 @@
  */
 let basePath = 'http://localhost:9093/'
 var commonUrls = {
-  // leftTree: basePath + 'leftmenu',
-  leftTree: 'static/demo-data/crm/lefttree.json',
+  leftTree: basePath + 'leftmenu',
+  userStatus: basePath + 'userstatus',
+  // leftTree: 'static/demo-data/crm/lefttree.json',
   clientLevel: {
     list: basePath + 'clientlevel/list',
     info: basePath + 'clientlevel/info',
