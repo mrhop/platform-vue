@@ -4,8 +4,19 @@
 let basePath = 'http://localhost:9093/'
 var commonUrls = {
   leftTree: basePath + 'leftmenu',
-  userStatus: basePath + 'userstatus',
   // leftTree: 'static/demo-data/crm/lefttree.json',
+  userStatus: basePath + 'userstatus',
+  dashBoard: {
+    options: basePath + 'dashboard/options',
+    clientOrigin: basePath + 'dashboard/clientorigin',
+    country: basePath + 'dashboard/country',
+    clientAmount: basePath + 'dashboard/clientamount',
+    userAmount: basePath + 'dashboard/useramount',
+    orderSum: basePath + 'dashboard/ordersum',
+    userOrder: basePath + 'dashboard/userordersum',
+    newClient: basePath + 'dashboard/newclient',
+    clientTrace: basePath + 'dashboard/clienttrace'
+  },
   clientLevel: {
     list: basePath + 'clientlevel/list',
     info: basePath + 'clientlevel/info',

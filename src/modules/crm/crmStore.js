@@ -6,7 +6,7 @@ export default {
     crm: {
       orderStatusCode: null,
       userStatus: {
-        isAdmin: false,
+        isAdmin: true,
         firstPage: undefined
       }
     }
