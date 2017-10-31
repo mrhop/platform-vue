@@ -13,8 +13,8 @@
         </div>
         <vchart :chartConfig="charts.clientOrigin.chartConfig"
                 :chartTrigger="charts.clientOrigin.chartTrigger"/>
-        【过滤，订单金额数】
-        饼图 【客户数，来源】
+        <!--【过滤，订单金额数】-->
+        <!--饼图 【客户数，来源】-->
       </div>
     </panel>
     <panel v-if="isAdmin" col="6" :canHide="true">
@@ -34,8 +34,8 @@
         </div>
         <vchart :chartConfig="charts.country.chartConfig"
                 :chartTrigger="charts.country.chartTrigger"/>
-        【过滤，时间段】
-        订单数量【完成】，金额，客户关联国家柱状图
+        <!--【过滤，时间段】-->
+        <!--订单数量【完成】，金额，客户关联国家柱状图-->
       </div>
     </panel>
     <panel v-if="isAdmin" col="6" :canHide="true">
@@ -55,8 +55,8 @@
         </div>
         <vchart :chartConfig="charts.clientAmount.chartConfig"
                 :chartTrigger="charts.clientAmount.chartTrigger"/>
-        【过滤，时间段】
-        客户成交金额 饼图
+        <!--【过滤，时间段】-->
+        <!--客户成交金额 饼图-->
       </div>
     </panel>
     <panel v-if="isAdmin" col="6" :canHide="true">
@@ -76,8 +76,8 @@
         </div>
         <vchart :chartConfig="charts.userAmount.chartConfig"
                 :chartTrigger="charts.userAmount.chartTrigger"/>
-        【过滤，时间段】
-        每个用户成交金额 饼图
+        <!--【过滤，时间段】-->
+        <!--每个用户成交金额 饼图-->
       </div>
     </panel>
     <panel v-if="isAdmin" col="6" :canHide="true">
@@ -101,8 +101,8 @@
         </div>
         <vchart :chartConfig="charts.orderSum.chartConfig"
                 :chartTrigger="charts.orderSum.chartTrigger"/>
-        【过滤，时间段，客户】
-        成交订单数量，金额折线图，多折线【数量和金额】
+        <!--【过滤，时间段，客户】-->
+        <!--成交订单数量，金额折线图，多折线【数量和金额】-->
       </div>
     </panel>
     <panel col="6" :canHide="true">
@@ -126,8 +126,8 @@
         </div>
         <vchart :chartConfig="charts.userOrder.chartConfig"
                 :chartTrigger="charts.userOrder.chartTrigger"/>
-        【时间过滤】，【查询类型（订单数，订单金额）】
-        成交订单，多折线【针对不同的用户】
+        <!--【时间过滤】，【查询类型（订单数，订单金额）】-->
+        <!--成交订单，多折线【针对不同的用户】-->
       </div>
     </panel>
     <panel col="6" :canHide="true">
@@ -158,8 +158,8 @@
         </div>
         <vchart :chartConfig="charts.newClient.chartConfig"
                 :chartTrigger="charts.newClient.chartTrigger"/>
-        【客户级别，时间过滤】
-        新增客户数，多折线【针对不同的用户】
+        <!--【客户级别，时间过滤】-->
+        <!--新增客户数，多折线【针对不同的用户】-->
       </div>
     </panel>
     <panel col="6" :canHide="true">
@@ -189,8 +189,8 @@
         </div>
         <vchart :chartConfig="charts.clientTrace.chartConfig"
                 :chartTrigger="charts.clientTrace.chartTrigger"/>
-        【客户名称【当没有客户名称时，是同一时间总的追踪数量】*，时间过滤】
-        客户追踪记录，多折线【针对不同的用户】
+        <!--【客户名称【当没有客户名称时，是同一时间总的追踪数量】*，时间过滤】-->
+        <!--客户追踪记录，多折线【针对不同的用户】-->
       </div>
     </panel>
   </div>
@@ -300,7 +300,7 @@
                 let date = new Date()
                 if ((date.getTime() - this.charts.clientOrigin.lastInputTime.getTime()) > 999) {
                   let data = this.charts.clientOrigin.filters
-                  if (data.orderAmount != undefined && data.orderAmount != null) {
+                  if (data.orderAmount != undefined && data.orderAmount != null && data.orderAmount != '') {
                     clientOriginConfig.data.orderAmount = data.orderAmount
                   } else {
                     delete clientOriginConfig.data.orderAmount
@@ -371,20 +371,16 @@
                 datasets: [{
                   label: '客户数',
                   backgroundColor: Chart.helpers.color(window.chartColorArray[0]).rgbString(),
-                  yAxisID: 'y-axis-1',
                   data: []
                 }, {
                   label: '订单总额',
                   backgroundColor: Chart.helpers.color(window.chartColorArray[1]).rgbString(),
-                  yAxisID: 'y-axis-2',
                   data: []
                 }, {
                   label: '订单数',
                   backgroundColor: Chart.helpers.color(window.chartColorArray[2]).rgbString(),
-                  yAxisID: 'y-axis-3',
                   data: []
                 }]
-
               },
               options: {
                 responsive: true,
@@ -398,20 +394,9 @@
                 },
                 scales: {
                   yAxes: [{
-                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                    display: true,
-                    position: 'left',
-                    id: 'y-axis-1'
-                  }, {
-                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                    display: true,
-                    position: 'right',
-                    id: 'y-axis-2'
-                  }, {
-                    type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-                    display: true,
-                    position: 'right',
-                    id: 'y-axis-3'
+                    ticks: {
+                      beginAtZero: true
+                    }
                   }]
                 }
               }
@@ -963,8 +948,9 @@
           axios.request(clientOriginConfig).then(function (response) {
             if (response.data) {
               this.charts.clientOrigin.chartConfig.data.labels = response.data[0]
+              this.charts.clientOrigin.chartConfig.data.datasets[0].data = response.data[1]
+              this.charts.clientOrigin.chartConfig.data.datasets[0].backgroundColor = []
               for (let key in response.data[1]) {
-                this.charts.clientOrigin.chartConfig.data.datasets[0].data.push(response.data[1][key])
                 this.charts.clientOrigin.chartConfig.data.datasets[0].backgroundColor.push(Chart.helpers.color(window.chartColorArray[key % window.chartColorArray.length]).darken(parseInt(key / window.chartColorArray.length) / response.data[1].length).rgbString())
               }
             } else {
@@ -1004,6 +990,7 @@
             if (response.data) {
               this.charts.clientAmount.chartConfig.data.labels = response.data[0]
               this.charts.clientAmount.chartConfig.data.datasets[0].data = response.data[1]
+              this.charts.clientAmount.chartConfig.data.datasets[0].backgroundColor = []
               for (let key in response.data[1]) {
                 this.charts.clientAmount.chartConfig.data.datasets[0].backgroundColor.push(Chart.helpers.color(window.chartColorArray[key % window.chartColorArray.length]).darken(parseInt(key / window.chartColorArray.length) / response.data[1].length).rgbString())
               }

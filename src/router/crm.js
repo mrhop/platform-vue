@@ -75,36 +75,70 @@ export default new Router({
     {
       path: '/',
       name: 'Dashboard',
-      component: Dashboard
-      // beforeEnter: (to, from, next) => {
-      //   let userStatus = global.store.getters.getUserStatus
-      //   if (userStatus.firstPage) {
-      //     if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
-      //       next()
-      //     } else {
-      //       next(userStatus.firstPage)
-      //     }
-      //   } else {
-      //     let config = {
-      //       url: commonUrls.userStatus,
-      //       method: 'get'
-      //     }
-      //     axios.request(config).then(function (response) {
-      //       userStatus = response.data
-      //       global.store.commit('setUserStatus', {userStatus})
-      //       if (userStatus.firstPage) {
-      //         if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
-      //           next()
-      //         } else {
-      //           next(userStatus.firstPage)
-      //         }
-      //       }
-      //     }).catch(function (error) {
-      //       console.log(error)
-      //       next('/404')
-      //     })
-      //   }
-      // }
+      component: Dashboard,
+      beforeEnter: (to, from, next) => {
+        let userStatus = global.store.getters.getUserStatus
+        if (userStatus.firstPage) {
+          if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+            next()
+          } else {
+            next(userStatus.firstPage)
+          }
+        } else {
+          let config = {
+            url: commonUrls.userStatus,
+            method: 'get'
+          }
+          axios.request(config).then(function (response) {
+            userStatus = response.data
+            global.store.commit('setUserStatus', {userStatus})
+            if (userStatus.firstPage) {
+              if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+                next()
+              } else {
+                next(userStatus.firstPage)
+              }
+            }
+          }).catch(function (error) {
+            console.log(error)
+            next('/404')
+          })
+        }
+      }
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard-Alias',
+      component: Dashboard,
+      beforeEnter: (to, from, next) => {
+        let userStatus = global.store.getters.getUserStatus
+        if (userStatus.firstPage) {
+          if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+            next()
+          } else {
+            next(userStatus.firstPage)
+          }
+        } else {
+          let config = {
+            url: commonUrls.userStatus,
+            method: 'get'
+          }
+          axios.request(config).then(function (response) {
+            userStatus = response.data
+            global.store.commit('setUserStatus', {userStatus})
+            if (userStatus.firstPage) {
+              if (userStatus.firstPage === '/' || userStatus.firstPage === '/dashboard') {
+                next()
+              } else {
+                next(userStatus.firstPage)
+              }
+            }
+          }).catch(function (error) {
+            console.log(error)
+            next('/404')
+          })
+        }
+      }
     },
     {
       path: '/clientlevel/add',

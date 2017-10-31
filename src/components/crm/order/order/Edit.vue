@@ -128,7 +128,8 @@
                     'name': 'orderStatusName',
                     'label': '订单状态',
                     'type': 'text',
-                    defaultValue: response.data.orderStatusName
+                    defaultValue: response.data.orderStatusName,
+                    locked: true
                   })
                 }
                 if (this.orderStatusCode === 'created' || this.orderStatusCode === 'quoting') {
@@ -597,8 +598,9 @@
                 'pager': false
               }
             }
-            if (!productsSelectedListConfig.params.orderId) {
+            if (!this.selectedProductInited) {
               productsSelectedListConfig.params.orderId = this.$route.query.key
+              this.selectedProductInited = true
               axios.request(productsSelectedListConfig).then(function (response) {
                 this.orderProductSelectedData = response.data
                 this.backup.orderProductSelectedData = lodash.cloneDeep(this.orderProductSelectedData)
@@ -713,6 +715,7 @@
         orderProducts: [],
         orderStatusCode: global.store.getters.getOrderStatusCode,
         clientId: undefined,
+        selectedProductInited: false,
         backup: {
           orderProductSelectedData: {rows: [], totalCount: 0},
           customDiscount: 1,
@@ -780,6 +783,9 @@
     },
     components: {
       panel, vform, vtable, modalTpl
+    },
+    mounted: function () {
+
     }
   }
 </script>
