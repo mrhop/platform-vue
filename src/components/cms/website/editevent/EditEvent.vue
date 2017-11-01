@@ -246,7 +246,7 @@
                       ruleChange: true
                     },
                     {
-                      'name': '',
+                      'name': 'content',
                       'label': '内容',
                       'type': 'ckeditor',
                       defaultValue: response.data.content,

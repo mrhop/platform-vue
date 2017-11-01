@@ -106,13 +106,6 @@
                     required: false
                   },
                   {
-                    'name': 'relatedUsers',
-                    'label': '关联用户',
-                    'type': 'checkbox',
-                    items: response.data.relatedUsers,
-                    required: false
-                  },
-                  {
                     'name': 'screenshotFiles',
                     'label': '网站截图',
                     'type': 'image',
@@ -136,6 +129,15 @@
                     label: '返回列表'
                   }
                 }
+              }
+              if (response.data.relatedUsers) {
+                rules.items.splice(8, 0, {
+                  'name': 'relatedUserIds',
+                  'label': '关联用户',
+                  'type': 'checkbox',
+                  items: response.data.relatedUsers,
+                  required: false
+                })
               }
               global.store.commit('FORM_SUCCESS', {
                 id: 'website-add-form',

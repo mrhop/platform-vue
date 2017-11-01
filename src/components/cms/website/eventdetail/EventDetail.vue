@@ -156,7 +156,7 @@
                       defaultValue: response.data.templateName
                     },
                     {
-                      'name': '',
+                      'name': 'content',
                       'label': '内容',
                       'type': 'ckeditor',
                       'locked': true,

@@ -21,7 +21,7 @@
   let vform = huodhVuePlugins.vform
   let vtable = huodhVuePlugins.vtable
   let ruleChangeConfig = {
-    url: commonUrls.relatedUsers,
+    url: commonUrls.theme.rulechange,
     method: 'get'
   }
   let initConfig = {
@@ -62,14 +62,6 @@
                       'defaultValue': response.data.themeId
                     },
                     {
-                      'name': 'relatedUsers',
-                      'label': '关联用户',
-                      'type': 'checkbox',
-                      'defaultValue': response.data.relatedUsers ? response.data.relatedUsers : [],
-                      items: responseInner.data,
-                      required: false
-                    },
-                    {
                       'name': 'screenshotFiles',
                       'label': '主题截图',
                       'type': 'image',
@@ -94,6 +86,17 @@
                       label: '返回列表'
                     }
                   }
+                }
+
+                if (responseInner.data.relatedUsers) {
+                  rules.items.splice(2, 0, {
+                    'name': 'relatedUserIds',
+                    'label': '关联用户',
+                    'type': 'checkbox',
+                    'defaultValue': response.data.relatedUserIds,
+                    items: responseInner.data.relatedUsers,
+                    required: false
+                  })
                 }
                 global.store.commit('FORM_SUCCESS', {
                   id: 'theme-update-form',

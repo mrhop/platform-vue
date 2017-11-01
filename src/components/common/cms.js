@@ -18,7 +18,8 @@ var commonUrls = {
     update: basePath + 'theme/update',
     updateinfo: basePath + 'theme/updateinfo',
     save: basePath + 'theme/save',
-    delete: basePath + 'theme/delete'
+    delete: basePath + 'theme/delete',
+    rulechange: basePath + 'theme/form/rulechange'
   },
   template: {
     list: basePath + 'template/list',

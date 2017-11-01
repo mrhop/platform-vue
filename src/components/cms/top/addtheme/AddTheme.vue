@@ -15,7 +15,7 @@
   let panel = huodhVuePlugins.panel
   let vform = huodhVuePlugins.vform
   let ruleChangeConfig = {
-    url: commonUrls.relatedUsers,
+    url: commonUrls.theme.rulechange,
     method: 'get'
   }
   export default {
@@ -52,13 +52,6 @@
                     'placeholder': '主题ID'
                   },
                   {
-                    'name': 'relatedUsers',
-                    'label': '关联用户',
-                    'type': 'checkbox',
-                    items: response.data,
-                    required: false
-                  },
-                  {
                     'name': 'screenshotFiles',
                     'label': '主题截图',
                     'type': 'image',
@@ -82,6 +75,15 @@
                     label: '返回列表'
                   }
                 }
+              }
+              if (response.data.relatedUsers) {
+                rules.items.splice(2, 0, {
+                  'name': 'relatedUserIds',
+                  'label': '关联用户',
+                  'type': 'checkbox',
+                  items: response.data.relatedUsers,
+                  required: false
+                })
               }
               global.store.commit('FORM_SUCCESS', {
                 id: 'theme-add-form',
