@@ -106,6 +106,10 @@
                           'delete': true,
                           events: [
                             {
+                              key: 'preview',
+                              label: '预览'
+                            },
+                            {
                               key: 'copyArticle',
                               label: '复制文章'
                             }
@@ -156,6 +160,18 @@
               }
               return config
             }
+          },
+          preview: function (key) {
+            let config = {
+              url: commonUrls.article.preview,
+              method: 'get'
+            }
+            config.params = {key}
+            axios.request(config).then(function (response) {
+              // 进行ifram的创建和response.data的注入
+            }).catch(function (error) {
+              console.log('error' + error)
+            })
           },
           copyArticle: function (key) {
             let config = {

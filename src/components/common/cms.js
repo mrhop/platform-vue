@@ -24,6 +24,7 @@ var commonUrls = {
   template: {
     list: basePath + 'template/list',
     copyTpl: basePath + 'template/copy',
+    preview: basePath + 'template/preview',
     info: basePath + 'template/info',
     update: basePath + 'template/update',
     save: basePath + 'template/save',
@@ -56,6 +57,7 @@ var commonUrls = {
     list: basePath + 'article/list',
     info: basePath + 'article/info',
     copyArticle: basePath + 'article/copy',
+    preview: basePath + 'article/preview',
     update: basePath + 'article/update',
     save: basePath + 'article/save',
     delete: basePath + 'article/delete',

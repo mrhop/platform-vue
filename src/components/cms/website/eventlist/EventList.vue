@@ -106,6 +106,10 @@
                           'delete': true,
                           events: [
                             {
+                              key: 'preview',
+                              label: '预览'
+                            },
+                            {
                               key: 'copyArticle',
                               label: '复制活动'
                             }
@@ -156,6 +160,9 @@
               }
               return config
             }
+          },
+          preview: function (key) {
+            console.log('preview:' + key)
           },
           copyArticle: function (key) {
             let config = {

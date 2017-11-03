@@ -65,6 +65,10 @@
                         'delete': true,
                         events: [
                           {
+                            key: 'preview',
+                            label: '预览'
+                          },
+                          {
                             key: 'copyTpl',
                             label: '复制模板'
                           }
@@ -100,6 +104,18 @@
                 global.store.commit('TABLE_FAILURE', {id: 'template-list', error})
               })
             }
+          },
+          preview: function (key) {
+            let config = {
+              url: commonUrls.template.preview,
+              method: 'get'
+            }
+            config.params = {key}
+            axios.request(config).then(function (response) {
+              // 进行ifram的创建和response.data的注入
+            }).catch(function (error) {
+              console.log('error' + error)
+            })
           },
           copyTpl: function (key) {
             let config = {
