@@ -1,0 +1,38 @@
+div.row {
+  border: 1px dashed #708090 !important;
+  padding: 5px !important;
+}
+
+div.row .col {
+  border: 1px inset #4682B4 !important;
+  padding: 0 !important;
+}
+
+div.row .col.main-content {
+  background: #4682B4 !important;
+  color: #fff !important;
+}
+
+div.relative-height-1 {
+  height: 16.6%;
+}
+
+div.relative-height-2 {
+  height: 33.3%;
+}
+
+div.relative-height-3 {
+  height: 50%;
+}
+
+div.relative-height-4 {
+  height: 66.6%;
+}
+
+div.relative-height-5 {
+  height: 83.3%;
+}
+
+div.relative-height-6 {
+  height: 100%;
+}

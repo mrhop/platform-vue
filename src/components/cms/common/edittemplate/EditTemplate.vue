@@ -658,6 +658,11 @@
         if (index === 0) {
           if (this.positionCurrent !== 'block-list') {
             let cols = this.$refs.positionMap.querySelectorAll('div.col')
+            for (let temp in cols) {
+              if (temp < cols.length) {
+                cols[temp].innerHTML = ''
+              }
+            }
             for (let k in this.blockList) {
               let position = JSON.parse(this.blockList[k].value[1])
               for (let i in cols) {

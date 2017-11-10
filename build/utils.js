@@ -6,8 +6,11 @@ var glob = require('glob')
 exports.getEntries = function (globPath) {
   var entries = {}
   glob.sync(globPath).forEach(function (entry) {
+    let parentDir = path.dirname(entry).split('/').pop()
     var basename = path.basename(entry, path.extname(entry), 'router.js') // 过滤router.js
-    entries[basename] = entry
+    if (parentDir === basename) {
+      entries[basename] = entry
+    }
   });
   //console.log(entries);
   return entries;

@@ -4,6 +4,13 @@
       <h1 slot="header">模板列表</h1>
       <vtable id="template-list" :editable="true" :actionUrls="actionUrls" :actions="actions"></vtable>
     </panel>
+    <div class="iframe-container" v-show="frameShow">
+      <div class="top-header">
+        <span class="h4">预览页面</span>
+        <span class="close-btn" @click="closePreview"></span>
+      </div>
+      <iframe ref="previewIframe"></iframe>
+    </div>
   </div>
 </template>
 
@@ -110,13 +117,15 @@
               url: commonUrls.template.preview,
               method: 'get'
             }
-            config.params = {key}
+            config.params = {key, originPath: document.location.origin}
             axios.request(config).then(function (response) {
               // 进行ifram的创建和response.data的注入
-            }).catch(function (error) {
+              this.$refs.previewIframe.src = 'data:text/html;charset=utf-8,' + encodeURI(response.data)
+              this.frameShow = true
+            }.bind(this)).catch(function (error) {
               console.log('error' + error)
             })
-          },
+          }.bind(this),
           copyTpl: function (key) {
             let config = {
               url: commonUrls.template.copyTpl,
@@ -129,7 +138,13 @@
               console.log('error' + error)
             })
           }.bind(this)
-        }
+        },
+        frameShow: false
+      }
+    },
+    methods: {
+      closePreview: function () {
+        this.frameShow = false
       }
     },
     components: {

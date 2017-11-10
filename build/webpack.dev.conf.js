@@ -13,7 +13,7 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 //multi pages
 var pages = utils.getEntries('./src/modules/**/*.html')
 var htmlWebpackPluginArr = [];
-for(var page in pages) {
+for (var page in pages) {
   // 配置生成的html文件，定义路径等
   var conf = {
     filename: page + '.html',

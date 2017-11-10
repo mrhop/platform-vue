@@ -22,5 +22,33 @@
         "url": "/template/add"
       }
     ]
+  },
+  {
+    "title": "媒体库管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "媒体库列表",
+        "url": "/mediatag/list"
+      },
+      {
+        "title": "新增媒体库",
+        "url": "/mediatag/add"
+      }
+    ]
+  },
+  {
+    "title": "媒体管理",
+    "iconClass": "glyphicon glyphicon-th-large",
+    "children": [
+      {
+        "title": "媒体列表",
+        "url": "/media/list"
+      },
+      {
+        "title": "新增媒体文件",
+        "url": "/media/add"
+      }
+    ]
   }
 ]
