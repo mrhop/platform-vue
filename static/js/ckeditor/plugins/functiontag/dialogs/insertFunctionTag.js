@@ -16,6 +16,7 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
     var dialog = this.getDialog()
     var element = dialog.getContentElement('info', 'mediaTag');
     var element1 = dialog.getContentElement('info', 'customTag');
+    var element2 = dialog.getContentElement('info', 'num');
     if (this.getValue() === 'hotfiles' || this.getValue() === 'newfiles') {
       element.getElement().show();
     } else {
@@ -25,6 +26,11 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
       element1.getElement().show();
     } else {
       element1.getElement().hide();
+    }
+    if (this.getValue() === 'navigate') {
+      element2.getElement().hide();
+    } else {
+      element2.getElement().show();
     }
     dialog.layout();
   }
@@ -53,13 +59,13 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         validate: CKEDITOR.dialog.validate.notEmpty("请选择Tag类型."),
         'default': 'hotnews',
         items: [
-          ['导航条', 'navigate'],
           ['最热新闻', 'hotnews'],
           ['最新新闻', 'newnews'],
           ['最热活动', 'hotevents'],
           ['最新活动', 'newevents'],
           ['最热媒体文件', 'hotfiles'],
           ['最新媒体文件', 'newfiles'],
+          ['导航条', 'navigate'],
           ['自定义标签', 'customtag']
         ],
         setup: function (widget) {
@@ -183,8 +189,12 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         label: '显示数量',
         'default': 0,
         setup: function (widget) {
-          if (widget.data.num) {
-            this.setValue(widget.data.num)
+          if (widget.data.tagType === 'navigate') {
+            this.getElement().hide();
+          } else {
+            if (widget.data.num) {
+              this.setValue(widget.data.num)
+            }
           }
         },
         validate: function () {
@@ -195,7 +205,7 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
           return true;
         },
         commit: function (widget) {
-          if (this.getValue()) {
+          if (this.isVisible() && this.getValue()) {
             widget.setData('num', this.getValue());
           } else {
             widget.setData("num", null)

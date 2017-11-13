@@ -42,7 +42,7 @@ CKEDITOR.plugins.add('functiontag', {
         } else {
           this.element.removeAttribute('data-customtag')
         }
-        if (this.data.num || !this.data.customTag) {
+        if (this.data.num || (!this.data.customTag && this.data.type !== 'navigate')) {
           this.element.setAttribute('data-num', this.data.num || 10)
         } else {
           this.element.removeAttribute('data-num')
@@ -60,7 +60,7 @@ CKEDITOR.plugins.add('functiontag', {
           if (this.data.customTagLabel) {
             innerElement.setText(innerElement.getText() + ':' + this.data.customTagLabel)
           }
-          if (this.data.num || !this.data.customTag) {
+          if (this.data.num || (!this.data.customTag && this.data.type !== 'navigate')) {
             innerElement.setText(innerElement.getText() + ':' + (this.data.num || 10))
           }
         }
