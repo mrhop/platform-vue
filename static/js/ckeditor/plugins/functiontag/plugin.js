@@ -18,8 +18,11 @@ CKEDITOR.plugins.add('functiontag', {
         if (this.element.getAttribute('data-type')) {
           this.setData('type', this.element.getAttribute('data-type'));
         }
-        if (this.element.getAttribute('data-mediaTag')) {
-          this.setData('mediaTag', this.element.getAttribute('data-mediaTag'));
+        if (this.element.getAttribute('data-mediatag')) {
+          this.setData('mediaTag', this.element.getAttribute('data-mediatag'));
+        }
+        if (this.element.getAttribute('data-customtag')) {
+          this.setData('customTag', this.element.getAttribute('data-customtag'));
         }
         if (this.element.getAttribute('data-num')) {
           this.setData('num', this.element.getAttribute('data-num'));
@@ -30,10 +33,19 @@ CKEDITOR.plugins.add('functiontag', {
           this.element.setAttribute('data-type', this.data.type)
         }
         if (this.data.mediaTag) {
-          this.element.setAttribute('data-mediaTag', this.data.mediaTag)
+          this.element.setAttribute('data-mediatag', this.data.mediaTag)
+        } else {
+          this.element.removeAttribute('data-mediatag')
         }
-        if (this.data.num) {
-          this.element.setAttribute('data-num', this.data.num)
+        if (this.data.customTag) {
+          this.element.setAttribute('data-customtag', this.data.customTag)
+        } else {
+          this.element.removeAttribute('data-customtag')
+        }
+        if (this.data.num || !this.data.customTag) {
+          this.element.setAttribute('data-num', this.data.num || 10)
+        } else {
+          this.element.removeAttribute('data-num')
         }
         var innerElement = this.element.getChild(0)
         if (!innerElement) {
@@ -45,8 +57,11 @@ CKEDITOR.plugins.add('functiontag', {
           if (this.data.mediaTagLabel) {
             innerElement.setText(innerElement.getText() + ':' + this.data.mediaTagLabel)
           }
-          if (this.data.num) {
-            innerElement.setText(innerElement.getText() + ':' + this.data.num)
+          if (this.data.customTagLabel) {
+            innerElement.setText(innerElement.getText() + ':' + this.data.customTagLabel)
+          }
+          if (this.data.num || !this.data.customTag) {
+            innerElement.setText(innerElement.getText() + ':' + (this.data.num || 10))
           }
         }
       }
@@ -72,3 +87,4 @@ CKEDITOR.plugins.add('functiontag', {
     CKEDITOR.dialog.add('insertFunctionTag', this.path + 'dialogs/insertFunctionTag.js');
   }
 });
+// 目前此处存在1。validate的问题，2.显示的问题，都是二级的select

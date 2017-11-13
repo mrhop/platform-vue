@@ -42,7 +42,8 @@ var commonUrls = {
     info: basePath + 'blocktag/info',
     update: basePath + 'blocktag/update',
     save: basePath + 'blocktag/save',
-    delete: basePath + 'blocktag/delete'
+    delete: basePath + 'blocktag/delete',
+    selectOptions: basePath + 'blocktag/options'
   },
   website: {
     list: basePath + 'website/list',

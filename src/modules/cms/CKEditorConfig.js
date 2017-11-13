@@ -21,6 +21,7 @@ let config = {
 // 仍然需要一个file module来实现filebrowser？分类和列表做统一的名称处理，然后统一给出分类和过滤处理
 // 用于functionTag plugin
 config.mediaTagsUrl = commonUrls.mediaTag.selectOptions
+config.customTagsUrl = commonUrls.blockTag.selectOptions
 // 文件列表和文件过滤选项的url
 document.cookie = 'filebrowserListUrl=' + commonUrls.media.ckfilelist
 document.cookie = 'filebrowserRuleChangeUrl=' + commonUrls.media.ckfilerulechange

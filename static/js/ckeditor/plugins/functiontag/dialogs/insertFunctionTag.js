@@ -3,7 +3,7 @@
  */
 CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
 
-  function createRangeForFunctionTag (editor, functionTag) {
+  function createRangeForFunctionTag(editor, functionTag) {
     var range = editor.createRange();
 
     range.setStartBefore(functionTag);
@@ -15,10 +15,16 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
   var linkTypeChanged = function () {
     var dialog = this.getDialog()
     var element = dialog.getContentElement('info', 'mediaTag');
+    var element1 = dialog.getContentElement('info', 'customTag');
     if (this.getValue() === 'hotfiles' || this.getValue() === 'newfiles') {
       element.getElement().show();
     } else {
       element.getElement().hide();
+    }
+    if (this.getValue() === 'customtag') {
+      element1.getElement().show();
+    } else {
+      element1.getElement().hide();
     }
     dialog.layout();
   }
@@ -47,12 +53,14 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         validate: CKEDITOR.dialog.validate.notEmpty("请选择Tag类型."),
         'default': 'hotnews',
         items: [
+          ['导航条', 'navigate'],
           ['最热新闻', 'hotnews'],
           ['最新新闻', 'newnews'],
           ['最热活动', 'hotevents'],
           ['最新活动', 'newevents'],
           ['最热媒体文件', 'hotfiles'],
-          ['最新媒体文件', 'newfiles']
+          ['最新媒体文件', 'newfiles'],
+          ['自定义标签', 'customtag']
         ],
         setup: function (widget) {
           if (widget.data.type) {
@@ -76,7 +84,7 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
         required: true,
         items: [],
         validate: function () {
-          if (!this.getElement().isEditable()) {
+          if (!this.isVisible()) {
             return true;
           }
           if (!this.getValue()) {
@@ -114,6 +122,59 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
                 return
               }
             }
+          } else {
+            widget.setData("mediaTag", null)
+            widget.setData("mediaTagLabel", null)
+          }
+        }
+      }, {
+        type: 'select',
+        id: 'customTag',
+        label: '自定义标签',
+        required: true,
+        items: [],
+        validate: function () {
+          if (!this.isVisible()) {
+            return true;
+          }
+          if (!this.getValue()) {
+            alert('请选择自定义标签');
+            return false;
+          }
+          return true;
+        },
+        onLoad: function (widget) {
+          if (editor.config.customTagsUrl) {
+            CKEDITOR.ajax.load(editor.config.customTagsUrl, function (data) {
+              if (data) {
+                var dataParsed = JSON.parse(data)
+                this.dataParsed = dataParsed
+                for (var k in dataParsed) {
+                  this.add(dataParsed[k].label, dataParsed[k].value);
+                }
+              }
+            }.bind(this))
+          }
+        },
+        setup: function (widget) {
+          if (widget.data.customTag) {
+            this.setValue(widget.data.customTag)
+          } else {
+            this.getElement().hide();
+          }
+        },
+        commit: function (widget) {
+          if (this.isVisible()) {
+            widget.setData('customTag', this.getValue());
+            for (var key in this.dataParsed) {
+              if (this.dataParsed[key].value + '' === this.getValue()) {
+                widget.setData('customTagLabel', this.dataParsed[key].label);
+                return
+              }
+            }
+          } else {
+            widget.setData("customTag", null)
+            widget.setData("customTagLabel", null)
           }
         }
       }, {
@@ -137,7 +198,7 @@ CKEDITOR.dialog.add('insertFunctionTag', function (editor) {
           if (this.getValue()) {
             widget.setData('num', this.getValue());
           } else {
-            widget.setData('num', 10);
+            widget.setData("num", null)
           }
         }
       }]
